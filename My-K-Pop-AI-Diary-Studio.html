@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>My K-Pop AI Diary Studio ✨</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Dancing+Script:wght@700&display=swap');
+  :root{
+    --pink:#f9a8d4;--purple:#c084fc;--lavender:#e9d5ff;--deep:#7c3aed;
+    --bg:#fdf4ff;--card:#fff;--accent:#fb7185;--gold:#fbbf24;
+    --text:#3b0764;--sub:#6b21a8;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+
+  /* HERO */
+  .hero{background:linear-gradient(135deg,#7c3aed,#c084fc,#f9a8d4,#fb7185);padding:40px 20px 30px;text-align:center;position:relative;overflow:hidden;}
+  .hero::before{content:'✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦';position:absolute;top:8px;left:0;right:0;font-size:12px;color:rgba(255,255,255,.5);letter-spacing:8px;}
+  .hero h1{font-family:'Dancing Script',cursive;font-size:clamp(2rem,6vw,3.5rem);color:#fff;text-shadow:2px 2px 20px rgba(0,0,0,.2);line-height:1.1;}
+  .hero p{color:rgba(255,255,255,.9);margin-top:8px;font-size:1rem;font-weight:600;}
+  .sparkle-row{margin-top:12px;font-size:1.4rem;animation:sparkle 2s infinite alternate;}
+  @keyframes sparkle{from{opacity:.7;transform:scale(.95);}to{opacity:1;transform:scale(1.05);}}
+  .hero-badge{display:inline-block;background:rgba(255,255,255,.25);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.4);border-radius:20px;padding:5px 16px;font-size:.8rem;color:#fff;margin-top:10px;font-weight:700;}
+
+  /* NAV */
+  .nav{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;padding:16px 12px;background:#fff;box-shadow:0 2px 12px rgba(124,58,237,.1);position:sticky;top:0;z-index:100;}
+  .nav-btn{background:var(--lavender);border:none;border-radius:20px;padding:7px 14px;font-size:.78rem;font-weight:800;color:var(--deep);cursor:pointer;transition:.2s;font-family:'Nunito',sans-serif;}
+  .nav-btn:hover,.nav-btn.active{background:var(--deep);color:#fff;transform:translateY(-2px);box-shadow:0 4px 12px rgba(124,58,237,.3);}
+
+  /* MAIN */
+  main{max-width:900px;margin:0 auto;padding:24px 16px 60px;}
+  .section{display:none;animation:fadeIn .4s ease;}
+  .section.active{display:block;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+
+  .section-title{font-family:'Dancing Script',cursive;font-size:2rem;color:var(--deep);margin-bottom:6px;}
+  .section-sub{color:var(--sub);font-size:.9rem;margin-bottom:20px;font-weight:600;}
+
+  /* CARDS */
+  .card{background:#fff;border-radius:20px;padding:20px;box-shadow:0 4px 20px rgba(124,58,237,.1);border:1.5px solid var(--lavender);margin-bottom:16px;}
+  .card:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(124,58,237,.18);transition:.3s;}
+
+  /* MOOD */
+  .mood-grid{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px;}
+  .mood-btn{flex:1 1 calc(33%-10px);min-width:90px;padding:14px 8px;border-radius:16px;border:2px solid transparent;font-size:1rem;font-weight:800;cursor:pointer;transition:.25s;font-family:'Nunito',sans-serif;background:var(--lavender);color:var(--deep);}
+  .mood-btn:hover{transform:scale(1.07);box-shadow:0 4px 14px rgba(124,58,237,.25);}
+  .mood-btn.selected{border-color:var(--deep);background:linear-gradient(135deg,var(--purple),var(--pink));color:#fff;}
+  .mood-result{background:linear-gradient(135deg,#f3e8ff,#fce7f3);border-radius:16px;padding:18px;display:none;border-left:4px solid var(--purple);}
+  .mood-result.show{display:block;animation:fadeIn .4s ease;}
+  .mood-result h3{color:var(--deep);font-size:1.1rem;margin-bottom:6px;}
+  .mood-result p{color:var(--sub);font-size:.92rem;line-height:1.6;}
+  .prompt-tag{display:inline-block;background:var(--lavender);color:var(--deep);border-radius:12px;padding:6px 12px;margin-top:10px;font-size:.82rem;font-weight:700;}
+
+  /* DIARY PROMPTS */
+  .prompt-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;}
+  .prompt-card{background:linear-gradient(135deg,#fdf4ff,#fce7f3);border-radius:18px;padding:18px;cursor:pointer;border:2px solid var(--lavender);transition:.25s;position:relative;overflow:hidden;}
+  .prompt-card::after{content:'✨';position:absolute;right:12px;bottom:10px;font-size:1.4rem;opacity:.5;}
+  .prompt-card:hover{border-color:var(--purple);transform:translateY(-3px);box-shadow:0 6px 18px rgba(192,132,252,.25);}
+  .prompt-card .ptag{font-size:.7rem;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
+  .prompt-card p{font-size:.88rem;color:var(--text);font-weight:700;line-height:1.4;}
+  .diary-area{width:100%;border:2px solid var(--lavender);border-radius:14px;padding:14px;font-family:'Nunito',sans-serif;font-size:.92rem;color:var(--text);resize:vertical;min-height:120px;outline:none;transition:.2s;background:#fdf4ff;}
+  .diary-area:focus{border-color:var(--purple);box-shadow:0 0 0 3px rgba(192,132,252,.2);}
+  .selected-prompt{background:linear-gradient(135deg,#ede9fe,#fce7f3);border-radius:12px;padding:12px;margin-bottom:12px;font-size:.88rem;color:var(--sub);font-weight:700;display:none;}
+  .selected-prompt.show{display:block;}
+
+  /* CHALLENGE CARDS */
+  .challenge-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;}
+  .challenge-card{background:#fff;border-radius:18px;padding:18px;border:2px solid var(--lavender);cursor:pointer;transition:.25s;text-align:center;}
+  .challenge-card:hover{border-color:var(--accent);transform:scale(1.04);box-shadow:0 6px 20px rgba(251,113,133,.2);}
+  .challenge-card .icon{font-size:2rem;margin-bottom:8px;}
+  .challenge-card h4{font-size:.88rem;font-weight:800;color:var(--deep);line-height:1.3;}
+  .challenge-card p{font-size:.76rem;color:var(--sub);margin-top:4px;}
+  .challenge-modal{display:none;background:linear-gradient(135deg,#f3e8ff,#fce7f3);border-radius:16px;padding:20px;margin-top:16px;border-left:4px solid var(--accent);}
+  .challenge-modal.show{display:block;animation:fadeIn .3s ease;}
+  .challenge-modal h3{color:var(--deep);margin-bottom:8px;}
+  .challenge-modal p{color:var(--sub);font-size:.92rem;line-height:1.6;}
+
+  /* K-DRAMA SCENE */
+  .scene-moods{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:16px;}
+  .scene-btn{padding:10px 18px;border-radius:20px;border:2px solid var(--lavender);background:#fff;font-size:.85rem;font-weight:800;color:var(--deep);cursor:pointer;transition:.2s;font-family:'Nunito',sans-serif;}
+  .scene-btn:hover,.scene-btn.picked{background:linear-gradient(135deg,var(--purple),var(--accent));color:#fff;border-color:transparent;transform:scale(1.05);}
+  .scene-output{background:linear-gradient(135deg,#1e1b4b,#3b0764);border-radius:18px;padding:22px;color:#e9d5ff;display:none;font-size:.92rem;line-height:1.8;}
+  .scene-output.show{display:block;animation:fadeIn .4s ease;}
+  .scene-output .scene-title{font-family:'Dancing Script',cursive;font-size:1.4rem;color:var(--pink);margin-bottom:10px;}
+
+  /* DREAM BOARD */
+  .dream-input-row{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;}
+  .dream-input{flex:1;min-width:180px;padding:12px 16px;border-radius:14px;border:2px solid var(--lavender);font-family:'Nunito',sans-serif;font-size:.9rem;color:var(--text);outline:none;background:var(--bg);}
+  .dream-input:focus{border-color:var(--purple);}
+  .btn-add{background:linear-gradient(135deg,var(--purple),var(--accent));color:#fff;border:none;border-radius:14px;padding:12px 20px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.88rem;cursor:pointer;transition:.2s;}
+  .btn-add:hover{transform:scale(1.05);box-shadow:0 4px 14px rgba(192,132,252,.4);}
+  .dream-grid{display:flex;flex-wrap:wrap;gap:12px;}
+  .dream-card{background:linear-gradient(135deg,#fdf4ff,#fce7f3);border:2px solid var(--lavender);border-radius:16px;padding:14px 18px;font-size:.88rem;font-weight:800;color:var(--deep);display:flex;align-items:center;gap:8px;animation:fadeIn .3s ease;}
+  .dream-card span{cursor:pointer;color:var(--accent);font-weight:900;margin-left:4px;}
+
+  /* AI PROMPTS */
+  .prompt-list{display:grid;gap:12px;}
+  .ai-prompt-card{background:#fff;border-radius:16px;padding:16px 18px;border:2px solid var(--lavender);display:flex;align-items:center;justify-content:space-between;gap:12px;transition:.2s;}
+  .ai-prompt-card:hover{border-color:var(--purple);box-shadow:0 4px 14px rgba(192,132,252,.2);}
+  .ai-prompt-card p{font-size:.88rem;color:var(--text);font-weight:700;line-height:1.4;}
+  .copy-btn{background:var(--lavender);border:none;border-radius:10px;padding:7px 13px;font-size:.76rem;font-weight:800;color:var(--deep);cursor:pointer;white-space:nowrap;transition:.2s;font-family:'Nunito',sans-serif;}
+  .copy-btn:hover{background:var(--deep);color:#fff;}
+  .copy-btn.copied{background:#10b981;color:#fff;}
+
+  /* KOREAN PHRASES */
+  .phrase-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;}
+  .phrase-card{background:linear-gradient(135deg,#1e1b4b,#4c1d95);border-radius:18px;padding:20px;color:#fff;text-align:center;transition:.2s;}
+  .phrase-card:hover{transform:translateY(-3px);box-shadow:0 8px 20px rgba(76,29,149,.3);}
+  .phrase-card .korean{font-size:1.6rem;font-weight:900;color:var(--pink);margin-bottom:4px;}
+  .phrase-card .romanize{font-size:.82rem;color:#c4b5fd;margin-bottom:6px;font-style:italic;}
+  .phrase-card .meaning{font-size:.88rem;color:#e9d5ff;font-weight:700;}
+  .phrase-card .use{font-size:.74rem;color:#a78bfa;margin-top:4px;}
+
+  /* PRIVACY */
+  .privacy-box{background:linear-gradient(135deg,#fef3c7,#fde68a);border-radius:18px;padding:22px;border-left:5px solid var(--gold);display:flex;gap:14px;align-items:flex-start;}
+  .privacy-box .icon{font-size:2rem;flex-shrink:0;}
+  .privacy-box h3{color:#92400e;margin-bottom:6px;font-size:1rem;}
+  .privacy-box p,.privacy-box li{color:#78350f;font-size:.88rem;line-height:1.6;}
+  .privacy-box ul{margin-top:8px;padding-left:18px;}
+
+  /* FOOTER */
+  footer{text-align:center;padding:24px;color:var(--sub);font-size:.8rem;font-weight:600;}
+
+  /* FLOATING DECO */
+  .float-deco{position:fixed;pointer-events:none;z-index:0;font-size:1.2rem;opacity:.12;animation:float 6s infinite ease-in-out;}
+  .float-deco:nth-child(1){top:15%;left:3%;animation-delay:0s;}
+  .float-deco:nth-child(2){top:40%;right:2%;animation-delay:2s;}
+  .float-deco:nth-child(3){top:70%;left:5%;animation-delay:4s;}
+  @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-18px);}}
+
+  .pill{display:inline-block;background:var(--lavender);color:var(--deep);border-radius:20px;padding:3px 10px;font-size:.72rem;font-weight:800;margin-right:4px;margin-bottom:4px;}
+
+  @media(max-width:500px){
+    .mood-btn{flex:1 1 calc(50%-10px);}
+    .hero h1{font-size:1.9rem;}
+  }
+</style>
+</head>
+<body>
+
+<div class="float-deco">💜</div>
+<div class="float-deco">✨</div>
+<div class="float-deco">🌸</div>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>✨ My K-Pop AI Diary Studio ✨</h1>
+  <p>Your magical space for journaling, creativity & K-drama vibes 🌸</p>
+  <div class="sparkle-row">💜 ⭐ 🌸 ✨ 💖 🌟 💫</div>
+  <div class="hero-badge">Powered by AI · Made for You · 100% Safe & Fun</div>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <button class="nav-btn active" onclick="showSection('mood')">💜 Mood Check-In</button>
+  <button class="nav-btn" onclick="showSection('diary')">📓 Diary Prompts</button>
+  <button class="nav-btn" onclick="showSection('challenges')">⚡ AI Challenges</button>
+  <button class="nav-btn" onclick="showSection('drama')">🎬 K-Drama Scene</button>
+  <button class="nav-btn" onclick="showSection('dream')">🌟 Dream Board</button>
+  <button class="nav-btn" onclick="showSection('aiprompts')">🤖 AI Prompt Starters</button>
+  <button class="nav-btn" onclick="showSection('korean')">🇰🇷 Korean Corner</button>
+  <button class="nav-btn" onclick="showSection('privacy')">🔒 Privacy Tip</button>
+</nav>
+
+<main>
+
+  <!-- MOOD -->
+  <div class="section active" id="mood">
+    <div class="section-title">💜 Mood Check-In</div>
+    <div class="section-sub">How are you feeling right now? Pick your vibe! ✨</div>
+    <div class="mood-grid">
+      <button class="mood-btn" onclick="selectMood(this,'Happy','🌟 Your happy energy is contagious! The world feels your sunshine today. Keep radiating positivity — it is your superpower.','Write about 3 things that made you smile today. No matter how small!')">😄 Happy</button>
+      <button class="mood-btn" onclick="selectMood(this,'Dreamy','🌙 Dreamy days are when your best ideas are born. Daydreaming is not a waste — it is planning your future self.','If your life was a K-drama, describe the dreamy scene happening right now.')">🌙 Dreamy</button>
+      <button class="mood-btn" onclick="selectMood(this,'Stressed','💜 It is okay to feel overwhelmed. Even your favourite idol has hard days. Take a breath — you are stronger than you know.','Write down everything stressing you out. Then cross out what you can\'t control. Focus only on what you can.')">😤 Stressed</button>
+      <button class="mood-btn" onclick="selectMood(this,'Excited','🎉 That excitement is energy — channel it! Big things happen when you feel like this. Ride this wave!','What are you most excited about right now? Write about it like it has already happened!')">🎉 Excited</button>
+      <button class="mood-btn" onclick="selectMood(this,'Sad','💖 It is okay to feel sad. Even the most beautiful K-drama has tearful episodes. This feeling will pass, and it makes you deeper and more real.','Write a letter to yourself from your future self who made it through this sad moment.')">🥺 Sad</button>
+      <button class="mood-btn" onclick="selectMood(this,'Confident','👑 Yes! Own that energy! Confidence is a skill, and today you are levelling up. The world is your stage!','Write about a moment you were brave. What did you do? How did it feel?')">👑 Confident</button>
+      <button class="mood-btn" onclick="selectMood(this,'Chill','🍃 Chill mode is self-care mode. Resting is productive. Your mind is recharging for something amazing.','Write about your perfect chill day — what does it look, sound, and feel like?')">🍃 Chill</button>
+    </div>
+    <div class="mood-result" id="moodResult">
+      <h3 id="moodMsg"></h3>
+      <p id="moodTip"></p>
+      <div class="prompt-tag">📓 Journal Prompt: <span id="moodPrompt"></span></div>
+    </div>
+    <div class="card" style="margin-top:20px;">
+      <textarea class="diary-area" placeholder="✍️ Start writing your mood diary here... This is just for you! 💜"></textarea>
+    </div>
+  </div>
+
+  <!-- DIARY PROMPTS -->
+  <div class="section" id="diary">
+    <div class="section-title">📓 K-Pop Diary Prompts</div>
+    <div class="section-sub">Tap a prompt to use it as your diary starter! ✨</div>
+    <div class="selected-prompt" id="selectedPrompt">📌 Your prompt: <span id="spText"></span></div>
+    <div class="prompt-cards">
+      <div class="prompt-card" onclick="pickPrompt(this,'Write about your main-character moment today.')"><div class="ptag">✨ Main Character</div><p>Write about your main-character moment today.</p></div>
+      <div class="prompt-card" onclick="pickPrompt(this,'If your day was a K-drama episode, what would the title be and why?')"><div class="ptag">🎬 K-Drama</div><p>If your day was a K-drama episode, what would the title be?</p></div>
+      <div class="prompt-card" onclick="pickPrompt(this,'What song vibe matches your mood today — and what are the lyrics saying about your life?')"><div class="ptag">🎵 Music</div><p>What song vibe matches your mood today?</p></div>
+      <div class="prompt-card" onclick="pickPrompt(this,'What dream are you practicing for like a K-pop trainee? Write your training plan.')"><div class="ptag">🌟 Trainee Life</div><p>What dream are you practicing for like a trainee?</p></div>
+      <div class="prompt-card" onclick="pickPrompt(this,'Describe yourself as a K-pop idol. What is your stage name, concept, and signature move?')"><div class="ptag">💎 Idol Fantasy</div><p>Describe yourself as a K-pop idol. What is your concept?</p></div>
+      <div class="prompt-card" onclick="pickPrompt(this,'Write a letter to your 5-years-older self. What do you hope she has achieved?')"><div class="ptag">💌 Future Self</div><p>Write a letter to your future self 5 years from now.</p></div>
+      <div class="prompt-card" onclick="pickPrompt(this,'If your life had a 10-episode K-drama arc, what would each episode be about?')"><div class="ptag">📺 Story Arc</div><p>If your life had a 10-episode arc, map it out!</p></div>
+      <div class="prompt-card" onclick="pickPrompt(this,'What is one thing you are proud of this week that nobody noticed? Celebrate it here.')"><div class="ptag">🏆 Hidden Win</div><p>What is one small win this week nobody noticed?</p></div>
+    </div>
+    <div class="card" style="margin-top:20px;">
+      <textarea class="diary-area" id="diaryText" placeholder="✍️ Write your diary entry here... Let the words flow! 💜" style="min-height:160px;"></textarea>
+    </div>
+  </div>
+
+  <!-- CHALLENGES -->
+  <div class="section" id="challenges">
+    <div class="section-title">⚡ AI Challenge Cards</div>
+    <div class="section-sub">Tap a challenge to discover how AI can help you grow! 🚀</div>
+    <div class="challenge-grid">
+      <div class="challenge-card" onclick="showChallenge('🖊️ Write a Poem','Ask AI: \"Help me write a short poem about chasing my dreams in the style of a K-pop song.\" Then read it out loud. You will be amazed! Try changing one word and see how it transforms.')"><div class="icon">🖊️</div><h4>Write a Poem with AI</h4><p>Express your heart through words</p></div>
+      <div class="challenge-card" onclick="showChallenge('📅 Study Timetable','Ask AI: \"Create a fun and aesthetic study timetable for a student who loves K-pop. Add cute emoji and motivational notes.\" Use it for one week and track how it goes!')"><div class="icon">📅</div><h4>Create a Study Timetable</h4><p>Make studying actually fun</p></div>
+      <div class="challenge-card" onclick="showChallenge('🛋️ Room Makeover Plan','Ask AI: \"Help me plan a K-pop themed aesthetic room makeover on a student budget.\" Dream big — then pick 2 ideas you can actually do this weekend!')"><div class="icon">🛋️</div><h4>Plan a K-Pop Room</h4><p>Design your dream space</p></div>
+      <div class="challenge-card" onclick="showChallenge('🎤 Motivational Speech','Ask AI: \"Write a short motivational speech for a teenager who is feeling like giving up on her dreams.\" Read it every morning for a week. Watch what changes.')"><div class="icon">🎤</div><h4>Write a Motivational Speech</h4><p>Words that fuel your fire</p></div>
+      <div class="challenge-card" onclick="showChallenge('🇰🇷 Learn 5 Korean Words','Ask AI: \"Teach me 5 fun Korean words used in K-dramas with pronunciation and a sentence example.\" Write them in your diary and use one in conversation today!')"><div class="icon">🇰🇷</div><h4>Learn 5 Korean Words</h4><p>Start your Korean journey</p></div>
+      <div class="challenge-card" onclick="showChallenge('🎭 Dramatic K-Drama Scene','Ask AI: \"Turn this boring sentence into a dramatic K-drama scene: I missed the school bus today.\" Try it with moments from your own day!')"><div class="icon">🎭</div><h4>Dramatize Your Day</h4><p>Make everything cinematic</p></div>
+      <div class="challenge-card" onclick="showChallenge('💅 Weekly Glow-Up Plan','Ask AI: \"Give me a 7-day glow-up challenge for mind, body, and confidence — K-pop idol edition.\" Follow it for a week and journal your progress!')"><div class="icon">💅</div><h4>Weekly Glow-Up Plan</h4><p>Level up your whole self</p></div>
+      <div class="challenge-card" onclick="showChallenge('📖 Story Starter','Ask AI: \"Start a short story where a girl discovers she has a hidden talent the night before a big school event.\" Continue the story yourself from where AI stops!')"><div class="icon">📖</div><h4>Co-Write a Story</h4><p>You + AI = bestselling duo</p></div>
+    </div>
+    <div class="challenge-modal card" id="challengeModal">
+      <h3 id="cTitle"></h3>
+      <p id="cDesc"></p>
+    </div>
+  </div>
+
+  <!-- K-DRAMA SCENE -->
+  <div class="section" id="drama">
+    <div class="section-title">🎬 K-Drama Scene Maker</div>
+    <div class="section-sub">Pick a vibe and get your own original K-drama scene idea! 🌸</div>
+    <div class="scene-moods">
+      <button class="scene-btn" onclick="makeScene(this,'First Encounter')">💘 First Encounter</button>
+      <button class="scene-btn" onclick="makeScene(this,'Rivalry')">⚡ Rival Showdown</button>
+      <button class="scene-btn" onclick="makeScene(this,'Redemption')">🌟 Redemption Arc</button>
+      <button class="scene-btn" onclick="makeScene(this,'Friendship')">💜 Best Friend Moment</button>
+      <button class="scene-btn" onclick="makeScene(this,'Dream Chase')">🚀 Chasing a Dream</button>
+      <button class="scene-btn" onclick="makeScene(this,'Rainy Day')">🌧️ Rainy Day Drama</button>
+    </div>
+    <div class="scene-output card" id="sceneOutput">
+      <div class="scene-title" id="sceneName"></div>
+      <div id="sceneText"></div>
+    </div>
+  </div>
+
+  <!-- DREAM BOARD -->
+  <div class="section" id="dream">
+    <div class="section-title">🌟 My Dream Board</div>
+    <div class="section-sub">Type your goals and watch them become real cards! Every dream written down gets closer to happening. ✨</div>
+    <div class="dream-input-row">
+      <input class="dream-input" id="dreamInput" placeholder="e.g. Learn to speak Korean fluently 🇰🇷" maxlength="60" onkeydown="if(event.key==='Enter')addDream()"/>
+      <button class="btn-add" onclick="addDream()">+ Add Dream ✨</button>
+    </div>
+    <div class="dream-grid" id="dreamGrid">
+      <div class="dream-card">💃 Learn K-pop choreography <span onclick="removeDream(this)">✕</span></div>
+      <div class="dream-card">📓 Journal every single day <span onclick="removeDream(this)">✕</span></div>
+      <div class="dream-card">🇰🇷 Learn to read Korean <span onclick="removeDream(this)">✕</span></div>
+      <div class="dream-card">🎤 Build my confidence <span onclick="removeDream(this)">✕</span></div>
+      <div class="dream-card">📱 Create aesthetic content <span onclick="removeDream(this)">✕</span></div>
+    </div>
+  </div>
+
+  <!-- AI PROMPTS -->
+  <div class="section" id="aiprompts">
+    <div class="section-title">🤖 AI Prompt Starters</div>
+    <div class="section-sub">Copy these prompts and paste them into any AI tool to get magical results! ✨</div>
+    <div class="prompt-list">
+      <div class="ai-prompt-card"><p>📓 "Help me write a creative diary entry about my day — make it poetic and emotional like a K-drama monologue."</p><button class="copy-btn" onclick="copyPrompt(this,'Help me write a creative diary entry about my day — make it poetic and emotional like a K-drama monologue.')">Copy</button></div>
+      <div class="ai-prompt-card"><p>📚 "Make my study routine fun and aesthetic. I love K-pop. Add encouraging notes and cute time blocks."</p><button class="copy-btn" onclick="copyPrompt(this,'Make my study routine fun and aesthetic. I love K-pop. Add encouraging notes and cute time blocks.')">Copy</button></div>
+      <div class="ai-prompt-card"><p>🇰🇷 "Teach me 5 Korean phrases commonly used in K-dramas with pronunciation and fun example sentences."</p><button class="copy-btn" onclick="copyPrompt(this,'Teach me 5 Korean phrases commonly used in K-dramas with pronunciation and fun example sentences.')">Copy</button></div>
+      <div class="ai-prompt-card"><p>⚡ "Give me a K-pop inspired 7-day productivity challenge with one small task per day."</p><button class="copy-btn" onclick="copyPrompt(this,'Give me a K-pop inspired 7-day productivity challenge with one small task per day.')">Copy</button></div>
+      <div class="ai-prompt-card"><p>🛁 "Help me plan a relaxing and fun weekend self-care routine — cozy, aesthetic, and recharging."</p><button class="copy-btn" onclick="copyPrompt(this,'Help me plan a relaxing and fun weekend self-care routine — cozy, aesthetic, and recharging.')">Copy</button></div>
+      <div class="ai-prompt-card"><p>🌸 "Turn my scattered thoughts into a beautiful, flowing poem. My thoughts: [write them here]."</p><button class="copy-btn" onclick="copyPrompt(this,'Turn my scattered thoughts into a beautiful, flowing poem. My thoughts: [write them here].')">Copy</button></div>
+      <div class="ai-prompt-card"><p>🎬 "Rewrite my ordinary Tuesday as if it were a dramatic K-drama episode with a title and scene description."</p><button class="copy-btn" onclick="copyPrompt(this,'Rewrite my ordinary Tuesday as if it were a dramatic K-drama episode with a title and scene description.')">Copy</button></div>
+      <div class="ai-prompt-card"><p>🌟 "Give me a 30-day confidence challenge for a teenager — one small act of bravery or self-love per day."</p><button class="copy-btn" onclick="copyPrompt(this,'Give me a 30-day confidence challenge for a teenager — one small act of bravery or self-love per day.')">Copy</button></div>
+    </div>
+  </div>
+
+  <!-- KOREAN CORNER -->
+  <div class="section" id="korean">
+    <div class="section-title">🇰🇷 Mini Korean Phrase Corner</div>
+    <div class="section-sub">Your first steps into the Korean language! Learn these and impress yourself 💜</div>
+    <div class="phrase-grid">
+      <div class="phrase-card"><div class="korean">안녕하세요</div><div class="romanize">Annyeonghaseyo</div><div class="meaning">Hello / Good day</div><div class="use">Used in: Every K-drama, always!</div></div>
+      <div class="phrase-card"><div class="korean">괜찮아요</div><div class="romanize">Gwaenchanayo</div><div class="meaning">I'm okay / It's alright</div><div class="use">When someone asks if you are fine</div></div>
+      <div class="phrase-card"><div class="korean">화이팅!</div><div class="romanize">Hwaiting!</div><div class="meaning">Fighting! / You got this!</div><div class="use">The ultimate K-drama cheer phrase</div></div>
+      <div class="phrase-card"><div class="korean">고마워요</div><div class="romanize">Gomawoyo</div><div class="meaning">Thank you</div><div class="use">Polite way to say thanks</div></div>
+      <div class="phrase-card"><div class="korean">꿈을 꿔</div><div class="romanize">Kkumeul kkwo</div><div class="meaning">Dream your dreams</div><div class="use">Inspirational phrase, used in songs</div></div>
+      <div class="phrase-card"><div class="korean">나 할 수 있어</div><div class="romanize">Na hal su isseo</div><div class="meaning">I can do it!</div><div class="use">Say this every morning 💜</div></div>
+      <div class="phrase-card"><div class="korean">진짜요?</div><div class="romanize">Jinjjayo?</div><div class="meaning">Really? / Seriously?</div><div class="use">Shocked K-drama reaction face!</div></div>
+      <div class="phrase-card"><div class="korean">사랑해</div><div class="romanize">Saranghae</div><div class="meaning">I love you</div><div class="use">The most iconic K-drama line 💖</div></div>
+    </div>
+    <div class="card" style="margin-top:20px;text-align:center;">
+      <p style="color:var(--sub);font-size:.88rem;font-weight:700;">💡 <strong>Pro tip:</strong> Copy the Korean phrase into an AI tool and ask it to teach you more phrases in the same context. You will be reading Korean before you know it! 🌟</p>
+    </div>
+  </div>
+
+  <!-- PRIVACY -->
+  <div class="section" id="privacy">
+    <div class="section-title">🔒 Stay Safe, Stay Smart</div>
+    <div class="section-sub">A little reminder before you explore the world of AI 💜</div>
+    <div class="privacy-box">
+      <div class="icon">🛡️</div>
+      <div>
+        <h3>Your Diary is Personal. Use AI Wisely.</h3>
+        <p>AI is an amazing creative tool — but it is important to stay safe online. Here is what to always remember:</p>
+        <ul>
+          <li>🚫 Never share your <strong>passwords</strong>, home address, phone number, or school name with any AI tool.</li>
+          <li>🚫 Do not enter full names of real people in sensitive situations.</li>
+          <li>🚫 Never share private family information or financial details.</li>
+          <li>✅ Use AI for <strong>creativity</strong>, learning, journaling ideas, studying, and fun.</li>
+          <li>✅ If something online feels weird or wrong, tell a trusted adult immediately.</li>
+          <li>✅ Remember: AI does not know you personally — it is a very smart creative assistant, not a friend or counsellor.</li>
+          <li>💜 Your thoughts and feelings are precious. Use AI to express them beautifully — but real support always comes from real people who love you.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card" style="margin-top:16px;text-align:center;">
+      <p style="font-size:.92rem;color:var(--sub);font-weight:700;">✨ AI is a tool for your <strong style="color:var(--deep)">creativity, confidence & growth</strong>. You are always in control. Use it wisely, and it will help you become the best version of yourself! 💜</p>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  ✨ My K-Pop AI Diary Studio · Made with 💜 for creative, confident teenagers · nerdrv.com ✨<br>
+  <span style="opacity:.6;font-size:.75rem;">All content is original and fan-inspired. No copyrighted K-pop materials are used.</span>
+</footer>
+
+<script>
+  const moods={
+    Happy:{msg:'🌟 Your happy energy is contagious!',tip:'The world feels your sunshine today. Keep radiating positivity — it is your superpower.'},
+    Dreamy:{msg:'🌙 Dreamy days are when your best ideas are born.',tip:'Daydreaming is not a waste — it is planning your future self. Let your mind wander.'},
+    Stressed:{msg:'💜 It is okay to feel overwhelmed.',tip:'Even your favourite idol has hard days. Take a breath — you are stronger than you know. One step at a time.'},
+    Excited:{msg:'🎉 That excitement is pure energy!',tip:'Big things happen when you feel like this. Channel it into something creative today!'},
+    Sad:{msg:'💖 It is okay to feel sad.',tip:'Even the most beautiful K-drama has tearful episodes. This feeling will pass, making you deeper and more real.'},
+    Confident:{msg:'👑 Yes! Own that energy!',tip:'Confidence is a skill, and today you are levelling up. The world is your stage — go shine!'},
+    Chill:{msg:'🍃 Chill mode is self-care mode.',tip:'Resting is productive. Your mind is recharging for something amazing. Enjoy every calm moment.'}
+  };
+
+  function showSection(id){
+    document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    event.target.classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  function selectMood(btn,mood,msg,prompt){
+    document.querySelectorAll('.mood-btn').forEach(b=>b.classList.remove('selected'));
+    btn.classList.add('selected');
+    const r=document.getElementById('moodResult');
+    document.getElementById('moodMsg').textContent=moods[mood].msg;
+    document.getElementById('moodTip').textContent=moods[mood].tip;
+    document.getElementById('moodPrompt').textContent=prompt;
+    r.classList.add('show');
+  }
+
+  function pickPrompt(card,text){
+    document.querySelectorAll('.prompt-card').forEach(c=>c.style.borderColor='');
+    card.style.borderColor='var(--purple)';
+    document.getElementById('spText').textContent=text;
+    document.getElementById('selectedPrompt').classList.add('show');
+    document.getElementById('diaryText').placeholder='✍️ '+text+'\n\nStart writing here... 💜';
+    document.getElementById('diaryText').focus();
+  }
+
+  function showChallenge(title,desc){
+    const m=document.getElementById('challengeModal');
+    document.getElementById('cTitle').textContent=title;
+    document.getElementById('cDesc').textContent=desc;
+    m.classList.add('show');
+    m.scrollIntoView({behavior:'smooth',block:'nearest'});
+  }
+
+  const scenes={
+    'First Encounter':['Episode 1: "The Umbrella Moment"','The school hallway is bustling. She rounds the corner and crashes into someone, sending her diary flying. He catches it mid-air with one hand — their eyes meet for exactly 2.3 seconds. The background music swells. Neither says a word. He simply places the diary in her hands and walks away. She stands there, heart doing something completely unreasonable for a Tuesday morning.'],
+    'Rivalry':['Episode 5: "The Scoreboard"','The results go up on the board. First place: her rival. Second place: her. She squares her jaw and does not let a single tear fall — not here, not in front of everyone. She turns, walks calmly to the rooftop, and there she exhales. "Next time," she whispers to the city skyline. "Next time I will be first." The wind answers by tossing her hair dramatically. She was born for this arc.'],
+    'Redemption':['Episode 9: "The Moment She Returned"','After three months away, she walks back into the classroom. Silence. Then one person starts clapping. Then another. She has changed — not on the outside, but in the quiet, unshakeable way she holds herself. She smiles — not to impress anyone. Just because she finally, truly, believes in herself again.'],
+    'Friendship':['Episode 3: "2 AM and Ramen"','They are sitting on the kitchen floor at 2 AM, eating instant ramen straight from the pot, laughing about absolutely nothing. Outside, the rain is pouring. Inside, the world is perfectly small and perfectly theirs. This is the scene they will remember when they are old. Not the big moments — this one. The ramen. The rain. The laughter that made their stomachs hurt.'],
+    'Dream Chase':['Episode 7: "The Audition"','She stands backstage. Her hands are shaking. Three years of practicing in her small room. Every early morning. Every missed party. Every time someone said "are you sure?" She breathes. She walks out. The lights hit her face. And for the first time in her life — she is exactly where she is supposed to be.'],
+    'Rainy Day':['Episode 6: "The Rain Knew"','It starts raining the moment she gets the news. She stands at the bus stop without an umbrella, looking up at the grey sky. A stranger offers their umbrella. She shakes her head. "It is okay," she says. "I think I needed this." Sometimes the rain comes not to ruin your day, but to wash away what you were holding too tightly.']
+  };
+
+  function makeScene(btn,mood){
+    document.querySelectorAll('.scene-btn').forEach(b=>b.classList.remove('picked'));
+    btn.classList.add('picked');
+    const s=scenes[mood];
+    document.getElementById('sceneName').textContent=s[0];
+    document.getElementById('sceneText').textContent=s[1];
+    const o=document.getElementById('sceneOutput');
+    o.classList.add('show');
+    o.scrollIntoView({behavior:'smooth',block:'nearest'});
+  }
+
+  function addDream(){
+    const inp=document.getElementById('dreamInput');
+    const val=inp.value.trim();
+    if(!val)return;
+    const emojis=['🌟','💜','✨','🎯','🔥','💫','🌸','🎵','📚','💪','🌈','🏆'];
+    const em=emojis[Math.floor(Math.random()*emojis.length)];
+    const card=document.createElement('div');
+    card.className='dream-card';
+    card.innerHTML=em+' '+val+' <span onclick="removeDream(this)">✕</span>';
+    document.getElementById('dreamGrid').appendChild(card);
+    inp.value='';
+    inp.focus();
+  }
+
+  function removeDream(span){
+    span.parentElement.style.transform='scale(0)';
+    span.parentElement.style.opacity='0';
+    span.parentElement.style.transition='.2s';
+    setTimeout(()=>span.parentElement.remove(),200);
+  }
+
+  function copyPrompt(btn,text){
+    navigator.clipboard.writeText(text).then(()=>{
+      btn.textContent='Copied! ✓';
+      btn.classList.add('copied');
+      setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('copied');},2000);
+    }).catch(()=>{
+      btn.textContent='Done ✓';
+      btn.classList.add('copied');
+      setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('copied');},2000);
+    });
+  }
+</script>
+</body>
+</html>
