@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Me | Aaradhya Beri</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600&display=swap');
+
+  :root {
+    --pink: #ff2d9b;
+    --purple: #b14fff;
+    --cyan: #00f5ff;
+    --yellow: #ffe600;
+    --bg: #07010f;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: #fff; font-family: 'Rajdhani', sans-serif; overflow-x: hidden; min-height: 100vh; }
+  #stars { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+  .grid-bg {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image: linear-gradient(rgba(177,79,255,.07) 1px, transparent 1px), linear-gradient(90deg, rgba(177,79,255,.07) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+  .wrapper { position: relative; z-index: 1; max-width: 860px; margin: 0 auto; padding: 40px 20px 80px; }
+
+  nav { display: flex; justify-content: space-between; align-items: center; padding: 0 0 40px; }
+  .nav-logo { font-family: 'Orbitron', monospace; font-size: 1rem; font-weight: 900; color: #fff; text-decoration: none; letter-spacing: 2px; text-shadow: 0 0 16px var(--pink); }
+  .nav-links { display: flex; gap: 24px; }
+  .nav-links a { font-family: 'Rajdhani', sans-serif; font-size: .95rem; letter-spacing: 2px; color: rgba(255,255,255,.5); text-decoration: none; text-transform: uppercase; transition: color .3s; }
+  .nav-links a:hover, .nav-links a.active { color: var(--cyan); }
+
+  .hero { display: flex; align-items: center; gap: 40px; padding: 20px 0 60px; flex-wrap: wrap; }
+  .avatar-ring { width: 140px; height: 140px; flex-shrink: 0; border-radius: 50%; background: linear-gradient(135deg, var(--pink), var(--purple), var(--cyan)); padding: 3px; animation: spin-ring 6s linear infinite; box-shadow: 0 0 40px var(--pink), 0 0 80px var(--purple); }
+  .avatar-inner { width: 100%; height: 100%; border-radius: 50%; background: var(--bg); display: flex; align-items: center; justify-content: center; font-size: 64px; }
+  @keyframes spin-ring { 0%{filter:hue-rotate(0deg)} 100%{filter:hue-rotate(360deg)} }
+
+  .hero-text { flex: 1; min-width: 220px; }
+  .hero-text h1 { font-family: 'Orbitron', monospace; font-size: clamp(1.8rem, 5vw, 3rem); font-weight: 900; text-shadow: 0 0 20px var(--pink), 0 0 40px var(--purple); margin-bottom: 6px; }
+  .hero-text .role { font-family: 'Orbitron', monospace; font-size: .9rem; color: var(--cyan); letter-spacing: 4px; text-transform: uppercase; margin-bottom: 16px; animation: pulse 2.5s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.5} }
+  .hero-text p { color: rgba(255,255,255,.7); font-size: 1.05rem; line-height: 1.7; }
+
+  .badges { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+  .badge { padding: 5px 14px; border-radius: 20px; font-size: .8rem; border: 1px solid; letter-spacing: 1px; font-family: 'Orbitron', monospace; }
+  .badge-pink   { border-color: var(--pink);   color: var(--pink);   box-shadow: 0 0 10px rgba(255,45,155,.3); }
+  .badge-cyan   { border-color: var(--cyan);   color: var(--cyan);   box-shadow: 0 0 10px rgba(0,245,255,.3); }
+  .badge-purple { border-color: var(--purple); color: var(--purple); box-shadow: 0 0 10px rgba(177,79,255,.3); }
+  .badge-yellow { border-color: var(--yellow); color: var(--yellow); box-shadow: 0 0 10px rgba(255,230,0,.3); }
+
+  .sec-title { font-family: 'Orbitron', monospace; font-size: 1.3rem; font-weight: 700; color: var(--yellow); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; }
+  .sec-title::after { content:''; flex:1; height:2px; background:linear-gradient(to right,var(--yellow),transparent); }
+  section { margin-bottom: 56px; }
+
+  .story-box { background: rgba(177,79,255,.05); border: 1px solid rgba(177,79,255,.2); border-radius: 20px; padding: 32px; line-height: 1.9; font-size: 1.05rem; color: rgba(255,255,255,.8); }
+  .story-box p + p { margin-top: 14px; }
+  .story-box span { color: var(--pink); font-weight: 600; }
+  .story-box .cyan { color: var(--cyan); font-weight: 600; }
+
+  .timeline { position: relative; padding-left: 32px; }
+  .timeline::before { content:''; position:absolute; left:8px; top:0; bottom:0; width:2px; background: linear-gradient(to bottom, var(--pink), var(--purple), var(--cyan)); }
+  .tl-item { position: relative; margin-bottom: 28px; }
+  .tl-dot { position:absolute; left:-28px; top:4px; width:14px; height:14px; border-radius:50%; background: var(--pink); box-shadow: 0 0 12px var(--pink); border: 2px solid var(--bg); }
+  .tl-year { font-family: 'Orbitron', monospace; font-size: .75rem; color: var(--cyan); letter-spacing: 2px; margin-bottom: 4px; }
+  .tl-title { font-size: 1.05rem; font-weight: 600; color: #fff; margin-bottom: 4px; }
+  .tl-desc  { font-size: .95rem; color: rgba(255,255,255,.6); line-height: 1.6; }
+
+  .interests-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px,1fr)); gap: 16px; }
+  .interest-card { background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.08); border-radius: 16px; padding: 24px 16px; text-align: center; transition: transform .3s, box-shadow .3s, border-color .3s; }
+  .interest-card:hover { transform: translateY(-6px); box-shadow: 0 0 24px var(--glow); border-color: var(--glow); }
+  .interest-icon { font-size: 2rem; margin-bottom: 10px; }
+  .interest-name { font-family: 'Orbitron', monospace; font-size: .72rem; letter-spacing: 2px; color: #ddd; }
+
+  .goals-list { display: flex; flex-direction: column; gap: 14px; }
+  .goal-item { display: flex; align-items: flex-start; gap: 14px; background: rgba(0,245,255,.04); border: 1px solid rgba(0,245,255,.15); border-radius: 14px; padding: 18px 20px; }
+  .goal-num { font-family: 'Orbitron', monospace; font-size: 1.2rem; font-weight: 900; color: var(--cyan); flex-shrink: 0; text-shadow: 0 0 12px var(--cyan); }
+  .goal-text { font-size: 1rem; color: rgba(255,255,255,.75); line-height: 1.6; }
+  .goal-text strong { color: #fff; }
+
+  .facts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap: 16px; }
+  .fact-card { background: rgba(255,45,155,.05); border: 1px solid rgba(255,45,155,.15); border-radius: 14px; padding: 20px; text-align: center; }
+  .fact-emoji { font-size: 1.8rem; margin-bottom: 8px; }
+  .fact-text  { font-size: .95rem; color: rgba(255,255,255,.7); line-height: 1.5; }
+
+  .cta-box { background: rgba(177,79,255,.06); border: 1px solid rgba(177,79,255,.2); border-radius: 20px; padding: 36px 32px; text-align: center; }
+  .cta-box p { color: rgba(255,255,255,.7); font-size: 1.05rem; margin-bottom: 22px; line-height: 1.7; }
+  .cta-btns { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+  .btn { padding: 12px 30px; border-radius: 50px; font-family: 'Orbitron', monospace; font-size: .8rem; letter-spacing: 2px; text-decoration: none; transition: transform .3s, box-shadow .3s; }
+  .btn-primary { background: linear-gradient(135deg, var(--pink), var(--purple)); color: #fff; box-shadow: 0 0 24px rgba(255,45,155,.4); }
+  .btn-primary:hover { transform: scale(1.06); box-shadow: 0 0 40px rgba(255,45,155,.7); }
+  .btn-outline { border: 1px solid var(--cyan); color: var(--cyan); }
+  .btn-outline:hover { transform: scale(1.06); box-shadow: 0 0 24px rgba(0,245,255,.3); }
+
+  footer { text-align: center; padding: 30px 0 0; color: rgba(255,255,255,.3); font-size: .85rem; letter-spacing: 2px; }
+  footer span { color: var(--pink); }
+</style>
+</head>
+<body>
+
+<canvas id="stars"></canvas>
+<div class="grid-bg"></div>
+
+<div class="wrapper">
+
+  <nav>
+    <a href="index.html" class="nav-logo">RV⚡CODES</a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="about.html" class="active">About</a>
+      <a href="mailto:aaradhyaberi01@gmail.com">Contact</a>
+    </div>
+  </nav>
+
+  <div class="hero">
+    <div class="avatar-ring"><div class="avatar-inner">👩‍💻</div></div>
+    <div class="hero-text">
+      <h1>Aaradhya Beri</h1>
+      <p class="role">✦ Future AI Developer ✦</p>
+      <p id="hero-tagline"></p>
+      <div class="badges">
+        <span class="badge badge-pink">🤖 AI Enthusiast</span>
+        <span class="badge badge-cyan">💻 Student Dev</span>
+        <span class="badge badge-purple">🎵 K-pop Fan</span>
+        <span class="badge badge-yellow">🌟 Open Source</span>
+      </div>
+    </div>
+  </div>
+
+  <section>
+    <h2 class="sec-title">📖 My Story</h2>
+    <div class="story-box">
+      <p id="story-line-1"></p>
+      <p>I started with <span>HTML & CSS</span> — making simple pages that barely worked — and fell completely in love with it. Then came <span>JavaScript</span>, then <span>Python</span>, and now I'm diving deep into <span class="cyan">Artificial Intelligence & Machine Learning</span>.</p>
+      <p>Every project I build teaches me something new. Every bug I fix makes me stronger. And every line of code brings me one step closer to my goal — <span>becoming an AI developer who makes a real difference</span> 🚀.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="sec-title">🛤️ My Journey</h2>
+    <div class="timeline" id="timeline"></div>
+  </section>
+
+  <section>
+    <h2 class="sec-title">💜 Interests</h2>
+    <div class="interests-grid">
+      <div class="interest-card" style="--glow:var(--pink)"><div class="interest-icon">🤖</div><div class="interest-name">Artificial Intelligence</div></div>
+      <div class="interest-card" style="--glow:var(--cyan)"><div class="interest-icon">🎵</div><div class="interest-name">K-pop Music</div></div>
+      <div class="interest-card" style="--glow:var(--purple)"><div class="interest-icon">📚</div><div class="interest-name">Learning & Growth</div></div>
+      <div class="interest-card" style="--glow:var(--yellow)"><div class="interest-icon">🎮</div><div class="interest-name">Game Dev</div></div>
+      <div class="interest-card" style="--glow:var(--pink)"><div class="interest-icon">🌸</div><div class="interest-name">UI Design</div></div>
+      <div class="interest-card" style="--glow:var(--cyan)"><div class="interest-icon">🔬</div><div class="interest-name">Data Science</div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="sec-title">🎯 My Goals</h2>
+    <div class="goals-list">
+      <div class="goal-item"><span class="goal-num">01</span><p class="goal-text"><strong>Master AI & Machine Learning</strong> — go beyond the basics and build models that actually solve real-world problems.</p></div>
+      <div class="goal-item"><span class="goal-num">02</span><p class="goal-text"><strong>Contribute to Open Source</strong> — give back to the community that taught me everything, one pull request at a time.</p></div>
+      <div class="goal-item"><span class="goal-num">03</span><p class="goal-text"><strong>Inspire Other Girls to Code</strong> — show that age and gender are no barrier to building amazing things with technology.</p></div>
+      <div class="goal-item"><span class="goal-num">04</span><p class="goal-text"><strong>Build a Product That Matters</strong> — launch something that genuinely helps people in their everyday lives.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="sec-title">⚡ Fun Facts</h2>
+    <div class="facts-grid">
+      <div class="fact-card"><div class="fact-emoji">🎵</div><div class="fact-text">I code better with K-pop playing in the background</div></div>
+      <div class="fact-card"><div class="fact-emoji">🐛</div><div class="fact-text">I once spent 2 hours debugging a missing semicolon</div></div>
+      <div class="fact-card"><div class="fact-emoji">🌙</div><div class="fact-text">My best ideas come at midnight</div></div>
+      <div class="fact-card"><div class="fact-emoji">🤖</div><div class="fact-text">I talk to AI models to understand how they think</div></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="cta-box">
+      <h2 class="sec-title" style="justify-content:center;">💌 Let's Connect</h2>
+      <p>Whether you want to collab on a project, share ideas, or just say hi — I'd love to hear from you! Let's build something amazing together.</p>
+      <div class="cta-btns">
+        <a class="btn btn-primary" href="mailto:aaradhyaberi01@gmail.com">✉️ &nbsp;Email Me</a>
+        <a class="btn btn-outline" href="https://github.com/nerdrv" target="_blank">🐙 &nbsp;GitHub</a>
+        <a class="btn btn-outline" href="index.html">🏠 &nbsp;Back to Home</a>
+      </div>
+    </div>
+  </section>
+
+  <footer><p>Built with <span>♥</span> by Aaradhya Beri · RV Codes © 2025</p></footer>
+</div>
+
+<script>
+/* ── AGE CALCULATOR ── */
+// Birthday: 19th September. Starting age reference: born in 2012 (turns 13 on 19 Sep 2025)
+const BIRTH_YEAR = 2012;
+const BIRTH_MONTH = 9;  // September (1-based)
+const BIRTH_DAY = 19;
+
+function getAge() {
+  const today = new Date();
+  let age = today.getFullYear() - BIRTH_YEAR;
+  // If birthday hasn't occurred yet this year, subtract 1
+  const bdayThisYear = new Date(today.getFullYear(), BIRTH_MONTH - 1, BIRTH_DAY);
+  if (today < bdayThisYear) age--;
+  return age;
+}
+
+const age = getAge();
+
+/* ── INJECT AGE INTO PAGE ── */
+document.getElementById('hero-tagline').innerHTML =
+  `<span style="color:var(--pink);font-weight:600">${age}-year-old</span> coder from India, building the future one line of code at a time.`;
+
+document.getElementById('story-line-1').innerHTML =
+  `Hey! I'm <span>Aaradhya</span> — a <span>${age}-year-old</span> coder from India with one big dream: to build AI that actually helps people. I picked up coding because I realised it's the most powerful creative tool in the world. With just a keyboard and an idea, you can build <span>anything</span>.`;
+
+/* ── TIMELINE ── */
+const milestones = [
+  { year:'2017', dot:'var(--cyan)',    title:'First Steps on Code.org 🌐',         desc:'Discovered coding through Code.org — dragging blocks and making things move for the very first time.' },
+  { year:'2018', dot:'var(--pink)',    title:'Online Coding Classes 📺',            desc:'Started taking structured online classes to level up beyond the basics.' },
+  { year:'2019', dot:'var(--purple)',  title:'First Real App — Birdify 🐦',         desc:'Built my very first app using Thunkable. It was called Birdify and I was so proud of it!' },
+  { year:'2020', dot:'var(--yellow)',  title:'More Apps with Thunkable 📱',         desc:'Kept building and experimenting — made more apps and learned how to think like a developer.' },
+  { year:'2021', dot:'var(--cyan)',    title:'Advanced Block Coding 🧩',            desc:'Pushed into more complex block coding logic — loops, conditions, and data structures.' },
+  { year:'2022', dot:'var(--pink)',    title:'MIT App Inventor Era 🔬',             desc:'Switched to MIT App Inventor and took my app-building skills to the next level.' },
+  { year:'2023', dot:'var(--purple)',  title:'Hello, HTML! 🌐',                     desc:'Wrote my first line of HTML and fell completely in love with web development.' },
+  { year:'2024', dot:'var(--yellow)',  title:'Rescue Tails App 🐾',                 desc:'Built Rescue Tails using MIT App Inventor — an app with a real purpose: helping animals.' },
+  { year:'2025', dot:'var(--cyan)',    title:'Python Unlocked 🐍',                  desc:'Started learning Python and opened the door to data science, AI and so much more.' },
+  { year:'2026', dot:'var(--pink)',    title:'Making Progress 🚀',                  desc:'Growing every day — more projects, more skills, more impact. The journey continues!' },
+];
+
+const tl = document.getElementById('timeline');
+milestones.forEach(m => {
+  tl.innerHTML += `
+    <div class="tl-item">
+      <div class="tl-dot" style="background:${m.dot};box-shadow:0 0 12px ${m.dot}"></div>
+      <div class="tl-year">${m.year}</div>
+      <div class="tl-title">${m.title}</div>
+      <div class="tl-desc">${m.desc}</div>
+    </div>`;
+});
+
+/* ── STARS ── */
+const canvas = document.getElementById('stars');
+const ctx = canvas.getContext('2d');
+let stars = [];
+function initStars() {
+  canvas.width = innerWidth; canvas.height = innerHeight;
+  stars = Array.from({length:180}, () => ({
+    x: Math.random()*canvas.width, y: Math.random()*canvas.height,
+    r: Math.random()*1.5+.3, alpha: Math.random(), speed: Math.random()*.004+.001
+  }));
+}
+function drawStars() {
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  stars.forEach(s => {
+    s.alpha += s.speed;
+    if(s.alpha>1||s.alpha<0) s.speed*=-1;
+    ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+    ctx.fillStyle=`rgba(255,255,255,${s.alpha})`; ctx.fill();
+  });
+  requestAnimationFrame(drawStars);
+}
+initStars(); drawStars();
+window.addEventListener('resize', initStars);
+</script>
+</body>
+</html>
