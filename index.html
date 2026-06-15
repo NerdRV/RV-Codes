@@ -506,6 +506,15 @@ const pg=document.getElementById('proj-grid');
 projects.forEach(p=>{
   const card=document.createElement('div');
   card.className='proj-card';
+   if(p.link){
+
+    card.style.cursor='pointer';
+
+    card.addEventListener('click',()=>{
+
+      window.open(p.link,'_blank');
+
+    });
   card.style.setProperty('--accent',p.accent);
   card.innerHTML=`<div class="proj-emoji">${p.emoji}</div>
     <div class="proj-title">${p.title}</div>
