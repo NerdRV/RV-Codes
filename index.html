@@ -320,6 +320,37 @@
     letter-spacing: 2px;
   }
   footer span { color: var(--pink); }
+  /* ── NAV DROPDOWN ── */
+  .nav-dropdown { position: relative; display: inline-block; }
+  .nav-dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 10px;
+    background: #0d0118;
+    border: 1px solid rgba(177,79,255,.3);
+    border-radius: 12px;
+    padding: 8px;
+    min-width: 220px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.5);
+    z-index: 200;
+  }
+  .nav-dropdown:hover .nav-dropdown-menu { display: block; }
+  .nav-dropdown-menu.show { display: block; }
+  .nav-dropdown-menu a {
+    display: block;
+    padding: 10px 14px;
+    border-radius: 8px;
+    color: rgba(255,255,255,.7);
+    font-size: .85rem;
+    text-decoration: none;
+    text-transform: none;
+    letter-spacing: 0;
+    font-family: 'Rajdhani', sans-serif;
+    transition: background .2s, color .2s;
+  }
+  .nav-dropdown-menu a:hover { background: rgba(177,79,255,.15); color: var(--cyan); }
 
   /* ── FLOATING PARTICLES ── */
   .particle {
@@ -349,7 +380,20 @@
   <div style="display:flex;gap:24px;">
     <a href="index.html" style="font-family:'Rajdhani',sans-serif;color:#00f5ff;text-decoration:none;letter-spacing:2px;text-transform:uppercase;">Home</a>
     <a href="about-me.html" style="font-family:'Rajdhani',sans-serif;color:rgba(255,255,255,.5);text-decoration:none;letter-spacing:2px;text-transform:uppercase;">About</a>
-   <a href="My-K-Pop-AI-Diary-Studio.html" style="font-family:'Rajdhani',sans-serif;color:rgba(255,255,255,.5);text-decoration:none;letter-spacing:2px;text-transform:uppercase;">K-Pop Diary</a>
+   div class="nav-dropdown" id="projDropdown">
+  <a href="javascript:void(0)" onclick="toggleProjDropdown(event)" style="font-family:'Rajdhani',sans-serif;color:rgba(255,255,255,.5);text-decoration:none;letter-spacing:2px;text-transform:uppercase;">Projects ▾</a>
+  <div class="nav-dropdown-menu" id="projMenu">
+    <a href="#proj-grid">🌟 My First Website</a>
+    <a href="#proj-grid">🤖 AI Chatbot</a>
+    <a href="#proj-grid">🎮 Mini JS Game</a>
+    <a href="#proj-grid">🧠 AI Study Buddy</a>
+    <a href="My-K-Pop-AI-Diary-Studio.html">💜 K-pop Mood Diary</a>
+    <a href="#proj-grid">❓ Quiz App</a>
+    <a href="#proj-grid">📊 Marks Analyzer</a>
+    <a href="#proj-grid">🚀 Smart Study OS</a>
+    <a href="#proj-grid">🚀 RV Codes Portfolio</a>
+  </div>
+</div>
     <a href="mailto:aaradhyaberi01@gmail.com" style="font-family:'Rajdhani',sans-serif;color:rgba(255,255,255,.5);text-decoration:none;letter-spacing:2px;text-transform:uppercase;">Contact</a>
   </div>
 </nav>
@@ -417,6 +461,18 @@
 </div>
 
 <script>
+  /* ── PROJECTS DROPDOWN ── */
+function toggleProjDropdown(e) {
+  e.preventDefault();
+  const menu = document.getElementById('projMenu');
+  menu.classList.toggle('show');
+}
+document.addEventListener('click', function(e) {
+  const dropdown = document.getElementById('projDropdown');
+  if (dropdown && !dropdown.contains(e.target)) {
+    document.getElementById('projMenu').classList.remove('show');
+  }
+});
 /* ── STARS ── */
 const canvas = document.getElementById('stars');
 const ctx = canvas.getContext('2d');
