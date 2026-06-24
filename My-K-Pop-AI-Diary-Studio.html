@@ -130,7 +130,37 @@
   @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-18px);}}
 
   .pill{display:inline-block;background:var(--lavender);color:var(--deep);border-radius:20px;padding:3px 10px;font-size:.72rem;font-weight:800;margin-right:4px;margin-bottom:4px;}
-
+/* ── NAV DROPDOWN ── */
+  .nav-dropdown { position: relative; display: inline-block; }
+  .nav-dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 10px;
+    background: #0d0118;
+    border: 1px solid rgba(177,79,255,.3);
+    border-radius: 12px;
+    padding: 8px;
+    min-width: 220px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.5);
+    z-index: 200;
+  }
+  .nav-dropdown:hover .nav-dropdown-menu { display: block; }
+  .nav-dropdown-menu.show { display: block; }
+  .nav-dropdown-menu a {
+    display: block;
+    padding: 10px 14px;
+    border-radius: 8px;
+    color: rgba(255,255,255,.7);
+    font-size: .85rem;
+    text-decoration: none;
+    text-transform: none;
+    letter-spacing: 0;
+    font-family: 'Nunito', sans-serif;
+    transition: background .2s, color .2s;
+  }
+  .nav-dropdown-menu a:hover { background: rgba(192,132,252,.15); color: #fff; }
   @media(max-width:500px){
     .mood-btn{flex:1 1 calc(50%-10px);}
     .hero h1{font-size:1.9rem;}
@@ -142,8 +172,21 @@
   <a href="index.html" style="font-family:'Orbitron',monospace;font-weight:900;color:#fff;text-decoration:none;text-shadow:0 0 16px #ff2d9b;letter-spacing:2px;">RV⚡CODES</a>
   <div style="display:flex;gap:24px;">
     <a href="index.html" style="font-family:'Rajdhani',sans-serif;color:rgba(255,255,255,.5);text-decoration:none;letter-spacing:2px;text-transform:uppercase;font-size:.95rem;">Home</a>
-    <a href="about-me.html" style="font-family:'Rajdhani',sans-serif;color:rgba(255,255,255,.5);text-decoration:none;letter-spacing:2px;text-transform:uppercase;font-size:.95rem;">About</a>
-
+<a href="about-me.html" style="font-family:'Rajdhani',sans-serif;color:rgba(255,255,255,.5);text-decoration:none;letter-spacing:2px;text-transform:uppercase;font-size:.95rem;">About</a>
+    <div class="nav-dropdown" id="projDropdown">
+      <a href="javascript:void(0)" onclick="toggleProjDropdown(event)" style="font-family:'Rajdhani',sans-serif;color:#c084fc;text-decoration:none;letter-spacing:2px;text-transform:uppercase;font-size:.95rem;">Projects ▾</a>
+      <div class="nav-dropdown-menu" id="projMenu">
+        <a href="index.html#proj-grid">🌟 My First Website</a>
+        <a href="index.html#proj-grid">🤖 AI Chatbot</a>
+        <a href="index.html#proj-grid">🎮 Mini JS Game</a>
+        <a href="index.html#proj-grid">🧠 AI Study Buddy</a>
+        <a href="My-K-Pop-AI-Diary-Studio.html">💜 K-pop Mood Diary</a>
+        <a href="index.html#proj-grid">❓ Quiz App</a>
+        <a href="index.html#proj-grid">📊 Marks Analyzer</a>
+        <a href="index.html#proj-grid">🚀 Smart Study OS</a>
+        <a href="index.html#proj-grid">🚀 RV Codes Portfolio</a>
+      </div>
+    </div>
     <a href="mailto:aaradhyaberi01@gmail.com" style="font-family:'Rajdhani',sans-serif;color:rgba(255,255,255,.5);text-decoration:none;letter-spacing:2px;text-transform:uppercase;font-size:.95rem;">Contact</a>
   </div>
 </nav>
@@ -337,6 +380,18 @@
 </footer>
 
 <script>
+  /* ── PROJECTS DROPDOWN ── */
+  function toggleProjDropdown(e) {
+    e.preventDefault();
+    const menu = document.getElementById('projMenu');
+    menu.classList.toggle('show');
+  }
+  document.addEventListener('click', function(e) {
+    const dropdown = document.getElementById('projDropdown');
+    if (dropdown && !dropdown.contains(e.target)) {
+      document.getElementById('projMenu').classList.remove('show');
+    }
+  });
   const moods={
     Happy:{msg:'🌟 Your happy energy is contagious!',tip:'The world feels your sunshine today. Keep radiating positivity — it is your superpower.'},
     Dreamy:{msg:'🌙 Dreamy days are when your best ideas are born.',tip:'Daydreaming is not a waste — it is planning your future self. Let your mind wander.'},
