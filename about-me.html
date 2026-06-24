@@ -91,6 +91,37 @@
   .btn-primary:hover { transform: scale(1.06); box-shadow: 0 0 40px rgba(255,45,155,.7); }
   .btn-outline { border: 1px solid var(--cyan); color: var(--cyan); }
   .btn-outline:hover { transform: scale(1.06); box-shadow: 0 0 24px rgba(0,245,255,.3); }
+  /* ── NAV DROPDOWN ── */
+  .nav-dropdown { position: relative; display: inline-block; }
+  .nav-dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 10px;
+    background: #0d0118;
+    border: 1px solid rgba(177,79,255,.3);
+    border-radius: 12px;
+    padding: 8px;
+    min-width: 220px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.5);
+    z-index: 200;
+  }
+  .nav-dropdown:hover .nav-dropdown-menu { display: block; }
+  .nav-dropdown-menu.show { display: block; }
+  .nav-dropdown-menu a {
+    display: block;
+    padding: 10px 14px;
+    border-radius: 8px;
+    color: rgba(255,255,255,.7);
+    font-size: .85rem;
+    text-decoration: none;
+    text-transform: none;
+    letter-spacing: 0;
+    font-family: 'Rajdhani', sans-serif;
+    transition: background .2s, color .2s;
+  }
+  .nav-dropdown-menu a:hover { background: rgba(177,79,255,.15); color: var(--cyan); }
 
   footer { text-align: center; padding: 30px 0 0; color: rgba(255,255,255,.3); font-size: .85rem; letter-spacing: 2px; }
   footer span { color: var(--pink); }
@@ -106,9 +137,22 @@
   <nav>
     <a href="index.html" class="nav-logo">RV⚡CODES</a>
     <div class="nav-links">
-      <a href="index.html">Home</a>
+    <a href="index.html">Home</a>
       <a href="about-me.html" class="active">About</a>
-      <a href="My-K-Pop-AI-Diary-Studio.html">K-Pop Diary</a>
+      <div class="nav-dropdown" id="projDropdown">
+        <a href="javascript:void(0)" onclick="toggleProjDropdown(event)">Projects ▾</a>
+        <div class="nav-dropdown-menu" id="projMenu">
+          <a href="index.html#proj-grid">🌟 My First Website</a>
+          <a href="index.html#proj-grid">🤖 AI Chatbot</a>
+          <a href="index.html#proj-grid">🎮 Mini JS Game</a>
+          <a href="index.html#proj-grid">🧠 AI Study Buddy</a>
+          <a href="My-K-Pop-AI-Diary-Studio.html">💜 K-pop Mood Diary</a>
+          <a href="index.html#proj-grid">❓ Quiz App</a>
+          <a href="index.html#proj-grid">📊 Marks Analyzer</a>
+          <a href="index.html#proj-grid">🚀 Smart Study OS</a>
+          <a href="index.html#proj-grid">🚀 RV Codes Portfolio</a>
+        </div>
+      </div>
       <a href="mailto:aaradhyaberi01@gmail.com">Contact</a>
     </div>
   </nav>
@@ -190,6 +234,18 @@
 </div>
 
 <script>
+  /* ── PROJECTS DROPDOWN ── */
+function toggleProjDropdown(e) {
+  e.preventDefault();
+  const menu = document.getElementById('projMenu');
+  menu.classList.toggle('show');
+}
+document.addEventListener('click', function(e) {
+  const dropdown = document.getElementById('projDropdown');
+  if (dropdown && !dropdown.contains(e.target)) {
+    document.getElementById('projMenu').classList.remove('show');
+  }
+});
 /* ── AGE CALCULATOR ── */
 // Birthday: 19th September. Starting age reference: born in 2012 (turns 13 on 19 Sep 2025)
 const BIRTH_YEAR = 2012;
