@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My First Website 🌟</title>
+<style>
+  body {
+    background-color: #c9f7f5;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40"><rect width="40" height="40" fill="%23c9f7f5"/><circle cx="5" cy="5" r="1" fill="%23a0e8e3"/></svg>');
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #333;
+  }
+
+  .nav-bar {
+    background: #ffe4ec;
+    border-bottom: 4px dashed #ff8fab;
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: Arial, sans-serif;
+  }
+  .nav-bar a {
+    color: #d6336c;
+    text-decoration: none;
+    font-weight: bold;
+    margin-left: 16px;
+  }
+  .nav-bar a:hover { text-decoration: underline; }
+
+  .banner {
+    text-align: center;
+    padding: 30px 10px;
+  }
+
+  marquee {
+    background: #fff3b0;
+    border: 3px ridge #ffd60a;
+    padding: 6px;
+    font-size: 1.1rem;
+    color: #d6336c;
+    font-weight: bold;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+    color: #ff4d8d;
+    text-shadow: 2px 2px 0px #ffd60a;
+    margin: 20px 0 5px;
+  }
+
+  .blink {
+    animation: blink 1.2s step-start infinite;
+    color: #2b9348;
+    font-weight: bold;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  .container {
+    max-width: 700px;
+    margin: 20px auto;
+    background: #fffafc;
+    border: 4px solid #ff8fab;
+    border-radius: 18px;
+    padding: 25px;
+    box-shadow: 6px 6px 0px #ffd6e8;
+  }
+
+  .container h2 {
+    color: #6a4c93;
+    border-bottom: 3px dotted #ffb3c6;
+    padding-bottom: 8px;
+  }
+
+  ul.cool-list {
+    list-style: none;
+    padding: 0;
+  }
+  ul.cool-list li {
+    background: #e0fbfc;
+    border: 2px solid #98c1d9;
+    border-radius: 10px;
+    padding: 10px 14px;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #3d5a80;
+  }
+  ul.cool-list li::before {
+    content: "⭐ ";
+  }
+
+  .guestbook {
+    background: #fff0f6;
+    border: 3px dashed #ff8fab;
+    border-radius: 14px;
+    padding: 18px;
+    margin-top: 20px;
+    text-align: center;
+  }
+  .guestbook input, .guestbook button {
+    font-family: 'Comic Sans MS', cursive;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 2px solid #ff8fab;
+    margin-top: 8px;
+  }
+  .guestbook button {
+    background: #ff8fab;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  .guestbook button:hover { background: #ff4d8d; }
+
+  .visitor-counter {
+    text-align: center;
+    margin: 20px;
+    font-family: 'Courier New', monospace;
+  }
+  .counter-box {
+    display: inline-block;
+    background: #000;
+    color: #0f0;
+    padding: 6px 14px;
+    border: 3px inset #888;
+    font-size: 1.3rem;
+    letter-spacing: 3px;
+  }
+
+  .under-construction {
+    text-align: center;
+    margin: 30px 0;
+  }
+  .under-construction span {
+    background: #fff3b0;
+    border: 3px dashed #ffb703;
+    padding: 8px 16px;
+    font-weight: bold;
+    color: #d00000;
+  }
+
+  footer {
+    text-align: center;
+    background: #ffe4ec;
+    border-top: 4px dashed #ff8fab;
+    padding: 16px;
+    font-family: Arial, sans-serif;
+    font-size: .85rem;
+    color: #6a4c93;
+  }
+  .nav-dropdown { position: relative; display: inline-block; }
+  .nav-dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 8px;
+    background: #fffafc;
+    border: 3px solid #ff8fab;
+    border-radius: 12px;
+    padding: 8px;
+    min-width: 200px;
+    box-shadow: 4px 4px 0px #ffd6e8;
+    z-index: 200;
+  }
+  .nav-dropdown:hover .nav-dropdown-menu { display: block; }
+  .nav-dropdown-menu.show { display: block; }
+  .nav-dropdown-menu a {
+    display: block;
+    padding: 8px 10px;
+    border-radius: 8px;
+    color: #d6336c !important;
+    font-weight: bold;
+    margin-left: 0 !important;
+    font-size: .85rem;
+  }
+  .nav-dropdown-menu a:hover { background: #ffe4ec; }
+
+  .stamp {
+    display: inline-block;
+    margin: 4px;
+    border: 2px solid #ccc;
+    padding: 4px 8px;
+    border-radius: 6px;
+    background: #fff;
+    font-size: .75rem;
+  }
+</style>
+</head>
+<body>
+
+<div class="nav-bar">
+  <strong style="color:#6a4c93;">🌐 RV-CODES.GeoCities</strong>
+  <div>
+    <a href="index.html">🏠 Home</a>
+    <a href="about-me.html">😊 About Me</a>
+    <div class="nav-dropdown" id="projDropdown">
+      <a href="javascript:void(0)" onclick="toggleProjDropdown(event)">📂 Projects ▾</a>
+      <div class="nav-dropdown-menu" id="projMenu">
+        <a href="my-first-website.html">🌟 My First Website</a>
+        <a href="index.html#proj-grid">🤖 AI Chatbot</a>
+        <a href="index.html#proj-grid">🎮 Mini JS Game</a>
+        <a href="index.html#proj-grid">🧠 AI Study Buddy</a>
+        <a href="My-K-Pop-AI-Diary-Studio.html">💜 K-pop Mood Diary</a>
+        <a href="index.html#proj-grid">❓ Quiz App</a>
+        <a href="index.html#proj-grid">📊 Marks Analyzer</a>
+        <a href="index.html#proj-grid">🚀 Smart Study OS</a>
+        <a href="index.html#proj-grid">🚀 RV Codes Portfolio</a>
+      </div>
+    </div>
+    <a href="mailto:aaradhyaberi01@gmail.com">📧 Contact</a>
+  </div>
+</div>
+
+<div class="banner">
+  <marquee behavior="scroll" direction="left">🌟✨ WELCOME TO MY VERY FIRST WEBSITE EVER!! ✨🌟 Thanks for visiting!! Please sign my guestbook below!! 🌟✨</marquee>
+  <h1>🌸 Hi, I'm Aaradhya! 🌸</h1>
+  <p class="blink">★ This page never sleeps! ★</p>
+</div>
+
+<div class="container">
+  <h2>📖 About This Page</h2>
+  <p>Hewwo!! This is literally the <strong>FIRST website</strong> I ever made when I started learning to code in 2023! 🎉 I made it super colorful because I LOVE bright things, and I wanted my website to feel like a fun digital scrapbook 🌈</p>
+  <p>I learned how to use basic <strong>HTML</strong> tags here — like headings, lists, links, and even the old-school <code>&lt;marquee&gt;</code> tag (it's not really used anymore but it's so iconic lol) 😆</p>
+
+  <h2>💖 Things I Loved Learning</h2>
+  <ul class="cool-list">
+    <li>How to make text bold and colorful</li>
+    <li>Making a scrolling banner with marquee</li>
+    <li>Adding links that actually worked!!</li>
+    <li>Making lists look pretty with emojis</li>
+    <li>My VERY first ever &lt;div&gt; tag</li>
+  </ul>
+
+  <h2>🎨 My Favorite Things</h2>
+  <ul class="cool-list">
+    <li>Coding (obviously!)</li>
+    <li>K-pop music 🎵</li>
+    <li>Bright neon colors</li>
+    <li>Dreaming about being an AI developer one day</li>
+  </ul>
+
+  <div class="guestbook">
+    <h2 style="border:none;">📝 Sign My Guestbook!</h2>
+    <p>Leave your name and a fun message! (Don't worry, this is just for fun, nothing is actually saved 😄)</p>
+    <input type="text" placeholder="Your name..." id="gName"><br>
+    <input type="text" placeholder="Your message..." id="gMsg" style="width:220px;"><br>
+    <button onclick="signGuestbook()">Sign It! ✍️</button>
+    <p id="gOutput" style="font-weight:bold;color:#2b9348;"></p>
+  </div>
+</div>
+
+<div class="visitor-counter">
+  <p>👀 You are visitor number:</p>
+  <div class="counter-box" id="counter">000142</div>
+</div>
+
+<div class="under-construction">
+  <span>🚧 MORE PAGES COMING SOON! THIS SITE IS ALWAYS UNDER CONSTRUCTION 🚧</span>
+</div>
+
+<footer>
+  <p>This page was lovingly hand-coded by Aaradhya in 2023 — my first step into the world of web development! 💜</p>
+  <div>
+    <span class="stamp">🏆 Best Beginner Coder Award</span>
+    <span class="stamp">⭐ Made With HTML & Heart</span>
+    <span class="stamp">🌐 Netscape Approved*</span>
+  </div>
+  <p style="margin-top:10px;">*not actually approved by Netscape, this is just for fun 😂</p>
+</footer>
+
+<script>
+  function toggleProjDropdown(e) {
+  e.preventDefault();
+  const menu = document.getElementById('projMenu');
+  menu.classList.toggle('show');
+}
+document.addEventListener('click', function(e) {
+  const dropdown = document.getElementById('projDropdown');
+  if (dropdown && !dropdown.contains(e.target)) {
+    document.getElementById('projMenu').classList.remove('show');
+  }
+});
+function signGuestbook(){
+  const name = document.getElementById('gName').value || 'Anonymous';
+  const msg = document.getElementById('gMsg').value || 'left no message';
+  document.getElementById('gOutput').textContent = `🎉 Thanks ${name}! Your message "${msg}" has been added to my imaginary guestbook!`;
+  document.getElementById('gName').value='';
+  document.getElementById('gMsg').value='';
+}
+
+// Fake visitor counter that ticks up randomly for fun
+let count = 142;
+setInterval(()=>{
+  count += Math.floor(Math.random()*2);
+  document.getElementById('counter').textContent = String(count).padStart(6,'0');
+}, 4000);
+</script>
+
+</body>
+</html>
