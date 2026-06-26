@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Study Buddy 🧠 | RV Codes</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Lexend:wght@400;500;600;700&display=swap');
+
+  :root {
+    --sage: #7fa896;
+    --sage-light: #e8f3ee;
+    --lavender: #9b8fd9;
+    --lavender-light: #f0edfb;
+    --peach: #f2b88b;
+    --peach-light: #fdf0e4;
+    --sky: #7fb8d9;
+    --sky-light: #e8f4fb;
+    --ink: #3a4750;
+    --bg: #f7f8fa;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  nav {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 16px 24px;
+    background: #fff;
+    box-shadow: 0 2px 12px rgba(0,0,0,.05);
+    position: relative; z-index: 50;
+  }
+  .nav-logo { font-family:'Lexend',sans-serif; font-weight:700; color: var(--ink); text-decoration:none; }
+  .nav-links { display: flex; gap: 20px; align-items: center; }
+  .nav-links a { color: #8a96a3; text-decoration: none; font-size: .9rem; font-weight: 500; }
+  .nav-links a:hover { color: var(--lavender); }
+
+  .nav-dropdown { position: relative; display: inline-block; }
+  .nav-dropdown-menu {
+    display: none; position: absolute; top: 100%; right: 0; margin-top: 10px;
+    background: #fff; border: 1px solid #eee; border-radius: 14px; padding: 8px;
+    min-width: 200px; box-shadow: 0 10px 30px rgba(0,0,0,.1); z-index: 200;
+  }
+  .nav-dropdown:hover .nav-dropdown-menu { display: block; }
+  .nav-dropdown-menu.show { display: block; }
+  .nav-dropdown-menu a { display:block; padding:9px 12px; border-radius:10px; color:var(--ink) !important; font-size:.85rem !important; }
+  .nav-dropdown-menu a:hover { background: var(--lavender-light); }
+
+  .wrapper { max-width: 720px; margin: 0 auto; padding: 36px 20px 70px; }
+
+  .hero { text-align: center; margin-bottom: 30px; }
+  .hero h1 { font-family:'Lexend',sans-serif; font-size: clamp(1.8rem,5vw,2.4rem); color: var(--ink); margin-bottom:6px; }
+  .hero p { color: #8a96a3; font-size: .95rem; }
+
+  /* SUBJECT SELECT */
+  .subject-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(180px,1fr)); gap: 16px; }
+  .subject-card {
+    background: #fff;
+    border-radius: 18px;
+    padding: 26px 18px;
+    text-align: center;
+    cursor: pointer;
+    border: 2px solid transparent;
+    box-shadow: 0 4px 16px rgba(0,0,0,.05);
+    transition: transform .2s, box-shadow .2s, border-color .2s;
+  }
+  .subject-card:hover { transform: translateY(-4px); box-shadow: 0 10px 24px rgba(0,0,0,.1); border-color: var(--accent); }
+  .subject-icon { font-size: 2.2rem; margin-bottom: 10px; }
+  .subject-name { font-family:'Lexend',sans-serif; font-weight: 600; font-size: 1rem; margin-bottom: 4px; }
+  .subject-count { font-size: .78rem; color: #9aa5b1; }
+
+  /* QUIZ SCREEN */
+  .quiz-screen { display: none; }
+  .quiz-screen.active { display: block; }
+  .subject-screen.hidden { display: none; }
+
+  .quiz-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 20px; flex-wrap: wrap; gap: 10px;
+  }
+  .back-btn {
+    background: none; border: none; color: #8a96a3;
+    font-family:'Poppins',sans-serif; font-size: .9rem; cursor: pointer;
+    display: flex; align-items: center; gap: 4px;
+  }
+  .back-btn:hover { color: var(--ink); }
+
+  .progress-pill {
+    background: #fff; border-radius: 30px; padding: 8px 18px;
+    font-size: .85rem; font-weight: 600; box-shadow: 0 2px 8px rgba(0,0,0,.06);
+  }
+
+  .progress-bar-track {
+    height: 8px; background: #e8eaed; border-radius: 8px; margin-bottom: 28px; overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%; background: var(--accent); border-radius: 8px;
+    transition: width .3s ease; width: 0%;
+  }
+
+  .question-card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 28px 24px;
+    box-shadow: 0 6px 24px rgba(0,0,0,.06);
+    margin-bottom: 20px;
+  }
+  .question-num { font-size: .8rem; color: #9aa5b1; font-weight: 600; margin-bottom: 8px; }
+  .question-text { font-family:'Lexend',sans-serif; font-size: 1.1rem; font-weight: 600; line-height: 1.5; margin-bottom: 22px; }
+
+  .options-list { display: flex; flex-direction: column; gap: 12px; }
+  .option-btn {
+    background: var(--bg);
+    border: 2px solid transparent;
+    border-radius: 14px;
+    padding: 14px 18px;
+    text-align: left;
+    font-family: 'Poppins', sans-serif;
+    font-size: .95rem;
+    cursor: pointer;
+    transition: .2s;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .option-btn:hover:not(.disabled) { background: var(--accent-light); }
+  .option-btn.selected { border-color: var(--accent); background: var(--accent-light); }
+  .option-btn.correct { border-color: #6fcf97; background: #e8fbf0; }
+  .option-btn.wrong { border-color: #f17c7c; background: #fdeaea; }
+  .option-btn.disabled { cursor: default; opacity: .85; }
+  .option-letter {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: #fff; display:flex; align-items:center; justify-content:center;
+    font-size: .8rem; font-weight: 700; flex-shrink: 0;
+    border: 1px solid #ddd;
+  }
+
+  .next-btn-row { display: flex; justify-content: flex-end; }
+  .next-btn {
+    background: var(--accent); color: #fff; border: none;
+    padding: 12px 28px; border-radius: 30px;
+    font-family:'Lexend',sans-serif; font-weight: 600; font-size: .9rem;
+    cursor: pointer; transition: transform .2s;
+    display: none;
+  }
+  .next-btn.show { display: inline-block; }
+  .next-btn:hover { transform: scale(1.04); }
+
+  /* RESULTS */
+  .results-screen { display: none; text-align: center; }
+  .results-screen.active { display: block; }
+  .result-emoji { font-size: 3.4rem; margin-bottom: 10px; }
+  .result-score { font-family:'Lexend',sans-serif; font-size: 2.2rem; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+  .result-msg { color: #8a96a3; margin-bottom: 24px; }
+  .result-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .result-btn {
+    border: none; border-radius: 30px; padding: 12px 24px;
+    font-family:'Lexend',sans-serif; font-weight: 600; font-size: .9rem; cursor: pointer;
+    transition: transform .2s;
+  }
+  .result-btn:hover { transform: scale(1.04); }
+  .result-btn.primary { background: var(--accent); color: #fff; }
+  .result-btn.secondary { background: #fff; color: var(--ink); box-shadow: 0 2px 10px rgba(0,0,0,.08); }
+
+  .review-list { text-align: left; margin-top: 30px; display: flex; flex-direction: column; gap: 10px; }
+  .review-item { background: #fff; border-radius: 14px; padding: 14px 18px; font-size: .85rem; box-shadow: 0 2px 10px rgba(0,0,0,.05); }
+  .review-item.correct { border-left: 4px solid #6fcf97; }
+  .review-item.wrong { border-left: 4px solid #f17c7c; }
+  .review-q { font-weight: 600; margin-bottom: 4px; }
+  .review-a { color: #8a96a3; }
+
+  footer { text-align: center; padding: 30px 0; color: #b3bcc6; font-size: .85rem; }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">RV ⚡ CODES</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="about-me.html">About</a>
+    <div class="nav-dropdown" id="projDropdown">
+      <a href="javascript:void(0)" onclick="toggleProjDropdown(event)">Projects ▾</a>
+      <div class="nav-dropdown-menu" id="projMenu">
+        <a href="my-first-website.html">🌟 My First Website</a>
+        <a href="hyphenbot.html">🤖 HyphenBot</a>
+        <a href="mini-js-game.html">🎮 Star Catcher Game</a>
+        <a href="ai-study-buddy.html">🧠 AI Study Buddy</a>
+        <a href="My-K-Pop-AI-Diary-Studio.html">💜 K-pop Mood Diary</a>
+        <a href="index.html#proj-grid">📊 Marks Analyzer</a>
+        <a href="index.html#proj-grid">🚀 Smart Study OS</a>
+        <a href="index.html#proj-grid">🚀 RV Codes Portfolio</a>
+      </div>
+    </div>
+    <a href="mailto:aaradhyaberi01@gmail.com">Contact</a>
+  </div>
+</nav>
+
+<div class="wrapper">
+
+  <!-- SUBJECT SELECT SCREEN -->
+  <div class="subject-screen" id="subjectScreen">
+    <div class="hero">
+      <h1>🧠 AI Study Buddy</h1>
+      <p>Pick a subject and test yourself with a 15-question quiz!</p>
+    </div>
+    <div class="subject-grid" id="subjectGrid"></div>
+  </div>
+
+  <!-- QUIZ SCREEN -->
+  <div class="quiz-screen" id="quizScreen">
+    <div class="quiz-header">
+      <button class="back-btn" onclick="exitQuiz()">← Back to subjects</button>
+      <div class="progress-pill" id="progressPill">Question 1 / 15</div>
+    </div>
+    <div class="progress-bar-track"><div class="progress-bar-fill" id="progressFill"></div></div>
+
+    <div class="question-card">
+      <div class="question-num" id="questionNum">QUESTION 1</div>
+      <div class="question-text" id="questionText"></div>
+      <div class="options-list" id="optionsList"></div>
+    </div>
+
+    <div class="next-btn-row">
+      <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Next →</button>
+    </div>
+  </div>
+
+  <!-- RESULTS SCREEN -->
+  <div class="results-screen" id="resultsScreen">
+    <div class="result-emoji" id="resultEmoji">🎉</div>
+    <div class="result-score" id="resultScore">12 / 15</div>
+    <div class="result-msg" id="resultMsg">Great job!</div>
+    <div class="result-actions">
+      <button class="result-btn primary" onclick="retrySubject()">🔁 Retry Quiz</button>
+      <button class="result-btn secondary" onclick="exitQuiz()">📚 Choose Another Subject</button>
+    </div>
+    <div class="review-list" id="reviewList"></div>
+  </div>
+
+</div>
+
+<footer>Built with 💜 &amp; lots of caffeine-free passion · RV Codes © 2025</footer>
+
+<script>
+/* ── PROJECTS DROPDOWN ── */
+function toggleProjDropdown(e) {
+  e.preventDefault();
+  document.getElementById('projMenu').classList.toggle('show');
+}
+document.addEventListener('click', function(e) {
+  const dropdown = document.getElementById('projDropdown');
+  if (dropdown && !dropdown.contains(e.target)) {
+    document.getElementById('projMenu').classList.remove('show');
+  }
+});
+
+/* ── SUBJECTS DATA (5 subjects x 15 questions) ── */
+const subjects = {
+  math: {
+    name: "Math", icon: "➗", color: "#7fb8d9", colorLight: "#e8f4fb",
+    questions: [
+      { q:"What is 7 × 8?", o:["54","56","58","64"], a:1 },
+      { q:"What is the square root of 144?", o:["10","11","12","14"], a:2 },
+      { q:"What is 15% of 200?", o:["20","25","30","35"], a:2 },
+      { q:"Solve: 3x = 27. What is x?", o:["6","7","8","9"], a:3 },
+      { q:"What is the value of π (pi) rounded to 2 decimal places?", o:["3.41","3.14","3.12","3.16"], a:1 },
+      { q:"What is 9² (9 squared)?", o:["81","72","99","18"], a:0 },
+      { q:"How many sides does a hexagon have?", o:["5","6","7","8"], a:1 },
+      { q:"What is 100 ÷ 4?", o:["20","25","30","40"], a:1 },
+      { q:"What is the sum of angles in a triangle?", o:["90°","180°","270°","360°"], a:1 },
+      { q:"What is 5! (5 factorial)?", o:["20","60","100","120"], a:3 },
+      { q:"What is -3 + 7?", o:["-4","4","10","-10"], a:1 },
+      { q:"Simplify: 2/4", o:["1/4","1/2","2/3","3/4"], a:1 },
+      { q:"What is the next prime number after 7?", o:["8","9","10","11"], a:3 },
+      { q:"What is 12 × 12?", o:["124","144","148","154"], a:1 },
+      { q:"If a triangle has a 90° angle, it's called a:", o:["Equilateral triangle","Right triangle","Obtuse triangle","Isosceles triangle"], a:1 }
+    ]
+  },
+  science: {
+    name: "Science", icon: "🔬", color: "#7fa896", colorLight: "#e8f3ee",
+    questions: [
+      { q:"What planet is known as the Red Planet?", o:["Venus","Mars","Jupiter","Saturn"], a:1 },
+      { q:"What gas do plants absorb from the air?", o:["Oxygen","Nitrogen","Carbon dioxide","Hydrogen"], a:2 },
+      { q:"What is the chemical symbol for water?", o:["H2O","O2","CO2","NaCl"], a:0 },
+      { q:"How many bones are in the adult human body?", o:["196","206","216","226"], a:1 },
+      { q:"What force pulls objects toward Earth?", o:["Magnetism","Friction","Gravity","Tension"], a:2 },
+      { q:"What is the powerhouse of the cell?", o:["Nucleus","Ribosome","Mitochondria","Cytoplasm"], a:2 },
+      { q:"What is the boiling point of water at sea level (°C)?", o:["90","95","100","110"], a:2 },
+      { q:"Which planet is closest to the sun?", o:["Earth","Venus","Mercury","Mars"], a:2 },
+      { q:"What do you call animals that eat only plants?", o:["Carnivores","Herbivores","Omnivores","Decomposers"], a:1 },
+      { q:"What is the largest organ in the human body?", o:["Heart","Liver","Skin","Lungs"], a:2 },
+      { q:"What part of the plant absorbs water?", o:["Leaves","Stem","Roots","Flowers"], a:2 },
+      { q:"What is the chemical symbol for gold?", o:["Go","Gd","Au","Ag"], a:2 },
+      { q:"How many chambers does the human heart have?", o:["2","3","4","5"], a:2 },
+      { q:"What type of energy does the sun give off?", o:["Chemical","Solar","Nuclear","Kinetic"], a:1 },
+      { q:"What is the process by which plants make food called?", o:["Respiration","Photosynthesis","Digestion","Evaporation"], a:1 }
+    ]
+  },
+  english: {
+    name: "English", icon: "📖", color: "#9b8fd9", colorLight: "#f0edfb",
+    questions: [
+      { q:"What is a synonym for 'happy'?", o:["Sad","Joyful","Angry","Tired"], a:1 },
+      { q:"Which word is a noun?", o:["Run","Quickly","Happiness","Blue"], a:2 },
+      { q:"What is the past tense of 'go'?", o:["Goed","Gone","Went","Going"], a:2 },
+      { q:"What punctuation mark ends a question?", o:["Period","Comma","Question mark","Exclamation mark"], a:2 },
+      { q:"What is an antonym for 'big'?", o:["Large","Huge","Small","Tall"], a:2 },
+      { q:"Which of these is an adjective?", o:["Quickly","Beautiful","Run","Jump"], a:1 },
+      { q:"What is the plural of 'child'?", o:["Childs","Childes","Children","Childies"], a:2 },
+      { q:"Which sentence is grammatically correct?", o:["She don't like it","She doesn't likes it","She doesn't like it","She not like it"], a:2 },
+      { q:"What type of word is 'quickly'?", o:["Noun","Verb","Adverb","Adjective"], a:2 },
+      { q:"What do you call a word that sounds like what it means (e.g. 'buzz')?", o:["Simile","Onomatopoeia","Metaphor","Alliteration"], a:1 },
+      { q:"What is the main character in a story called?", o:["Villain","Narrator","Protagonist","Author"], a:2 },
+      { q:"Which word means the same as 'enormous'?", o:["Tiny","Huge","Quiet","Fast"], a:1 },
+      { q:"What is a group of sentences about one topic called?", o:["A word","A paragraph","A letter","A title"], a:1 },
+      { q:"What is the opposite of 'ancient'?", o:["Old","Modern","Historic","Antique"], a:1 },
+      { q:"Which is a proper noun?", o:["city","India","river","school"], a:1 }
+    ]
+  },
+  coding: {
+    name: "Coding", icon: "💻", color: "#f2b88b", colorLight: "#fdf0e4",
+    questions: [
+      { q:"What does HTML stand for?", o:["Hyper Text Markup Language","High Tech Modern Language","Hyperlink Text Marking Language","Home Tool Markup Language"], a:0 },
+      { q:"Which tag is used to create a hyperlink in HTML?", o:["<link>","<a>","<href>","<url>"], a:1 },
+      { q:"What does CSS stand for?", o:["Computer Style Sheets","Cascading Style Sheets","Creative Style System","Color Style Sheets"], a:1 },
+      { q:"Which symbol is used for comments in JavaScript?", o:["#","//","<!-- -->","**"], a:1 },
+      { q:"What does a 'for loop' do?", o:["Stores data","Repeats code a number of times","Deletes a variable","Creates a function"], a:1 },
+      { q:"Which of these is a programming language?", o:["HTML","CSS","Python","All of the above"], a:3 },
+      { q:"What does 'console.log()' do in JavaScript?", o:["Deletes data","Prints output to the console","Creates a webpage","Stores a file"], a:1 },
+      { q:"What is a variable used for?", o:["Storing data","Deleting files","Designing pages","Connecting to internet"], a:0 },
+      { q:"What does 'if/else' help you do in code?", o:["Repeat actions","Make decisions","Store data","Style text"], a:1 },
+      { q:"What file extension is used for Python files?", o:[".html",".css",".py",".js"], a:2 },
+      { q:"What does CSS control on a webpage?", o:["Logic","Structure","Appearance/Style","Data storage"], a:2 },
+      { q:"What is a 'function' in programming?", o:["A type of variable","A reusable block of code","A color code","A file format"], a:1 },
+      { q:"Which company developed Python?", o:["Microsoft","Google","Python Software Foundation","Apple"], a:2 },
+      { q:"What does 'bug' mean in coding?", o:["A feature","An error in code","A type of variable","A loop"], a:1 },
+      { q:"What does GitHub help developers do?", o:["Design logos","Store and share code","Edit photos","Send emails"], a:1 }
+    ]
+  },
+  geography: {
+    name: "Geography", icon: "🌍", color: "#d98f8f", colorLight: "#fbeaea",
+    questions: [
+      { q:"What is the capital of India?", o:["Mumbai","New Delhi","Kolkata","Chennai"], a:1 },
+      { q:"What is the largest continent by area?", o:["Africa","Europe","Asia","North America"], a:2 },
+      { q:"Which river is the longest in the world?", o:["Amazon","Nile","Yangtze","Mississippi"], a:1 },
+      { q:"What is the smallest country in the world?", o:["Monaco","Vatican City","San Marino","Malta"], a:1 },
+      { q:"Which ocean is the largest?", o:["Atlantic","Indian","Arctic","Pacific"], a:3 },
+      { q:"What is the tallest mountain in the world?", o:["K2","Kangchenjunga","Mount Everest","Makalu"], a:2 },
+      { q:"Which desert is the largest in the world?", o:["Sahara","Gobi","Antarctic Desert","Arabian Desert"], a:2 },
+      { q:"How many continents are there?", o:["5","6","7","8"], a:2 },
+      { q:"Which country has the largest population?", o:["USA","India","China","Russia"], a:1 },
+      { q:"What is the capital of Japan?", o:["Seoul","Beijing","Tokyo","Bangkok"], a:2 },
+      { q:"Which country is known as the Land of the Rising Sun?", o:["China","Japan","Thailand","Korea"], a:1 },
+      { q:"What is the longest mountain range in the world?", o:["Himalayas","Rockies","Andes","Alps"], a:2 },
+      { q:"Which country has the most natural lakes?", o:["USA","Canada","Russia","Finland"], a:1 },
+      { q:"What is the largest island in the world?", o:["Madagascar","Greenland","Borneo","New Guinea"], a:1 },
+      { q:"Which line divides the Earth into the Northern and Southern Hemispheres?", o:["Prime Meridian","Tropic of Cancer","Equator","International Date Line"], a:2 }
+    ]
+  }
+};
+
+let currentSubjectKey = null;
+let currentQuestions = [];
+let currentIndex = 0;
+let userAnswers = [];
+let score = 0;
+
+/* ── BUILD SUBJECT CARDS ── */
+const subjectGrid = document.getElementById('subjectGrid');
+Object.keys(subjects).forEach(key => {
+  const s = subjects[key];
+  const card = document.createElement('div');
+  card.className = 'subject-card';
+  card.style.setProperty('--accent', s.color);
+  card.onclick = () => startQuiz(key);
+  card.innerHTML = `
+    <div class="subject-icon">${s.icon}</div>
+    <div class="subject-name">${s.name}</div>
+    <div class="subject-count">${s.questions.length} questions</div>
+  `;
+  subjectGrid.appendChild(card);
+});
+
+function startQuiz(key) {
+  currentSubjectKey = key;
+  currentQuestions = subjects[key].questions;
+  currentIndex = 0;
+  userAnswers = [];
+  score = 0;
+
+  document.documentElement.style.setProperty('--accent', subjects[key].color);
+  document.documentElement.style.setProperty('--accent-light', subjects[key].colorLight);
+
+  document.getElementById('subjectScreen').classList.add('hidden');
+  document.getElementById('resultsScreen').classList.remove('active');
+  document.getElementById('quizScreen').classList.add('active');
+
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = currentQuestions[currentIndex];
+  document.getElementById('questionNum').textContent = `QUESTION ${currentIndex+1}`;
+  document.getElementById('progressPill').textContent = `Question ${currentIndex+1} / ${currentQuestions.length}`;
+  document.getElementById('progressFill').style.width = ((currentIndex)/currentQuestions.length*100) + '%';
+  document.getElementById('questionText').textContent = q.q;
+
+  const optionsList = document.getElementById('optionsList');
+  optionsList.innerHTML = '';
+  const letters = ['A','B','C','D'];
+
+  q.o.forEach((opt, i) => {
+    const btn = document.createElement('div');
+    btn.className = 'option-btn';
+    btn.innerHTML = `<span class="option-letter">${letters[i]}</span><span>${opt}</span>`;
+    btn.onclick = () => selectAnswer(i, btn);
+    optionsList.appendChild(btn);
+  });
+
+  document.getElementById('nextBtn').classList.remove('show');
+}
+
+function selectAnswer(i, btnEl) {
+  const q = currentQuestions[currentIndex];
+  const allBtns = document.querySelectorAll('.option-btn');
+  allBtns.forEach(b => b.classList.add('disabled'));
+
+  if (i === q.a) {
+    btnEl.classList.add('correct');
+    score++;
+  } else {
+    btnEl.classList.add('wrong');
+    allBtns[q.a].classList.add('correct');
+  }
+
+  userAnswers.push({ question: q.q, chosen: q.o[i], correctAnswer: q.o[q.a], isCorrect: i === q.a });
+  document.getElementById('nextBtn').classList.add('show');
+}
+
+function nextQuestion() {
+  currentIndex++;
+  if (currentIndex < currentQuestions.length) {
+    renderQuestion();
+  } else {
+    showResults();
+  }
+}
+
+function showResults() {
+  document.getElementById('quizScreen').classList.remove('active');
+  document.getElementById('resultsScreen').classList.add('active');
+  document.getElementById('progressFill').style.width = '100%';
+
+  const total = currentQuestions.length;
+  document.getElementById('resultScore').textContent = `${score} / ${total}`;
+
+  const pct = score/total;
+  const emoji = document.getElementById('resultEmoji');
+  const msg = document.getElementById('resultMsg');
+  if (pct === 1) { emoji.textContent = '🏆'; msg.textContent = 'Perfect score! You absolutely crushed it!'; }
+  else if (pct >= 0.8) { emoji.textContent = '🎉'; msg.textContent = 'Awesome job! You really know your stuff!'; }
+  else if (pct >= 0.5) { emoji.textContent = '🌟'; msg.textContent = 'Good effort! A little more practice and you\'ll master it!'; }
+  else { emoji.textContent = '💪'; msg.textContent = 'Keep practicing — you\'ll get better every time!'; }
+
+  const reviewList = document.getElementById('reviewList');
+  reviewList.innerHTML = '<h3 style="font-family:\'Lexend\',sans-serif;margin-bottom:10px;">📋 Review Your Answers</h3>';
+  userAnswers.forEach((a, idx) => {
+    const item = document.createElement('div');
+    item.className = 'review-item ' + (a.isCorrect ? 'correct' : 'wrong');
+    item.innerHTML = `
+      <div class="review-q">${idx+1}. ${a.question}</div>
+      <div class="review-a">${a.isCorrect ? '✅ Your answer: ' + a.chosen : '❌ Your answer: ' + a.chosen + ' · Correct: ' + a.correctAnswer}</div>
+    `;
+    reviewList.appendChild(item);
+  });
+}
+
+function retrySubject() {
+  startQuiz(currentSubjectKey);
+}
+
+function exitQuiz() {
+  document.getElementById('quizScreen').classList.remove('active');
+  document.getElementById('resultsScreen').classList.remove('active');
+  document.getElementById('subjectScreen').classList.remove('hidden');
+}
+</script>
+
+</body>
+</html>
