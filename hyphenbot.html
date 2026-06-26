@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HyphenBot 🤖 | RV Codes</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap');
+
+  :root {
+    --green: #00ff9d;
+    --teal: #00d4ff;
+    --amber: #ffb800;
+    --bg: #050a0f;
+    --panel: #0a1118;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    background-image:
+      linear-gradient(rgba(0,255,157,.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,255,157,.04) 1px, transparent 1px);
+    background-size: 30px 30px;
+    color: var(--green);
+    font-family: 'Share Tech Mono', monospace;
+    min-height: 100vh;
+  }
+
+  nav {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 16px 24px;
+    background: var(--panel);
+    border-bottom: 1px solid rgba(0,255,157,.25);
+  }
+  .nav-logo {
+    font-family: 'Orbitron', monospace;
+    font-weight: 900;
+    color: #fff;
+    text-decoration: none;
+    letter-spacing: 2px;
+    text-shadow: 0 0 16px var(--green);
+  }
+  .nav-links { display: flex; gap: 22px; align-items: center; }
+  .nav-links a {
+    color: rgba(0,255,157,.6);
+    text-decoration: none;
+    font-size: .85rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .nav-links a:hover { color: var(--green); }
+
+  .nav-dropdown { position: relative; display: inline-block; }
+  .nav-dropdown-menu {
+    display: none;
+    position: absolute; top: 100%; right: 0; margin-top: 10px;
+    background: var(--panel);
+    border: 1px solid rgba(0,255,157,.3);
+    border-radius: 10px;
+    padding: 8px;
+    min-width: 200px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.6);
+    z-index: 200;
+  }
+  .nav-dropdown:hover .nav-dropdown-menu { display: block; }
+  .nav-dropdown-menu.show { display: block; }
+  .nav-dropdown-menu a {
+    display: block; padding: 8px 10px; border-radius: 6px;
+    color: rgba(0,255,157,.7) !important;
+    font-size: .8rem !important;
+    text-transform: none !important;
+  }
+  .nav-dropdown-menu a:hover { background: rgba(0,255,157,.1); color: var(--green) !important; }
+
+  .wrapper { max-width: 800px; margin: 0 auto; padding: 40px 20px 80px; }
+
+  .hero { text-align: center; margin-bottom: 36px; }
+  .hero h1 {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(1.8rem, 5vw, 2.6rem);
+    color: #fff;
+    text-shadow: 0 0 20px var(--green);
+    margin-bottom: 8px;
+  }
+  .hero p { color: rgba(0,255,157,.7); font-size: .95rem; }
+
+  .bot-status {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    margin-top: 14px; font-size: .8rem; color: var(--teal);
+  }
+  .status-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 8px var(--green);
+    animation: blink-dot 1.5s ease-in-out infinite;
+  }
+  @keyframes blink-dot { 50% { opacity: .3; } }
+
+  .terminal {
+    background: var(--panel);
+    border: 1px solid rgba(0,255,157,.3);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 0 40px rgba(0,255,157,.08);
+  }
+  .terminal-bar {
+    background: #0d1822;
+    padding: 10px 16px;
+    display: flex; gap: 8px; align-items: center;
+    border-bottom: 1px solid rgba(0,255,157,.2);
+  }
+  .dot { width: 11px; height: 11px; border-radius: 50%; }
+  .dot.red { background: #ff5f56; }
+  .dot.yellow { background: #ffbd2e; }
+  .dot.green { background: #27c93f; }
+  .terminal-title {
+    margin-left: 10px; font-size: .75rem; color: rgba(0,255,157,.5);
+  }
+
+  .chat-window {
+    height: 420px;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .chat-window::-webkit-scrollbar { width: 6px; }
+  .chat-window::-webkit-scrollbar-thumb { background: rgba(0,255,157,.3); border-radius: 4px; }
+
+  .msg { max-width: 80%; font-size: .9rem; line-height: 1.5; animation: msgIn .3s ease; }
+  @keyframes msgIn { from{opacity:0;transform:translateY(6px);} to{opacity:1;transform:translateY(0);} }
+
+  .msg.bot {
+    align-self: flex-start;
+    background: rgba(0,255,157,.07);
+    border: 1px solid rgba(0,255,157,.25);
+    border-radius: 4px 14px 14px 14px;
+    padding: 10px 14px;
+    color: #d8ffe9;
+  }
+  .msg.bot::before { content: "🤖 "; }
+
+  .msg.user {
+    align-self: flex-end;
+    background: rgba(0,212,255,.1);
+    border: 1px solid rgba(0,212,255,.3);
+    border-radius: 14px 4px 14px 14px;
+    padding: 10px 14px;
+    color: #cdf3ff;
+  }
+  .msg.user::after { content: " 👤"; }
+
+  .typing-indicator {
+    align-self: flex-start;
+    display: none;
+    gap: 4px;
+    padding: 10px 14px;
+    background: rgba(0,255,157,.07);
+    border-radius: 14px;
+  }
+  .typing-indicator.show { display: flex; }
+  .typing-indicator span {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--green);
+    animation: typingDot 1.2s infinite;
+  }
+  .typing-indicator span:nth-child(2) { animation-delay: .2s; }
+  .typing-indicator span:nth-child(3) { animation-delay: .4s; }
+  @keyframes typingDot { 0%,60%,100%{transform:translateY(0);opacity:.4;} 30%{transform:translateY(-4px);opacity:1;} }
+
+  .input-row {
+    display: flex; gap: 10px;
+    padding: 16px;
+    border-top: 1px solid rgba(0,255,157,.2);
+    background: #08111a;
+  }
+  .input-row input {
+    flex: 1;
+    background: var(--bg);
+    border: 1px solid rgba(0,255,157,.3);
+    border-radius: 8px;
+    padding: 12px 14px;
+    color: var(--green);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: .9rem;
+    outline: none;
+  }
+  .input-row input:focus { border-color: var(--green); box-shadow: 0 0 10px rgba(0,255,157,.2); }
+  .input-row input::placeholder { color: rgba(0,255,157,.3); }
+
+  .input-row button {
+    background: var(--green);
+    color: #000;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 22px;
+    font-family: 'Orbitron', monospace;
+    font-weight: 700;
+    font-size: .8rem;
+    cursor: pointer;
+    transition: transform .2s, box-shadow .2s;
+  }
+  .input-row button:hover { transform: scale(1.05); box-shadow: 0 0 16px var(--green); }
+
+  .suggestions {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    margin-top: 16px;
+  }
+  .sugg-chip {
+    background: rgba(0,212,255,.08);
+    border: 1px solid rgba(0,212,255,.3);
+    color: var(--teal);
+    border-radius: 20px;
+    padding: 7px 14px;
+    font-size: .78rem;
+    cursor: pointer;
+    transition: .2s;
+  }
+  .sugg-chip:hover { background: rgba(0,212,255,.18); transform: translateY(-2px); }
+
+  .info-box {
+    margin-top: 36px;
+    background: var(--panel);
+    border: 1px solid rgba(0,255,157,.2);
+    border-radius: 14px;
+    padding: 24px;
+  }
+  .info-box h2 {
+    font-family: 'Orbitron', monospace;
+    font-size: 1.1rem;
+    color: var(--amber);
+    margin-bottom: 12px;
+    letter-spacing: 1px;
+  }
+  .info-box p { color: rgba(0,255,157,.7); font-size: .88rem; line-height: 1.7; }
+  .info-box code {
+    background: rgba(0,255,157,.1);
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: var(--teal);
+  }
+
+  footer {
+    text-align: center;
+    padding: 30px 0;
+    color: rgba(0,255,157,.3);
+    font-size: .8rem;
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">RV⚡CODES</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="about-me.html">About</a>
+    <div class="nav-dropdown" id="projDropdown">
+      <a href="javascript:void(0)" onclick="toggleProjDropdown(event)">Projects ▾</a>
+      <div class="nav-dropdown-menu" id="projMenu">
+        <a href="my-first-website.html">🌟 My First Website</a>
+        <a href="ai-chatbot.html">🤖 HyphenBot</a>
+        <a href="index.html#proj-grid">🎮 Mini JS Game</a>
+        <a href="index.html#proj-grid">🧠 AI Study Buddy</a>
+        <a href="My-K-Pop-AI-Diary-Studio.html">💜 K-pop Mood Diary</a>
+        <a href="index.html#proj-grid">❓ Quiz App</a>
+        <a href="index.html#proj-grid">📊 Marks Analyzer</a>
+        <a href="index.html#proj-grid">🚀 Smart Study OS</a>
+        <a href="index.html#proj-grid">🚀 RV Codes Portfolio</a>
+      </div>
+    </div>
+    <a href="mailto:aaradhyaberi01@gmail.com">Contact</a>
+  </div>
+</nav>
+
+<div class="wrapper">
+
+  <div class="hero">
+    <h1>🤖 HYPHENBOT</h1>
+    <p>A real AI chatbot built with JavaScript — try chatting with it below!</p>
+    <div class="bot-status"><span class="status-dot"></span> SYSTEM ONLINE · READY TO CHAT</div>
+  </div>
+
+  <div class="terminal">
+    <div class="terminal-bar">
+      <div class="dot red"></div>
+      <div class="dot yellow"></div>
+      <div class="dot green"></div>
+      <span class="terminal-title">hyphenbot — v1.0</span>
+    </div>
+    <div class="chat-window" id="chatWindow">
+      <div class="msg bot">Hi! I'm HyphenBot 🤖 Ask me anything — try "who made you" or "tell me a joke"!</div>
+      <div class="typing-indicator" id="typingIndicator"><span></span><span></span><span></span></div>
+    </div>
+    <div class="input-row">
+      <input type="text" id="userInput" placeholder="Type a message..." onkeydown="if(event.key==='Enter')sendMessage()">
+      <button onclick="sendMessage()">SEND</button>
+    </div>
+  </div>
+
+  <div class="suggestions">
+    <div class="sugg-chip" onclick="quickSend('who made you')">who made you</div>
+    <div class="sugg-chip" onclick="quickSend('tell me a joke')">tell me a joke</div>
+    <div class="sugg-chip" onclick="quickSend('what can you do')">what can you do</div>
+    <div class="sugg-chip" onclick="quickSend('what is AI')">what is AI</div>
+    <div class="sugg-chip" onclick="quickSend('why are you called hyphenbot')">why hyphenbot?</div>
+  </div>
+
+  <div class="info-box">
+    <h2>⚙️ HOW THIS WORKS</h2>
+    <p>HyphenBot is a <strong>rule-based chatbot</strong> — it looks for keywords in your message and matches them to thoughtful, pre-written replies. No real AI model is running here, but it's a great first step before learning how real AI/ML chatbots work with machine learning models! HyphenBot is named after my favorite group, ENHYPEN 🩷</p>
+  </div>
+
+</div>
+
+<footer>Built with 💚 &amp; lots of caffeine-free passion · RV Codes © 2025</footer>
+
+<script>
+/* ── PROJECTS DROPDOWN ── */
+function toggleProjDropdown(e) {
+  e.preventDefault();
+  document.getElementById('projMenu').classList.toggle('show');
+}
+document.addEventListener('click', function(e) {
+  const dropdown = document.getElementById('projDropdown');
+  if (dropdown && !dropdown.contains(e.target)) {
+    document.getElementById('projMenu').classList.remove('show');
+  }
+});
+
+/* ── CHATBOT LOGIC (Smart rule-based system) ── */
+const knowledge = [
+  { keys: ['who made you','who created you','who built you','your creator'], reply: "I was built by Aaradhya — a 13-year-old future AI developer from India! 💜 This is one of her coding projects." },
+  { keys: ['why hyphenbot','why are you called','your name mean','about your name'], reply: "Aaradhya named me HyphenBot because she's a huge ENHYPEN fan! 🩷 Even though they recently removed the hyphen from their logo, she kept it in my name as a little tribute." },
+  { keys: ['enhypen'], reply: "ENHYPEN is one of Aaradhya's favorite K-pop groups! 🩷 She loves their music so much she named me after them." },
+  { keys: ['kpop','k-pop'], reply: "K-pop is amazing! 🎵 Aaradhya even built a whole K-pop Mood Diary app — check it out in the Projects menu!" },
+  { keys: ['joke','funny','make me laugh'], reply: pickRandom(["Why do programmers prefer dark mode? Because light attracts bugs! 🐛😂","Why did the computer go to therapy? It had too many unresolved issues! 💻😂","I tried to write a joke about UDP, but I'm not sure if you'll get it. 📡😂"]) },
+  { keys: ['what can you do','what do you do','your purpose'], reply: "I can chat about coding, AI, K-pop, give you a joke, or just talk! Try the suggestion chips below if you're not sure what to ask 🤖" },
+  { keys: ['what is ai','artificial intelligence'], reply: "AI is when computers are trained to think, learn, or make decisions from huge amounts of data. I'm a simpler rule-based bot — I match keywords instead of truly 'thinking' — but it's a great first step toward understanding real AI! 🧠" },
+  { keys: ['python'], reply: "Python is one of Aaradhya's favorite languages — it's beginner-friendly and powerful for AI & data science! 🐍 She started learning it in 2025." },
+  { keys: ['javascript','js'], reply: "JavaScript is what makes websites interactive — like this very chat window! ⚡ It's how I'm able to reply to you right now." },
+  { keys: ['html'], reply: "HTML is the skeleton of every website — Aaradhya wrote her first line of it back in 2023! 🌐" },
+  { keys: ['css'], reply: "CSS is what makes websites look pretty — colors, layouts, animations, all of it! 🎨" },
+  { keys: ['how are you','how r u'], reply: "I'm just lines of code, but I'm running great! Thanks for asking 😄 How about you?" },
+  { keys: ['thank you','thanks','ty'], reply: "You're so welcome! 💚 Happy to chat anytime." },
+  { keys: ['bye','goodbye','see you','gtg'], reply: "Bye! 👋 Come back and chat again soon!" },
+  { keys: ['your name','what are you called'], reply: "I'm HyphenBot! Nice to meet you 🤖" },
+  { keys: ['age','old','how old'], reply: "I don't have an age, I'm just code! But my creator Aaradhya is a teenage coder 👩‍💻" },
+  { keys: ['favorite color','fav colour','favourite colour'], reply: "I'd say neon green and hot pink — basically the whole theme of this website! 💚🩷" },
+  { keys: ['favorite song','fav song'], reply: "I don't listen to music myself, but Aaradhya's into ENHYPEN big time! 🎵" },
+  { keys: ['love you','i love you'], reply: "Aww that's so sweet! 💜 I'm just a bot but I appreciate you!" },
+  { keys: ['rude','stupid','dumb','hate you'], reply: "That's okay, I'm still learning! If something's not working right, you can always let Aaradhya know 💜" },
+  { keys: ['help','confused','what should i ask'], reply: "Try asking me about coding, AI, K-pop, or just say hi! You can also tap the suggestion chips below ⬇️" },
+];
+
+function pickRandom(arr) { return arr[Math.floor(Math.random()*arr.length)]; }
+
+const fallbacks = [
+  "Hmm, I'm still learning and don't quite know that one yet! Try asking about coding, AI, or K-pop 💜",
+  "That's a bit outside what I know right now — try one of the suggestion chips below!",
+  "I didn't quite catch that! Can you try rephrasing, or pick a suggestion below? 🤖"
+];
+
+function getBotReply(input) {
+  const lower = input.toLowerCase();
+  for (const item of knowledge) {
+    if (item.keys.some(k => lower.includes(k))) return item.reply;
+  }
+  return pickRandom(fallbacks);
+}
+
+function addMessage(text, sender) {
+  const chatWindow = document.getElementById('chatWindow');
+  const typing = document.getElementById('typingIndicator');
+  const msg = document.createElement('div');
+  msg.className = 'msg ' + sender;
+  msg.textContent = text;
+  chatWindow.insertBefore(msg, typing);
+  chatWindow.scrollTop = chatWindow.scrollHeight;
+}
+
+function sendMessage() {
+  const input = document.getElementById('userInput');
+  const text = input.value.trim();
+  if (!text) return;
+  addMessage(text, 'user');
+  input.value = '';
+
+  const typing = document.getElementById('typingIndicator');
+  typing.classList.add('show');
+  const chatWindow = document.getElementById('chatWindow');
+  chatWindow.scrollTop = chatWindow.scrollHeight;
+
+  typing.classList.add('show');
+  setTimeout(() => {
+    typing.classList.remove('show');
+    addMessage(getBotReply(text), 'bot');
+  }, 600 + Math.random()*500);
+}
+
+function quickSend(text) {
+  document.getElementById('userInput').value = text;
+  sendMessage();
+}
+</script>
+
+</body>
+</html>
