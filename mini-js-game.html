@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Star Catcher 🌟 | RV Codes</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Fredoka:wght@400;600;700&display=swap');
+
+  :root {
+    --pink: #ff6fb0;
+    --purple: #9b7bff;
+    --yellow: #ffd23f;
+    --blue: #4fd1ff;
+    --bg1: #fff0f6;
+    --bg2: #eef4ff;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'Fredoka', sans-serif;
+    background: linear-gradient(160deg, var(--bg1), var(--bg2));
+    min-height: 100vh;
+    color: #4a3a6b;
+    overflow-x: hidden;
+  }
+
+  nav {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 16px 24px;
+    background: #fff;
+    box-shadow: 0 2px 14px rgba(155,123,255,.15);
+    position: relative; z-index: 50;
+  }
+  .nav-logo {
+    font-family: 'Baloo 2', sans-serif;
+    font-weight: 800;
+    color: #6c4fcf;
+    text-decoration: none;
+    letter-spacing: 1px;
+  }
+  .nav-links { display: flex; gap: 20px; align-items: center; }
+  .nav-links a {
+    color: #8a7ba8;
+    text-decoration: none;
+    font-size: .9rem;
+    font-weight: 600;
+  }
+  .nav-links a:hover { color: var(--purple); }
+
+  .nav-dropdown { position: relative; display: inline-block; }
+  .nav-dropdown-menu {
+    display: none;
+    position: absolute; top: 100%; right: 0; margin-top: 10px;
+    background: #fff;
+    border: 2px solid #f0e6ff;
+    border-radius: 14px;
+    padding: 8px;
+    min-width: 200px;
+    box-shadow: 0 10px 30px rgba(155,123,255,.2);
+    z-index: 200;
+  }
+  .nav-dropdown:hover .nav-dropdown-menu { display: block; }
+  .nav-dropdown-menu.show { display: block; }
+  .nav-dropdown-menu a {
+    display: block; padding: 9px 12px; border-radius: 10px;
+    color: #6c4fcf !important;
+    font-size: .85rem !important;
+  }
+  .nav-dropdown-menu a:hover { background: #f5f0ff; }
+
+  .wrapper { max-width: 700px; margin: 0 auto; padding: 30px 20px 70px; text-align: center; }
+
+  h1 {
+    font-family: 'Baloo 2', sans-serif;
+    font-size: clamp(2rem, 7vw, 2.8rem);
+    color: #6c4fcf;
+    margin-bottom: 4px;
+  }
+  .subtitle { color: #9586b8; font-size: 1rem; margin-bottom: 20px; }
+
+  .stats-row {
+    display: flex; justify-content: center; gap: 14px;
+    margin-bottom: 18px; flex-wrap: wrap;
+  }
+  .stat-pill {
+    background: #fff;
+    border-radius: 30px;
+    padding: 10px 22px;
+    font-weight: 700;
+    box-shadow: 0 4px 14px rgba(155,123,255,.15);
+    font-size: .95rem;
+  }
+  .stat-pill.score { color: var(--pink); }
+  .stat-pill.time { color: var(--blue); }
+  .stat-pill.best { color: #f5a623; }
+
+  .game-frame {
+    position: relative;
+    width: 100%;
+    max-width: 600px;
+    height: 420px;
+    margin: 0 auto;
+    background: linear-gradient(180deg, #cdeaff, #ffe9f7);
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 14px 40px rgba(155,123,255,.25);
+    border: 4px solid #fff;
+    cursor: pointer;
+    touch-action: none;
+  }
+
+  .cloud {
+    position: absolute;
+    background: rgba(255,255,255,.7);
+    border-radius: 50px;
+    filter: blur(1px);
+  }
+
+  .basket {
+    position: absolute;
+    bottom: 16px;
+    width: 70px;
+    height: 50px;
+    font-size: 2.6rem;
+    text-align: center;
+    transform: translateX(-50%);
+    transition: left .05s linear;
+    user-select: none;
+    pointer-events: none;
+  }
+
+  .falling-item {
+    position: absolute;
+    font-size: 2rem;
+    user-select: none;
+    pointer-events: none;
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,.15));
+  }
+
+  .start-overlay, .end-overlay {
+    position: absolute; inset: 0;
+    background: rgba(255,255,255,.92);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 14px;
+    z-index: 30;
+    text-align: center;
+    padding: 20px;
+  }
+  .end-overlay { display: none; }
+
+  .big-emoji { font-size: 3.4rem; }
+
+  .play-btn {
+    background: linear-gradient(135deg, var(--pink), var(--purple));
+    color: #fff;
+    border: none;
+    padding: 14px 36px;
+    border-radius: 50px;
+    font-family: 'Baloo 2', sans-serif;
+    font-weight: 700;
+    font-size: 1.05rem;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(155,123,255,.4);
+    transition: transform .2s;
+  }
+  .play-btn:hover { transform: scale(1.07); }
+
+  .instructions {
+    color: #9586b8;
+    font-size: .85rem;
+    max-width: 320px;
+  }
+
+  .float-pts {
+    position: absolute;
+    font-family: 'Baloo 2', sans-serif;
+    font-weight: 800;
+    font-size: 1.2rem;
+    pointer-events: none;
+    animation: floatUp .8s ease forwards;
+  }
+  @keyframes floatUp {
+    0% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-40px); }
+  }
+
+  .how-box {
+    margin-top: 30px;
+    background: #fff;
+    border-radius: 18px;
+    padding: 22px;
+    box-shadow: 0 4px 16px rgba(155,123,255,.12);
+    text-align: left;
+  }
+  .how-box h2 {
+    font-family: 'Baloo 2', sans-serif;
+    color: #6c4fcf;
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+  }
+  .how-box p { color: #8a7ba8; font-size: .9rem; line-height: 1.6; }
+  .how-box ul { margin-top: 8px; padding-left: 20px; color: #8a7ba8; font-size: .88rem; line-height: 1.8; }
+
+  footer {
+    text-align: center; padding: 30px 0;
+    color: #b3a8c9; font-size: .85rem;
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">RV ⚡ CODES</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="about-me.html">About</a>
+    <div class="nav-dropdown" id="projDropdown">
+      <a href="javascript:void(0)" onclick="toggleProjDropdown(event)">Projects ▾</a>
+      <div class="nav-dropdown-menu" id="projMenu">
+        <a href="my-first-website.html">🌟 My First Website</a>
+        <a href="hyphenbot.html">🤖 HyphenBot</a>
+        <a href="mini-js-game.html">🎮 Star Catcher Game</a>
+        <a href="index.html#proj-grid">🧠 AI Study Buddy</a>
+        <a href="My-K-Pop-AI-Diary-Studio.html">💜 K-pop Mood Diary</a>
+        <a href="index.html#proj-grid">❓ Quiz App</a>
+        <a href="index.html#proj-grid">📊 Marks Analyzer</a>
+        <a href="index.html#proj-grid">🚀 Smart Study OS</a>
+        <a href="index.html#proj-grid">🚀 RV Codes Portfolio</a>
+      </div>
+    </div>
+    <a href="mailto:aaradhyaberi01@gmail.com">Contact</a>
+  </div>
+</nav>
+
+<div class="wrapper">
+  <h1>🌟 Star Catcher</h1>
+  <p class="subtitle">Catch the stars, dodge the bombs! A mini game built with JavaScript</p>
+
+  <div class="stats-row">
+    <div class="stat-pill score">⭐ Score: <span id="scoreDisplay">0</span></div>
+    <div class="stat-pill time">⏱️ Time: <span id="timeDisplay">30</span>s</div>
+    <div class="stat-pill best">🏆 Best: <span id="bestDisplay">0</span></div>
+  </div>
+
+  <div class="game-frame" id="gameFrame">
+    <div class="start-overlay" id="startOverlay">
+      <div class="big-emoji">🌟🧺</div>
+      <h2 style="font-family:'Baloo 2',sans-serif;color:#6c4fcf;">Star Catcher</h2>
+      <p class="instructions">Move your basket left and right to catch falling stars ⭐ — but watch out for bombs 💣! Move your mouse or finger across the game to control the basket.</p>
+      <button class="play-btn" onclick="startGame()">▶ Play Game</button>
+    </div>
+
+    <div class="end-overlay" id="endOverlay">
+      <div class="big-emoji" id="endEmoji">🎉</div>
+      <h2 style="font-family:'Baloo 2',sans-serif;color:#6c4fcf;" id="endTitle">Game Over!</h2>
+      <p class="instructions" id="endMsg">You scored some stars!</p>
+      <button class="play-btn" onclick="startGame()">🔁 Play Again</button>
+    </div>
+  </div>
+
+  <div class="how-box">
+    <h2>🎮 How To Play</h2>
+    <p>Move your mouse (or drag your finger on mobile) left and right across the game box to slide the basket.</p>
+    <ul>
+      <li>⭐ Catch stars to score +1 point each</li>
+      <li>💣 Avoid bombs — catching one ends the game early!</li>
+      <li>⏱️ You have 30 seconds — catch as many stars as you can</li>
+      <li>🏆 Try to beat your best score!</li>
+    </ul>
+  </div>
+</div>
+
+<footer>Built with 💜 &amp; lots of caffeine-free passion · RV Codes © 2025</footer>
+
+<script>
+/* ── PROJECTS DROPDOWN ── */
+function toggleProjDropdown(e) {
+  e.preventDefault();
+  document.getElementById('projMenu').classList.toggle('show');
+}
+document.addEventListener('click', function(e) {
+  const dropdown = document.getElementById('projDropdown');
+  if (dropdown && !dropdown.contains(e.target)) {
+    document.getElementById('projMenu').classList.remove('show');
+  }
+});
+
+/* ── GAME LOGIC ── */
+const gameFrame = document.getElementById('gameFrame');
+const startOverlay = document.getElementById('startOverlay');
+const endOverlay = document.getElementById('endOverlay');
+const scoreDisplay = document.getElementById('scoreDisplay');
+const timeDisplay = document.getElementById('timeDisplay');
+const bestDisplay = document.getElementById('bestDisplay');
+
+let bestScore = 0;
+let score = 0;
+let timeLeft = 30;
+let gameRunning = false;
+let basket;
+let basketX = 300;
+let spawnInterval, timerInterval, moveInterval;
+let items = [];
+
+function createBasket() {
+  basket = document.createElement('div');
+  basket.className = 'basket';
+  basket.textContent = '🧺';
+  gameFrame.appendChild(basket);
+}
+
+function moveBasket(clientX) {
+  const rect = gameFrame.getBoundingClientRect();
+  let x = clientX - rect.left;
+  x = Math.max(35, Math.min(rect.width - 35, x));
+  basketX = x;
+  if (basket) basket.style.left = x + 'px';
+}
+
+gameFrame.addEventListener('mousemove', (e) => { if (gameRunning) moveBasket(e.clientX); });
+gameFrame.addEventListener('touchmove', (e) => {
+  if (gameRunning) { moveBasket(e.touches[0].clientX); e.preventDefault(); }
+}, { passive: false });
+
+function spawnItem() {
+  const rect = gameFrame.getBoundingClientRect();
+  const isBomb = Math.random() < 0.25;
+  const el = document.createElement('div');
+  el.className = 'falling-item';
+  el.textContent = isBomb ? '💣' : (Math.random() < 0.5 ? '⭐' : '🌟');
+  const x = Math.random() * (rect.width - 40) + 20;
+  el.style.left = x + 'px';
+  el.style.top = '-30px';
+  gameFrame.appendChild(el);
+
+  const fallSpeed = 1.6 + Math.random() * 1.4;
+  items.push({ el, x, y: -30, speed: fallSpeed, isBomb, caught: false });
+}
+
+function showFloatPts(x, y, text, color) {
+  const pts = document.createElement('div');
+  pts.className = 'float-pts';
+  pts.textContent = text;
+  pts.style.left = x + 'px';
+  pts.style.top = y + 'px';
+  pts.style.color = color;
+  gameFrame.appendChild(pts);
+  setTimeout(() => pts.remove(), 800);
+}
+
+function gameLoop() {
+  const rect = gameFrame.getBoundingClientRect();
+  for (let i = items.length - 1; i >= 0; i--) {
+    const item = items[i];
+    item.y += item.speed;
+    item.el.style.top = item.y + 'px';
+
+    // collision check with basket
+    if (!item.caught && item.y > rect.height - 70 && item.y < rect.height - 10) {
+      if (Math.abs(item.x - basketX) < 40) {
+        item.caught = true;
+        if (item.isBomb) {
+          showFloatPts(item.x, item.y, '💥 BOOM', '#ff4d4d');
+          item.el.remove();
+          items.splice(i, 1);
+          endGame(false);
+          return;
+        } else {
+          score++;
+          scoreDisplay.textContent = score;
+          showFloatPts(item.x, item.y, '+1 ⭐', '#ff6fb0');
+          item.el.remove();
+          items.splice(i, 1);
+          continue;
+        }
+      }
+    }
+
+    // remove if off screen
+    if (item.y > rect.height + 20) {
+      item.el.remove();
+      items.splice(i, 1);
+    }
+  }
+}
+
+function startGame() {
+  startOverlay.style.display = 'none';
+  endOverlay.style.display = 'none';
+  score = 0;
+  timeLeft = 30;
+  scoreDisplay.textContent = 0;
+  timeDisplay.textContent = 30;
+  items.forEach(i => i.el.remove());
+  items = [];
+  if (basket) basket.remove();
+  createBasket();
+  basketX = gameFrame.getBoundingClientRect().width / 2;
+  basket.style.left = basketX + 'px';
+  gameRunning = true;
+
+  spawnInterval = setInterval(spawnItem, 750);
+  moveInterval = setInterval(gameLoop, 30);
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    timeDisplay.textContent = timeLeft;
+    if (timeLeft <= 0) endGame(true);
+  }, 1000);
+}
+
+function endGame(timeUp) {
+  gameRunning = false;
+  clearInterval(spawnInterval);
+  clearInterval(moveInterval);
+  clearInterval(timerInterval);
+
+  if (score > bestScore) {
+    bestScore = score;
+    bestDisplay.textContent = bestScore;
+  }
+
+  const endEmoji = document.getElementById('endEmoji');
+  const endTitle = document.getElementById('endTitle');
+  const endMsg = document.getElementById('endMsg');
+
+  if (!timeUp) {
+    endEmoji.textContent = '💥';
+    endTitle.textContent = 'Boom! Game Over';
+    endMsg.textContent = `You hit a bomb! Final score: ${score} ⭐`;
+  } else {
+    endEmoji.textContent = score >= 15 ? '🏆' : score >= 8 ? '🎉' : '🌟';
+    endTitle.textContent = "Time's Up!";
+    endMsg.textContent = `You caught ${score} stars! ${score > bestScore ? "New best score!" : "Try to beat your best!"}`;
+  }
+
+  endOverlay.style.display = 'flex';
+}
+</script>
+
+</body>
+</html>
