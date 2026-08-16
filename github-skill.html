@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GitHub Skill | RV Codes</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Orbitron:wght@700;900&display=swap');
+
+  :root {
+    --white: #e6edf3;
+    --green: #3fb950;
+    --purple: #8b949e;
+    --bg: #0d1117;
+    --card: #161b22;
+    --card2: #21262d;
+    --border: #30363d;
+    --text: #e6edf3;
+    --sub: #8b949e;
+    --accent: #58a6ff;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Space Grotesk',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+
+  nav { display:flex; justify-content:space-between; align-items:center; padding:16px 24px; background:#161b22; border-bottom:1px solid var(--border); position:relative; z-index:50; }
+  .nav-logo { font-family:'Orbitron',monospace; font-weight:700; color:#fff; text-decoration:none; font-size:.9rem; }
+  .nav-links { display:flex; gap:20px; align-items:center; }
+  .nav-links a { color:var(--sub); text-decoration:none; font-size:.9rem; font-weight:500; }
+  .nav-links a:hover { color:var(--white); }
+  .nav-dropdown { position:relative; display:inline-block; }
+  .nav-dropdown-menu { display:none; position:absolute; top:100%; right:0; margin-top:10px; background:var(--card2); border:1px solid var(--border); border-radius:12px; padding:8px; min-width:210px; box-shadow:0 10px 30px rgba(0,0,0,.5); z-index:200; }
+  .nav-dropdown:hover .nav-dropdown-menu { display:block; }
+  .nav-dropdown-menu.show { display:block; }
+  .nav-dropdown-menu a { display:block; padding:9px 12px; border-radius:8px; color:var(--text) !important; font-size:.85rem !important; }
+  .nav-dropdown-menu a:hover { background:var(--card); }
+
+  .wrapper { max-width:800px; margin:0 auto; padding:50px 20px 80px; }
+
+  /* HERO */
+  .hero { display:flex; align-items:center; gap:30px; margin-bottom:50px; flex-wrap:wrap; }
+  .gh-logo {
+    width:110px; height:110px; border-radius:50%; flex-shrink:0;
+    background:var(--card2); border:2px solid var(--border);
+    display:flex; align-items:center; justify-content:center;
+    font-size:3.8rem;
+    box-shadow:0 0 40px rgba(255,255,255,.1), 0 0 80px rgba(255,255,255,.05);
+    animation:glow 4s ease-in-out infinite;
+  }
+  @keyframes glow { 0%,100%{box-shadow:0 0 20px rgba(255,255,255,.08);} 50%{box-shadow:0 0 40px rgba(255,255,255,.18);} }
+
+  .hero-text h1 { font-family:'Orbitron',monospace; font-size:clamp(2rem,6vw,3rem); font-weight:900; color:#fff; margin-bottom:6px; }
+  .hero-text h1 span { color:var(--accent); }
+  .hero-text p { color:var(--sub); font-size:1rem; line-height:1.6; max-width:420px; }
+  .level-badge { display:inline-flex; align-items:center; gap:8px; background:rgba(88,166,255,.1); border:1px solid rgba(88,166,255,.25); border-radius:30px; padding:8px 18px; margin-top:14px; font-size:.85rem; font-weight:600; color:var(--accent); }
+
+  .sec-title { font-family:'Orbitron',monospace; font-size:1rem; font-weight:700; color:var(--accent); letter-spacing:3px; text-transform:uppercase; margin-bottom:20px; display:flex; align-items:center; gap:12px; }
+  .sec-title::after { content:''; flex:1; height:1px; background:linear-gradient(to right,var(--border),transparent); }
+  section { margin-bottom:48px; }
+
+  /* JOURNEY */
+  .journey-card { background:var(--card); border:1px solid var(--border); border-radius:20px; padding:28px; }
+  .journey-card p { color:var(--sub); font-size:1rem; line-height:1.8; }
+  .journey-card p span { color:var(--accent); font-weight:600; }
+
+  /* SKILLS GRID */
+  .skills-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:14px; }
+  .skill-item { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:18px; display:flex; align-items:flex-start; gap:12px; transition:.2s; }
+  .skill-item:hover { border-color:var(--accent); transform:translateY(-3px); }
+  .skill-dot { width:10px; height:10px; border-radius:50%; background:var(--green); flex-shrink:0; margin-top:5px; }
+  .skill-item-text h4 { font-size:.92rem; font-weight:700; color:#fff; margin-bottom:3px; }
+  .skill-item-text p { font-size:.78rem; color:var(--sub); line-height:1.5; }
+
+  /* CONTRIBUTION GRAPH */
+  .contrib-wrap { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:22px; }
+  .contrib-wrap p { color:var(--sub); font-size:.82rem; margin-bottom:14px; }
+  .contrib-grid { display:flex; gap:3px; flex-wrap:wrap; }
+  .contrib-week { display:flex; flex-direction:column; gap:3px; }
+  .contrib-day { width:12px; height:12px; border-radius:2px; cursor:default; transition:.2s; }
+  .contrib-day:hover { transform:scale(1.3); }
+  .c0 { background:#161b22; border:1px solid var(--border); }
+  .c1 { background:#0e4429; }
+  .c2 { background:#006d32; }
+  .c3 { background:#26a641; }
+  .c4 { background:#39d353; }
+  .contrib-labels { display:flex; gap:6px; align-items:center; margin-top:10px; font-size:.72rem; color:var(--sub); }
+  .contrib-labels .contrib-day { width:10px; height:10px; }
+
+  /* REPO CARDS */
+  .repo-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:14px; }
+  .repo-card { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:18px; transition:.2s; }
+  .repo-card:hover { border-color:var(--accent); }
+  .repo-name { font-size:.95rem; font-weight:700; color:var(--accent); margin-bottom:6px; display:flex; align-items:center; gap:6px; }
+  .repo-desc { font-size:.8rem; color:var(--sub); line-height:1.5; margin-bottom:12px; }
+  .repo-meta { display:flex; gap:14px; font-size:.75rem; color:var(--sub); }
+  .repo-lang { display:flex; align-items:center; gap:5px; }
+  .lang-dot { width:10px; height:10px; border-radius:50%; }
+
+  /* PROFICIENCY */
+  .prof-list { display:flex; flex-direction:column; gap:14px; }
+  .prof-item { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:16px 18px; }
+  .prof-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+  .prof-name { font-size:.9rem; font-weight:600; }
+  .prof-pct { font-size:.85rem; font-weight:700; color:var(--accent); }
+  .prof-track { height:6px; background:rgba(255,255,255,.06); border-radius:6px; overflow:hidden; }
+  .prof-fill { height:100%; background:linear-gradient(to right,#1f6feb,var(--accent)); border-radius:6px; width:0; transition:width 1.2s ease; }
+
+  /* CODE */
+  .code-block { background:#010409; border:1px solid var(--border); border-radius:16px; overflow:hidden; }
+  .code-bar { background:var(--card); padding:12px 18px; display:flex; gap:8px; align-items:center; border-bottom:1px solid var(--border); }
+  .code-dot { width:11px; height:11px; border-radius:50%; }
+  .code-dot.r{background:#ff5f56;} .code-dot.y{background:#ffbd2e;} .code-dot.g{background:#27c93f;}
+  .code-filename { font-size:.75rem; color:var(--sub); margin-left:8px; }
+  .code-content { padding:20px; font-family:'Courier New',monospace; font-size:.85rem; line-height:1.8; overflow-x:auto; color:#cdd9e5; }
+  .c-cmd { color:#58a6ff; }
+  .c-comment { color:#545d68; }
+  .c-str { color:#a5d6ff; }
+  .c-flag { color:#ffa657; }
+  .c-ok { color:#3fb950; }
+
+  /* NEXT */
+  .next-card { background:var(--card); border:1px solid var(--border); border-radius:20px; padding:28px; }
+  .next-card p { color:var(--sub); font-size:.95rem; line-height:1.8; margin-bottom:16px; }
+  .next-tags { display:flex; flex-wrap:wrap; gap:10px; }
+  .next-tag { background:rgba(88,166,255,.08); border:1px solid rgba(88,166,255,.2); border-radius:20px; padding:6px 16px; font-size:.82rem; font-weight:600; color:var(--accent); }
+
+  .back-link { display:inline-flex; align-items:center; gap:8px; color:var(--sub); text-decoration:none; font-size:.88rem; font-weight:600; margin-bottom:30px; transition:.2s; }
+  .back-link:hover { color:var(--white); }
+  footer { text-align:center; padding:30px 0; color:var(--border); font-size:.8rem; }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">RV⚡CODES</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="about-me.html">About</a>
+    <div class="nav-dropdown" id="projDropdown">
+      <a href="javascript:void(0)" onclick="toggleProjDropdown(event)">Projects ▾</a>
+      <div class="nav-dropdown-menu" id="projMenu">
+        <a href="my-first-website.html">🌟 My First Website</a>
+        <a href="hyphenbot.html">🤖 HyphenBot</a>
+        <a href="mini-js-game.html">🎮 Star Catcher Game</a>
+        <a href="ai-study-buddy.html">🧠 AI Study Buddy</a>
+        <a href="My-K-Pop-AI-Diary-Studio.html">💜 K-pop Mood Diary</a>
+        <a href="quiz-app.html">❓ Quiz App</a>
+        <a href="marks-analyzer.html">📊 Marks Analyzer</a>
+        <a href="smart-study-os.html">🚀 Smart Study OS</a>
+        <a href="index.html">🚀 RV Codes Portfolio</a>
+      </div>
+    </div>
+    <a href="mailto:aaradhyaberi01@gmail.com">Contact</a>
+  </div>
+</nav>
+
+<div class="wrapper">
+  <a href="index.html" class="back-link">← Back to Portfolio</a>
+
+  <div class="hero">
+    <div class="gh-logo">🐙</div>
+    <div class="hero-text">
+      <h1><span>GitHub</span> Skill</h1>
+      <p>Where code lives and developers collaborate. GitHub is how I share my work with the world — every project on this site is hosted here!</p>
+      <div class="level-badge">🐙 Level: Beginner · Since 2026</div>
+    </div>
+  </div>
+
+  <section>
+    <h2 class="sec-title">📖 My Journey</h2>
+    <div class="journey-card">
+      <p>I started using GitHub in <span>2026</span> — and it completely changed how I think about coding. Before GitHub, my projects lived only on my computer. Now they're <span>live on the internet</span> for anyone to see, use, and learn from.<br><br>
+      My first ever push was terrifying — typing <span>git push</span> and watching my code go live felt unreal. I learned how to create <span>repositories</span>, write <span>commit messages</span>, and use <span>GitHub Pages</span> to host this very portfolio for free!<br><br>
+      GitHub is also where the entire developer world collaborates — open source projects, code reviews, issue tracking. I'm just getting started, but I'm already hooked. Every commit is a little piece of my coding journey, permanently saved. 💜</p>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="sec-title">💡 What I Know</h2>
+    <div class="skills-grid">
+      <div class="skill-item"><div class="skill-dot"></div><div class="skill-item-text"><h4>Creating Repositories</h4><p>Setting up new repos, adding README files and descriptions</p></div></div>
+      <div class="skill-item"><div class="skill-dot"></div><div class="skill-item-text"><h4>Commits</h4><p>Staging changes and writing meaningful commit messages</p></div></div>
+      <div class="skill-item"><div class="skill-dot"></div><div class="skill-item-text"><h4>Push & Pull</h4><p>Pushing local code to GitHub and pulling updates down</p></div></div>
+      <div class="skill-item"><div class="skill-dot"></div><div class="skill-item-text"><h4>GitHub Pages</h4><p>Hosting websites for free directly from a GitHub repository</p></div></div>
+      <div class="skill-item"><div class="skill-dot"></div><div class="skill-item-text"><h4>README Files</h4><p>Writing markdown documentation to describe a project</p></div></div>
+      <div class="skill-item"><div class="skill-dot"></div><div class="skill-item-text"><h4>File Management</h4><p>Adding, editing, renaming and deleting files in a repo</p></div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="sec-title">📊 Contribution Activity</h2>
+    <div class="contrib-wrap">
+      <p>A simulated contribution graph — every green square represents a coding session! 🟩</p>
+      <div class="contrib-grid" id="contribGrid"></div>
+      <div class="contrib-labels">
+        Less <div class="contrib-day c0"></div><div class="contrib-day c1"></div><div class="contrib-day c2"></div><div class="contrib-day c3"></div><div class="contrib-day c4"></div> More
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="sec-title">📁 My Repos</h2>
+    <div class="repo-grid">
+      <div class="repo-card">
+        <div class="repo-name">📁 RV-Codes</div>
+        <div class="repo-desc">My personal portfolio website — built from scratch with HTML, CSS and JavaScript. Hosted on GitHub Pages.</div>
+        <div class="repo-meta">
+          <div class="repo-lang"><div class="lang-dot" style="background:#e44d26;"></div>HTML</div>
+          <span>⭐ Portfolio</span>
+        </div>
+      </div>
+      <div class="repo-card">
+        <div class="repo-name">📁 My-K-Pop-AI-Diary-Studio</div>
+        <div class="repo-desc">A fun K-pop themed AI diary app with mood tracking, journal prompts and a Korean phrase corner.</div>
+        <div class="repo-meta">
+          <div class="repo-lang"><div class="lang-dot" style="background:#f7df1e;"></div>JavaScript</div>
+          <span>💜 K-pop</span>
+        </div>
+      </div>
+      <div class="repo-card">
+        <div class="repo-name">📁 HyphenBot</div>
+        <div class="repo-desc">A custom rule-based chatbot named after ENHYPEN — built with JavaScript and deployed on GitHub Pages.</div>
+        <div class="repo-meta">
+          <div class="repo-lang"><div class="lang-dot" style="background:#f7df1e;"></div>JavaScript</div>
+          <span>🤖 Chatbot</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="sec-title">📊 Proficiency Breakdown</h2>
+    <div class="prof-list" id="profList"></div>
+  </section>
+
+  <section>
+    <h2 class="sec-title">💻 Commands I Use</h2>
+    <div class="code-block">
+      <div class="code-bar">
+        <div class="code-dot r"></div><div class="code-dot y"></div><div class="code-dot g"></div>
+        <span class="code-filename">terminal</span>
+      </div>
+      <div class="code-content">
+<span class="c-comment"># The Git commands I use every day 🐙</span>
+
+<span class="c-comment"># Check status of my files</span>
+<span class="c-cmd">git status</span>
+
+<span class="c-comment"># Stage all changes</span>
+<span class="c-cmd">git add</span> <span class="c-flag">.</span>
+
+<span class="c-comment"># Commit with a message</span>
+<span class="c-cmd">git commit</span> <span class="c-flag">-m</span> <span class="c-str">"Add HyphenBot skill page ✨"</span>
+
+<span class="c-comment"># Push to GitHub</span>
+<span class="c-cmd">git push</span> <span class="c-flag">origin</span> main
+
+<span class="c-comment"># Pull latest changes</span>
+<span class="c-cmd">git pull</span>
+
+<span class="c-ok">✓ Everything up to date on GitHub Pages!</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="sec-title">🚀 What's Next</h2>
+    <div class="next-card">
+      <p>I want to learn <strong style="color:var(--text)">branching</strong> — creating separate branches for new features so I don't break my main code. Then <strong style="color:var(--text)">pull requests</strong> and eventually contributing to <strong style="color:var(--text)">open source projects</strong>. The dream is having a GitHub profile full of green squares and projects that other developers actually use! 🌟</p>
+      <div class="next-tags">
+        <span class="next-tag">Git Branching</span>
+        <span class="next-tag">Pull Requests</span>
+        <span class="next-tag">Open Source</span>
+        <span class="next-tag">GitHub Actions</span>
+        <span class="next-tag">Collaboration</span>
+      </div>
+    </div>
+  </section>
+</div>
+
+<footer>Built with 💜 &amp; lots of caffeine-free passion · RV Codes © 2025</footer>
+
+<script>
+function toggleProjDropdown(e) {
+  e.preventDefault();
+  document.getElementById('projMenu').classList.toggle('show');
+}
+document.addEventListener('click', e => {
+  const d = document.getElementById('projDropdown');
+  if (d && !d.contains(e.target)) document.getElementById('projMenu').classList.remove('show');
+});
+
+/* CONTRIBUTION GRAPH */
+const grid = document.getElementById('contribGrid');
+const levels = [0,0,0,1,1,2,2,3,4];
+for (let w = 0; w < 28; w++) {
+  const week = document.createElement('div');
+  week.className = 'contrib-week';
+  for (let d = 0; d < 7; d++) {
+    const day = document.createElement('div');
+    const rand = Math.random();
+    const lvl = rand < 0.35 ? 0 : rand < 0.55 ? 1 : rand < 0.72 ? 2 : rand < 0.87 ? 3 : 4;
+    day.className = `contrib-day c${lvl}`;
+    week.appendChild(day);
+  }
+  grid.appendChild(week);
+}
+
+/* PROFICIENCY BARS */
+const profs = [
+  { name:'Creating & Managing Repos', pct:80 },
+  { name:'Commits & Push/Pull', pct:75 },
+  { name:'GitHub Pages Hosting', pct:85 },
+  { name:'README & Documentation', pct:70 },
+  { name:'Branching & Merging', pct:30 },
+];
+const list = document.getElementById('profList');
+profs.forEach(p => {
+  const item = document.createElement('div');
+  item.className = 'prof-item';
+  item.innerHTML = `
+    <div class="prof-top"><span class="prof-name">${p.name}</span><span class="prof-pct">${p.pct}%</span></div>
+    <div class="prof-track"><div class="prof-fill" data-w="${p.pct}%"></div></div>
+  `;
+  list.appendChild(item);
+});
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.prof-fill').forEach(b => b.style.width = b.dataset.w);
+      io.unobserve(e.target);
+    }
+  });
+}, { threshold:.3 });
+io.observe(list);
+</script>
+</body>
+</html>
