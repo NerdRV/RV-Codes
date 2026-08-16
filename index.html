@@ -171,7 +171,7 @@
     border-radius: 16px;
     padding: 24px 16px;
     text-align: center;
-    cursor: default;
+    cursor: pointer;
     transition: transform .3s, box-shadow .3s, border-color .3s;
     position: relative; overflow: hidden;
   }
@@ -320,6 +320,7 @@
     letter-spacing: 2px;
   }
   footer span { color: var(--pink); }
+
   /* ── NAV DROPDOWN ── */
   .nav-dropdown { position: relative; display: inline-block; }
   .nav-dropdown-menu {
@@ -380,20 +381,20 @@
   <div style="display:flex;gap:24px;">
     <a href="index.html" style="font-family:'Rajdhani',sans-serif;color:#00f5ff;text-decoration:none;letter-spacing:2px;text-transform:uppercase;">Home</a>
     <a href="about-me.html" style="font-family:'Rajdhani',sans-serif;color:rgba(255,255,255,.5);text-decoration:none;letter-spacing:2px;text-transform:uppercase;">About</a>
-   <div class="nav-dropdown" id="projDropdown">
-  <a href="javascript:void(0)" onclick="toggleProjDropdown(event)" style="font-family:'Rajdhani',sans-serif;color:rgba(255,255,255,.5);text-decoration:none;letter-spacing:2px;text-transform:uppercase;">Projects ▾</a>
-  <div class="nav-dropdown-menu" id="projMenu">
-    <a href="my-first-website.html">🌟 My First Website</a>
-    <a href="hyphenbot.html">🤖 HyphenBot</a>
-    <a href="mini-js-game.html">🎮 Star Catcher Game</a>
-    <a href="ai-study-buddy.html">🧠 AI Study Buddy</a>
-    <a href="My-K-Pop-AI-Diary-Studio.html">💜 K-pop Mood Diary</a>
-    <a href="quiz-app.html">❓ Quiz App</a>
-    <a href="marks-analyzer.html">📊 Marks Analyzer</a>
-    <a href="smart-study-os.html">🚀 Smart Study OS</a>
-    <a href="index.html">🚀 RV Codes Portfolio</a>
-  </div>
-</div>
+    <div class="nav-dropdown" id="projDropdown">
+      <a href="javascript:void(0)" onclick="toggleProjDropdown(event)" style="font-family:'Rajdhani',sans-serif;color:rgba(255,255,255,.5);text-decoration:none;letter-spacing:2px;text-transform:uppercase;">Projects ▾</a>
+      <div class="nav-dropdown-menu" id="projMenu">
+        <a href="my-first-website.html">🌟 My First Website</a>
+        <a href="hyphenbot.html">🤖 HyphenBot</a>
+        <a href="mini-js-game.html">🎮 Star Catcher Game</a>
+        <a href="ai-study-buddy.html">🧠 AI Study Buddy</a>
+        <a href="My-K-Pop-AI-Diary-Studio.html">💜 K-pop Mood Diary</a>
+        <a href="quiz-app.html">❓ Quiz App</a>
+        <a href="marks-analyzer.html">📊 Marks Analyzer</a>
+        <a href="smart-study-os.html">🚀 Smart Study OS</a>
+        <a href="index.html">🚀 RV Codes Portfolio</a>
+      </div>
+    </div>
     <a href="mailto:aaradhyaberi01@gmail.com" style="font-family:'Rajdhani',sans-serif;color:rgba(255,255,255,.5);text-decoration:none;letter-spacing:2px;text-transform:uppercase;">Contact</a>
   </div>
 </nav>
@@ -461,7 +462,7 @@
 </div>
 
 <script>
-  /* ── PROJECTS DROPDOWN ── */
+/* ── PROJECTS DROPDOWN ── */
 function toggleProjDropdown(e) {
   e.preventDefault();
   const menu = document.getElementById('projMenu');
@@ -473,6 +474,7 @@ document.addEventListener('click', function(e) {
     document.getElementById('projMenu').classList.remove('show');
   }
 });
+
 /* ── STARS ── */
 const canvas = document.getElementById('stars');
 const ctx = canvas.getContext('2d');
@@ -537,18 +539,20 @@ type();
 
 /* ── SKILLS ── */
 const skills=[
-  {name:'HTML',icon:'🌐',level:85,glow:'#ff6b35'},
-  {name:'CSS',icon:'🎨',level:80,glow:'#00f5ff'},
-  {name:'JavaScript',icon:'⚡',level:70,glow:'#ffe600'},
-  {name:'Python',icon:'🐍',level:75,glow:'#b14fff'},
-  {name:'AI / ML',icon:'🤖',level:55,glow:'#ff2d9b'},
-  {name:'GitHub',icon:'🐙',level:65,glow:'#ffffff'},
+  {name:'HTML',icon:'🌐',level:85,glow:'#ff6b35',link:'html-skill.html'},
+  {name:'CSS',icon:'🎨',level:80,glow:'#00f5ff',link:'css-skill.html'},
+  {name:'JavaScript',icon:'⚡',level:70,glow:'#ffe600',link:'js-skill.html'},
+  {name:'Python',icon:'🐍',level:75,glow:'#b14fff',link:'python-skill.html'},
+  {name:'AI / ML',icon:'🤖',level:55,glow:'#ff2d9b',link:'index.html'},
+  {name:'GitHub',icon:'🐙',level:65,glow:'#ffffff',link:'github-skill.html'},
 ];
 const sg=document.getElementById('skills-grid');
 skills.forEach(s=>{
   const card=document.createElement('div');
   card.className='skill-card';
   card.style.setProperty('--glow',s.glow);
+  card.style.cursor='pointer';
+  card.onclick=()=>window.location.href=s.link;
   card.innerHTML=`<div class="skill-icon">${s.icon}</div>
     <div class="skill-name">${s.name}</div>
     <div class="skill-bar"><div class="skill-fill" data-level="${s.level}"></div></div>`;
