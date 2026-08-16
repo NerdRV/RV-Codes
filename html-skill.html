@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HTML Skill | RV Codes</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Orbitron:wght@700;900&display=swap');
+
+  :root {
+    --orange: #e44d26;
+    --orange2: #f16529;
+    --orange-light: #ff8c42;
+    --bg: #0f0a06;
+    --card: #1a1008;
+    --border: rgba(228,77,38,.2);
+    --text: #f5e6d8;
+    --sub: rgba(245,230,216,.6);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Space Grotesk',sans-serif; background:var(--bg); color:var(--text); min-height:100vh;
+    background-image: radial-gradient(circle at 10% 10%, rgba(228,77,38,.15) 0%, transparent 50%),
+                      radial-gradient(circle at 90% 90%, rgba(241,101,41,.1) 0%, transparent 50%);
+  }
+
+  /* NAV */
+  nav { display:flex; justify-content:space-between; align-items:center; padding:16px 24px; background:rgba(0,0,0,.4); backdrop-filter:blur(10px); border-bottom:1px solid var(--border); position:relative; z-index:50; }
+  .nav-logo { font-family:'Orbitron',monospace; font-weight:700; color:#fff; text-decoration:none; font-size:.9rem; text-shadow:0 0 16px var(--orange); }
+  .nav-links { display:flex; gap:20px; align-items:center; }
+  .nav-links a { color:var(--sub); text-decoration:none; font-size:.9rem; font-weight:500; }
+  .nav-links a:hover { color:var(--orange-light); }
+  .nav-dropdown { position:relative; display:inline-block; }
+  .nav-dropdown-menu { display:none; position:absolute; top:100%; right:0; margin-top:10px; background:#1a0a04; border:1px solid var(--border); border-radius:14px; padding:8px; min-width:210px; box-shadow:0 10px 30px rgba(0,0,0,.5); z-index:200; }
+  .nav-dropdown:hover .nav-dropdown-menu { display:block; }
+  .nav-dropdown-menu.show { display:block; }
+  .nav-dropdown-menu a { display:block; padding:9px 12px; border-radius:10px; color:var(--text) !important; font-size:.85rem !important; }
+  .nav-dropdown-menu a:hover { background:rgba(228,77,38,.1); }
+
+  .wrapper { max-width:800px; margin:0 auto; padding:50px 20px 80px; }
+
+  /* HERO */
+  .hero { display:flex; align-items:center; gap:30px; margin-bottom:50px; flex-wrap:wrap; }
+  .html-logo {
+    width:110px; height:110px; border-radius:24px; flex-shrink:0;
+    background:linear-gradient(135deg,var(--orange),var(--orange-light));
+    display:flex; align-items:center; justify-content:center;
+    font-size:3rem; font-weight:900; color:#fff;
+    box-shadow:0 0 40px rgba(228,77,38,.5), 0 0 80px rgba(228,77,38,.2);
+    font-family:'Orbitron',monospace;
+    animation:glow 3s ease-in-out infinite;
+  }
+  @keyframes glow { 0%,100%{box-shadow:0 0 40px rgba(228,77,38,.5),0 0 80px rgba(228,77,38,.2);} 50%{box-shadow:0 0 60px rgba(228,77,38,.8),0 0 120px rgba(228,77,38,.4);} }
+  .hero-text h1 { font-family:'Orbitron',monospace; font-size:clamp(2rem,6vw,3rem); font-weight:900; color:#fff; margin-bottom:6px; }
+  .hero-text h1 span { color:var(--orange); }
+  .hero-text p { color:var(--sub); font-size:1rem; line-height:1.6; max-width:420px; }
+
+  .level-badge {
+    display:inline-flex; align-items:center; gap:8px;
+    background:rgba(228,77,38,.15); border:1px solid rgba(228,77,38,.3);
+    border-radius:30px; padding:8px 18px; margin-top:14px;
+    font-size:.85rem; font-weight:600; color:var(--orange-light);
+  }
+
+  /* SECTION TITLE */
+  .sec-title { font-family:'Orbitron',monospace; font-size:1rem; font-weight:700; color:var(--orange); letter-spacing:3px; text-transform:uppercase; margin-bottom:20px; display:flex; align-items:center; gap:12px; }
+  .sec-title::after { content:''; flex:1; height:1px; background:linear-gradient(to right,var(--orange),transparent); }
+  section { margin-bottom:48px; }
+
+  /* JOURNEY */
+  .journey-card { background:var(--card); border:1px solid var(--border); border-radius:20px; padding:28px; }
+  .journey-card p { color:var(--sub); font-size:1rem; line-height:1.8; }
+  .journey-card p span { color:var(--orange-light); font-weight:600; }
+
+  /* SKILLS GRID */
+  .skills-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:14px; }
+  .skill-item { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:18px; display:flex; align-items:flex-start; gap:12px; transition:.2s; }
+  .skill-item:hover { border-color:var(--orange); transform:translateY(-3px); }
+  .skill-dot { width:10px; height:10px; border-radius:50%; background:var(--orange); flex-shrink:0; margin-top:5px; box-shadow:0 0 8px var(--orange); }
+  .skill-item-text h4 { font-size:.92rem; font-weight:700; color:#fff; margin-bottom:3px; }
+  .skill-item-text p { font-size:.78rem; color:var(--sub); line-height:1.5; }
+
+  /* PROFICIENCY */
+  .prof-list { display:flex; flex-direction:column; gap:14px; }
+  .prof-item { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:16px 18px; }
+  .prof-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+  .prof-name { font-size:.9rem; font-weight:600; }
+  .prof-pct { font-size:.85rem; font-weight:700; color:var(--orange); }
+  .prof-track { height:6px; background:rgba(255,255,255,.08); border-radius:6px; overflow:hidden; }
+  .prof-fill { height:100%; background:linear-gradient(to right,var(--orange),var(--orange-light)); border-radius:6px; width:0; transition:width 1.2s ease; }
+
+  /* CODE SNIPPET */
+  .code-block { background:#0a0600; border:1px solid var(--border); border-radius:16px; overflow:hidden; }
+  .code-bar { background:#1a0a04; padding:12px 18px; display:flex; gap:8px; align-items:center; border-bottom:1px solid var(--border); }
+  .code-dot { width:11px; height:11px; border-radius:50%; }
+  .code-dot.r { background:#ff5f56; }
+  .code-dot.y { background:#ffbd2e; }
+  .code-dot.g { background:#27c93f; }
+  .code-filename { font-size:.75rem; color:var(--sub); margin-left:8px; }
+  .code-content { padding:20px; font-family:'Courier New',monospace; font-size:.85rem; line-height:1.8; overflow-x:auto; }
+  .c-tag { color:#e44d26; }
+  .c-attr { color:#f6c958; }
+  .c-val { color:#a8d8a8; }
+  .c-text { color:#d4d4d4; }
+  .c-comment { color:#6a9955; }
+
+  /* WHAT'S NEXT */
+  .next-card { background:linear-gradient(135deg,rgba(228,77,38,.1),rgba(241,101,41,.05)); border:1px solid var(--border); border-radius:20px; padding:28px; }
+  .next-card p { color:var(--sub); font-size:.95rem; line-height:1.8; margin-bottom:16px; }
+  .next-tags { display:flex; flex-wrap:wrap; gap:10px; }
+  .next-tag { background:rgba(228,77,38,.12); border:1px solid rgba(228,77,38,.25); border-radius:20px; padding:6px 16px; font-size:.82rem; font-weight:600; color:var(--orange-light); }
+
+  /* BACK BTN */
+  .back-link { display:inline-flex; align-items:center; gap:8px; color:var(--sub); text-decoration:none; font-size:.88rem; font-weight:600; margin-bottom:30px; transition:.2s; }
+  .back-link:hover { color:var(--orange-light); }
+
+  footer { text-align:center; padding:30px 0; color:rgba(245,230,216,.2); font-size:.8rem; }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">RV⚡CODES</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="about-me.html">About</a>
+    <div class="nav-dropdown" id="projDropdown">
+      <a href="javascript:void(0)" onclick="toggleProjDropdown(event)">Projects ▾</a>
+      <div class="nav-dropdown-menu" id="projMenu">
+        <a href="my-first-website.html">🌟 My First Website</a>
+        <a href="hyphenbot.html">🤖 HyphenBot</a>
+        <a href="mini-js-game.html">🎮 Star Catcher Game</a>
+        <a href="ai-study-buddy.html">🧠 AI Study Buddy</a>
+        <a href="My-K-Pop-AI-Diary-Studio.html">💜 K-pop Mood Diary</a>
+        <a href="quiz-app.html">❓ Quiz App</a>
+        <a href="marks-analyzer.html">📊 Marks Analyzer</a>
+        <a href="smart-study-os.html">🚀 Smart Study OS</a>
+        <a href="index.html">🚀 RV Codes Portfolio</a>
+      </div>
+    </div>
+    <a href="mailto:aaradhyaberi01@gmail.com">Contact</a>
+  </div>
+</nav>
+
+<div class="wrapper">
+
+  <a href="index.html" class="back-link">← Back to Portfolio</a>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="html-logo">&lt;/&gt;</div>
+    <div class="hero-text">
+      <h1><span>HTML</span> Skill</h1>
+      <p>The foundation of every website ever built. My very first coding language — and the one that started everything.</p>
+      <div class="level-badge">⚡ Level: Intermediate · Since 2023</div>
+    </div>
+  </div>
+
+  <!-- JOURNEY -->
+  <section>
+    <h2 class="sec-title">📖 My Journey</h2>
+    <div class="journey-card">
+      <p>I started learning HTML in <span>2023</span> — and honestly it was love at first tag. 💜 The first thing I ever typed was a simple <span>&lt;h1&gt;</span> heading and when I saw it appear in the browser, I was completely hooked. It felt like magic — writing words and watching them come to life on screen.<br><br>
+      From there I moved on to links, images, and paragraphs. Then I discovered <span>divs</span> and how they let you structure a whole page. I learned about <span>semantic HTML</span> — using the right tags for the right content — and how it makes websites more accessible and better for search engines.<br><br>
+      Today, HTML is second nature to me. Every project on this portfolio started with an HTML file. It's the skeleton of everything I build! 🦴</p>
+    </div>
+  </section>
+
+  <!-- WHAT I KNOW -->
+  <section>
+    <h2 class="sec-title">💡 What I Know</h2>
+    <div class="skills-grid">
+      <div class="skill-item"><div class="skill-dot"></div><div class="skill-item-text"><h4>Basic Structure</h4><p>DOCTYPE, html, head, body — the skeleton of every page</p></div></div>
+      <div class="skill-item"><div class="skill-dot"></div><div class="skill-item-text"><h4>Text & Headings</h4><p>h1–h6, p, strong, em, span, br — all the text tags</p></div></div>
+      <div class="skill-item"><div class="skill-dot"></div><div class="skill-item-text"><h4>Links & Images</h4><p>Anchor tags with href, img with src and alt attributes</p></div></div>
+      <div class="skill-item"><div class="skill-dot"></div><div class="skill-item-text"><h4>Lists</h4><p>Ordered (ol) and unordered (ul) lists with list items (li)</p></div></div>
+      <div class="skill-item"><div class="skill-dot"></div><div class="skill-item-text"><h4>Divs & Spans</h4><p>Using containers to group and structure content on a page</p></div></div>
+      <div class="skill-item"><div class="skill-dot"></div><div class="skill-item-text"><h4>Forms</h4><p>Input fields, buttons, labels, dropdowns and text areas</p></div></div>
+      <div class="skill-item"><div class="skill-dot"></div><div class="skill-item-text"><h4>Tables</h4><p>Creating data tables with tr, th, and td tags</p></div></div>
+      <div class="skill-item"><div class="skill-dot"></div><div class="skill-item-text"><h4>Semantic HTML</h4><p>nav, header, main, section, article, footer — writing meaningful code</p></div></div>
+      <div class="skill-item"><div class="skill-dot"></div><div class="skill-item-text"><h4>Attributes</h4><p>id, class, style, href, src, alt, placeholder and more</p></div></div>
+    </div>
+  </section>
+
+  <!-- PROFICIENCY -->
+  <section>
+    <h2 class="sec-title">📊 Proficiency Breakdown</h2>
+    <div class="prof-list" id="profList"></div>
+  </section>
+
+  <!-- CODE SNIPPET -->
+  <section>
+    <h2 class="sec-title">💻 Sample Code I Can Write</h2>
+    <div class="code-block">
+      <div class="code-bar">
+        <div class="code-dot r"></div>
+        <div class="code-dot y"></div>
+        <div class="code-dot g"></div>
+        <span class="code-filename">aaradhya.html</span>
+      </div>
+      <div class="code-content">
+<span class="c-comment">&lt;!-- My favourite kind of HTML page 💜 --&gt;</span>
+<span class="c-tag">&lt;!DOCTYPE html&gt;</span>
+<span class="c-tag">&lt;html</span> <span class="c-attr">lang</span>=<span class="c-val">"en"</span><span class="c-tag">&gt;</span>
+<span class="c-tag">&lt;head&gt;</span>
+  <span class="c-tag">&lt;meta</span> <span class="c-attr">charset</span>=<span class="c-val">"UTF-8"</span><span class="c-tag">&gt;</span>
+  <span class="c-tag">&lt;title&gt;</span><span class="c-text">Aaradhya's Page ✨</span><span class="c-tag">&lt;/title&gt;</span>
+<span class="c-tag">&lt;/head&gt;</span>
+<span class="c-tag">&lt;body&gt;</span>
+  <span class="c-tag">&lt;header&gt;</span>
+    <span class="c-tag">&lt;nav&gt;</span>
+      <span class="c-tag">&lt;a</span> <span class="c-attr">href</span>=<span class="c-val">"index.html"</span><span class="c-tag">&gt;</span><span class="c-text">Home</span><span class="c-tag">&lt;/a&gt;</span>
+    <span class="c-tag">&lt;/nav&gt;</span>
+  <span class="c-tag">&lt;/header&gt;</span>
+
+  <span class="c-tag">&lt;main&gt;</span>
+    <span class="c-tag">&lt;h1&gt;</span><span class="c-text">Hello, I'm Aaradhya 👩‍💻</span><span class="c-tag">&lt;/h1&gt;</span>
+    <span class="c-tag">&lt;p&gt;</span><span class="c-text">Future AI Developer from India 🚀</span><span class="c-tag">&lt;/p&gt;</span>
+    <span class="c-tag">&lt;img</span> <span class="c-attr">src</span>=<span class="c-val">"me.jpg"</span> <span class="c-attr">alt</span>=<span class="c-val">"Aaradhya coding"</span><span class="c-tag">&gt;</span>
+  <span class="c-tag">&lt;/main&gt;</span>
+
+  <span class="c-tag">&lt;footer&gt;</span>
+    <span class="c-tag">&lt;p&gt;</span><span class="c-text">Built with 💜 by Aaradhya</span><span class="c-tag">&lt;/p&gt;</span>
+  <span class="c-tag">&lt;/footer&gt;</span>
+<span class="c-tag">&lt;/body&gt;</span>
+<span class="c-tag">&lt;/html&gt;</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHAT'S NEXT -->
+  <section>
+    <h2 class="sec-title">🚀 What's Next</h2>
+    <div class="next-card">
+      <p>I'm already comfortable with intermediate HTML but I want to keep pushing! Next I want to go deeper into <strong style="color:#f5e6d8">HTML5 APIs</strong> like Canvas, Audio, Video and Web Storage — the stuff that makes web pages feel like real apps. I also want to get better at <strong style="color:#f5e6d8">accessibility</strong> (making sites usable for everyone) and writing cleaner, more semantic code.</p>
+      <div class="next-tags">
+        <span class="next-tag">HTML5 Canvas</span>
+        <span class="next-tag">Web Storage API</span>
+        <span class="next-tag">Accessibility (a11y)</span>
+        <span class="next-tag">Audio & Video tags</span>
+        <span class="next-tag">Meta SEO tags</span>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer>Built with 💜 &amp; lots of caffeine-free passion · RV Codes © 2025</footer>
+
+<script>
+function toggleProjDropdown(e) {
+  e.preventDefault();
+  document.getElementById('projMenu').classList.toggle('show');
+}
+document.addEventListener('click', e => {
+  const d = document.getElementById('projDropdown');
+  if (d && !d.contains(e.target)) document.getElementById('projMenu').classList.remove('show');
+});
+
+/* PROFICIENCY BARS */
+const profs = [
+  { name:'Basic Structure & Tags', pct:90 },
+  { name:'Forms & Inputs', pct:75 },
+  { name:'Semantic HTML', pct:70 },
+  { name:'Tables', pct:72 },
+  { name:'HTML5 Features', pct:55 },
+];
+const list = document.getElementById('profList');
+profs.forEach(p => {
+  const item = document.createElement('div');
+  item.className = 'prof-item';
+  item.innerHTML = `
+    <div class="prof-top">
+      <span class="prof-name">${p.name}</span>
+      <span class="prof-pct">${p.pct}%</span>
+    </div>
+    <div class="prof-track"><div class="prof-fill" data-w="${p.pct}%"></div></div>
+  `;
+  list.appendChild(item);
+});
+
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.prof-fill').forEach(b => b.style.width = b.dataset.w);
+      io.unobserve(e.target);
+    }
+  });
+}, { threshold:.3 });
+io.observe(list);
+</script>
+
+</body>
+</html>
