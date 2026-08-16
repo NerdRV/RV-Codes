@@ -557,25 +557,27 @@ skills.forEach(s=>{
 
 /* ── PROJECTS ── */
 const projects=[
-  {emoji:'🌟',title:'My First Website',desc:'The very first page I ever coded — the spark that started it all.',tag:'HTML & CSS',accent:'#ff2d9b'},
-  {emoji:'🤖',title:'AI Chatbot',desc:'A simple chatbot built with Python. Conversations with machines — so cool!',tag:'Python',accent:'#b14fff'},
-  {emoji:'🎮',title:'Mini JS Game',desc:'A browser game I made to learn JavaScript — dodge the asteroids!',tag:'JavaScript',accent:'#ffe600'},
-  {emoji:'🤖',title:'AI Study Buddy',desc:'An AI-powered learning companion that helps students understand concepts, revise topics, and study smarter.',tag:'JavaScript',accent:'#5cf216'},
-  {emoji:'💜',title:'K-pop Mood Diary',desc:'A fun digital diary that tracks moods, memories, and favorite K-pop songs every day.',tag:'JavaScript',accent:'#4856f7',link:'https://github.com/RV-Codes/My-K-Pop-AI-Diary-Studio'},
-  {emoji:'🧠',title:'Quiz App',desc:'An interactive quiz platform that makes learning engaging through challenges and instant feedback.',tag:'JavaScript',accent:'#ba1420'},
-  {emoji:'📊',title:'Marks Analyzer',desc:'A smart tool that analyzes academic performance and identifies strengths and areas for improvement.',tag:'JavaScript',accent:'#d6a249'},
-  {emoji:'🚀',title:'Smart Study OS',desc:'An all-in-one student productivity system with notes, planning, revision, and progress tracking.',tag:'JavaScript',accent:'#67dbd2'},
-  {emoji:'🚀',title:'RV Codes Portfolio',desc:'This very site — my little corner of the internet, coded from scratch.',tag:'HTML · CSS · JS',accent:'#00f5ff'},
+  {emoji:'🌟',title:'My First Website',desc:'The very first page I ever coded — the spark that started it all.',tag:'HTML & CSS',accent:'#ff2d9b',link:'my-first-website.html'},
+  {emoji:'🤖',title:'AI Chatbot',desc:'A simple chatbot built with Python. Conversations with machines — so cool!',tag:'Python',accent:'#b14fff',link:'hyphenbot.html'},
+  {emoji:'🎮',title:'Mini JS Game',desc:'A browser game I made to learn JavaScript — dodge the asteroids!',tag:'JavaScript',accent:'#ffe600',link:'mini-js-game.html'},
+  {emoji:'🤖',title:'AI Study Buddy',desc:'An AI-powered learning companion that helps students understand concepts, revise topics, and study smarter.',tag:'JavaScript',accent:'#5cf216',link:'ai-study-buddy.html'},
+  {emoji:'💜',title:'K-pop Mood Diary',desc:'A fun digital diary that tracks moods, memories, and favorite K-pop songs every day.',tag:'JavaScript',accent:'#4856f7',link:'My-K-Pop-AI-Diary-Studio.html'},
+  {emoji:'🧠',title:'Quiz App',desc:'An interactive quiz platform that makes learning engaging through challenges and instant feedback.',tag:'JavaScript',accent:'#ba1420',link:'quiz-app.html'},
+  {emoji:'📊',title:'Marks Analyzer',desc:'A smart tool that analyzes academic performance and identifies strengths and areas for improvement.',tag:'JavaScript',accent:'#d6a249',link:'marks-analyzer.html'},
+  {emoji:'🚀',title:'Smart Study OS',desc:'An all-in-one student productivity system with notes, planning, revision, and progress tracking.',tag:'JavaScript',accent:'#67dbd2',link:'smart-study-os.html'},
+  {emoji:'🚀',title:'RV Codes Portfolio',desc:'This very site — my little corner of the internet, coded from scratch.',tag:'HTML · CSS · JS',accent:'#00f5ff',link:'index.html'},
 ];
 const pg=document.getElementById('proj-grid');
 projects.forEach(p=>{
   const card=document.createElement('div');
   card.className='proj-card';
   card.style.setProperty('--accent',p.accent);
+  card.style.cursor='pointer';
   card.innerHTML=`<div class="proj-emoji">${p.emoji}</div>
     <div class="proj-title">${p.title}</div>
     <div class="proj-desc">${p.desc}</div>
     <span class="proj-tag">${p.tag}</span>`;
+  card.onclick=()=>window.location.href=p.link;
   pg.appendChild(card);
 });
 
