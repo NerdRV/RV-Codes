@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CSS Skill | RV Codes</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Orbitron:wght@700;900&display=swap');
+
+  :root {
+    --blue: #264de4;
+    --blue2: #2965f1;
+    --blue-light: #60a5fa;
+    --bg: #030818;
+    --card: #060f2a;
+    --border: rgba(38,77,228,.25);
+    --text: #e0eaff;
+    --sub: rgba(224,234,255,.6);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Space Grotesk',sans-serif; background:var(--bg); color:var(--text); min-height:100vh;
+    background-image: radial-gradient(circle at 10% 10%, rgba(38,77,228,.2) 0%, transparent 50%),
+                      radial-gradient(circle at 90% 90%, rgba(96,165,250,.1) 0%, transparent 50%);
+  }
+
+  nav { display:flex; justify-content:space-between; align-items:center; padding:16px 24px; background:rgba(0,0,0,.4); backdrop-filter:blur(10px); border-bottom:1px solid var(--border); position:relative; z-index:50; }
+  .nav-logo { font-family:'Orbitron',monospace; font-weight:700; color:#fff; text-decoration:none; font-size:.9rem; text-shadow:0 0 16px var(--blue-light); }
+  .nav-links { display:flex; gap:20px; align-items:center; }
+  .nav-links a { color:var(--sub); text-decoration:none; font-size:.9rem; font-weight:500; }
+  .nav-links a:hover { color:var(--blue-light); }
+  .nav-dropdown { position:relative; display:inline-block; }
+  .nav-dropdown-menu { display:none; position:absolute; top:100%; right:0; margin-top:10px; background:#060f2a; border:1px solid var(--border); border-radius:14px; padding:8px; min-width:210px; box-shadow:0 10px 30px rgba(0,0,0,.5); z-index:200; }
+  .nav-dropdown:hover .nav-dropdown-menu { display:block; }
+  .nav-dropdown-menu.show { display:block; }
+  .nav-dropdown-menu a { display:block; padding:9px 12px; border-radius:10px; color:var(--text) !important; font-size:.85rem !important; }
+  .nav-dropdown-menu a:hover { background:rgba(38,77,228,.15); }
+
+  .wrapper { max-width:800px; margin:0 auto; padding:50px 20px 80px; }
+
+  /* HERO */
+  .hero { display:flex; align-items:center; gap:30px; margin-bottom:50px; flex-wrap:wrap; }
+  .css-logo {
+    width:110px; height:110px; border-radius:24px; flex-shrink:0;
+    background:linear-gradient(135deg,var(--blue),var(--blue-light));
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.6rem; font-weight:900; color:#fff;
+    box-shadow:0 0 40px rgba(38,77,228,.6), 0 0 80px rgba(38,77,228,.2);
+    font-family:'Orbitron',monospace; letter-spacing:-1px;
+    animation:glow 3s ease-in-out infinite;
+  }
+  @keyframes glow { 0%,100%{box-shadow:0 0 40px rgba(38,77,228,.6),0 0 80px rgba(38,77,228,.2);} 50%{box-shadow:0 0 60px rgba(96,165,250,.9),0 0 120px rgba(38,77,228,.4);} }
+
+  .hero-text h1 { font-family:'Orbitron',monospace; font-size:clamp(2rem,6vw,3rem); font-weight:900; color:#fff; margin-bottom:6px; }
+  .hero-text h1 span { color:var(--blue-light); }
+  .hero-text p { color:var(--sub); font-size:1rem; line-height:1.6; max-width:420px; }
+  .level-badge { display:inline-flex; align-items:center; gap:8px; background:rgba(38,77,228,.15); border:1px solid rgba(38,77,228,.35); border-radius:30px; padding:8px 18px; margin-top:14px; font-size:.85rem; font-weight:600; color:var(--blue-light); }
+
+  .sec-title { font-family:'Orbitron',monospace; font-size:1rem; font-weight:700; color:var(--blue-light); letter-spacing:3px; text-transform:uppercase; margin-bottom:20px; display:flex; align-items:center; gap:12px; }
+  .sec-title::after { content:''; flex:1; height:1px; background:linear-gradient(to right,var(--blue-light),transparent); }
+  section { margin-bottom:48px; }
+
+  /* JOURNEY */
+  .journey-card { background:var(--card); border:1px solid var(--border); border-radius:20px; padding:28px; }
+  .journey-card p { color:var(--sub); font-size:1rem; line-height:1.8; }
+  .journey-card p span { color:var(--blue-light); font-weight:600; }
+
+  /* SKILLS GRID */
+  .skills-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:14px; }
+  .skill-item { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:18px; display:flex; align-items:flex-start; gap:12px; transition:.2s; }
+  .skill-item:hover { border-color:var(--blue-light); transform:translateY(-3px); }
+  .skill-dot { width:10px; height:10px; border-radius:50%; background:var(--blue-light); flex-shrink:0; margin-top:5px; box-shadow:0 0 8px var(--blue-light); }
+  .skill-item-text h4 { font-size:.92rem; font-weight:700; color:#fff; margin-bottom:3px; }
+  .skill-item-text p { font-size:.78rem; color:var(--sub); line-height:1.5; }
+
+  /* LIVE DEMO */
+  .demo-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:16px; }
+  .demo-card { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:20px; text-align:center; overflow:hidden; }
+  .demo-label { font-size:.75rem; font-weight:700; color:var(--sub); letter-spacing:1px; text-transform:uppercase; margin-bottom:14px; }
+  .demo-box { height:70px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:.85rem; font-weight:600; color:#fff; }
+  .demo-gradient { background:linear-gradient(135deg,#264de4,#60a5fa); }
+  .demo-shadow { background:#1e3a8a; box-shadow:0 0 20px rgba(96,165,250,.6); }
+  .demo-anim { background:#1e40af; animation:pulse-box 1.5s ease-in-out infinite; }
+  @keyframes pulse-box { 0%,100%{transform:scale(1);} 50%{transform:scale(1.06);} }
+  .demo-flex { background:#1e3a8a; display:flex; align-items:center; justify-content:center; gap:6px; }
+  .demo-flex-dot { width:16px; height:16px; border-radius:50%; }
+
+  /* PROFICIENCY */
+  .prof-list { display:flex; flex-direction:column; gap:14px; }
+  .prof-item { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:16px 18px; }
+  .prof-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+  .prof-name { font-size:.9rem; font-weight:600; }
+  .prof-pct { font-size:.85rem; font-weight:700; color:var(--blue-light); }
+  .prof-track { height:6px; background:rgba(255,255,255,.08); border-radius:6px; overflow:hidden; }
+  .prof-fill { height:100%; background:linear-gradient(to right,var(--blue),var(--blue-light)); border-radius:6px; width:0; transition:width 1.2s ease; }
+
+  /* CODE */
+  .code-block { background:#020a1a; border:1px solid var(--border); border-radius:16px; overflow:hidden; }
+  .code-bar { background:#060f2a; padding:12px 18px; display:flex; gap:8px; align-items:center; border-bottom:1px solid var(--border); }
+  .code-dot { width:11px; height:11px; border-radius:50%; }
+  .code-dot.r{background:#ff5f56;} .code-dot.y{background:#ffbd2e;} .code-dot.g{background:#27c93f;}
+  .code-filename { font-size:.75rem; color:var(--sub); margin-left:8px; }
+  .code-content { padding:20px; font-family:'Courier New',monospace; font-size:.85rem; line-height:1.8; overflow-x:auto; }
+  .c-sel { color:#60a5fa; }
+  .c-prop { color:#93c5fd; }
+  .c-val { color:#86efac; }
+  .c-comment { color:#4a5568; }
+  .c-unit { color:#fca5a5; }
+
+  /* NEXT */
+  .next-card { background:linear-gradient(135deg,rgba(38,77,228,.1),rgba(96,165,250,.05)); border:1px solid var(--border); border-radius:20px; padding:28px; }
+  .next-card p { color:var(--sub); font-size:.95rem; line-height:1.8; margin-bottom:16px; }
+  .next-tags { display:flex; flex-wrap:wrap; gap:10px; }
+  .next-tag { background:rgba(38,77,228,.15); border:1px solid rgba(38,77,228,.3); border-radius:20px; padding:6px 16px; font-size:.82rem; font-weight:600; color:var(--blue-light); }
+
+  .back-link { display:inline-flex; align-items:center; gap:8px; color:var(--sub); text-decoration:none; font-size:.88rem; font-weight:600; margin-bottom:30px; transition:.2s; }
+  .back-link:hover { color:var(--blue-light); }
+
+  footer { text-align:center; padding:30px 0; color:rgba(224,234,255,.2); font-size:.8rem; }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">RV⚡CODES</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="about-me.html">About</a>
+    <div class="nav-dropdown" id="projDropdown">
+      <a href="javascript:void(0)" onclick="toggleProjDropdown(event)">Projects ▾</a>
+      <div class="nav-dropdown-menu" id="projMenu">
+        <a href="my-first-website.html">🌟 My First Website</a>
+        <a href="hyphenbot.html">🤖 HyphenBot</a>
+        <a href="mini-js-game.html">🎮 Star Catcher Game</a>
+        <a href="ai-study-buddy.html">🧠 AI Study Buddy</a>
+        <a href="My-K-Pop-AI-Diary-Studio.html">💜 K-pop Mood Diary</a>
+        <a href="quiz-app.html">❓ Quiz App</a>
+        <a href="marks-analyzer.html">📊 Marks Analyzer</a>
+        <a href="smart-study-os.html">🚀 Smart Study OS</a>
+        <a href="index.html">🚀 RV Codes Portfolio</a>
+      </div>
+    </div>
+    <a href="mailto:aaradhyaberi01@gmail.com">Contact</a>
+  </div>
+</nav>
+
+<div class="wrapper">
+  <a href="index.html" class="back-link">← Back to Portfolio</a>
+
+  <div class="hero">
+    <div class="css-logo">CSS</div>
+    <div class="hero-text">
+      <h1><span>CSS</span> Skill</h1>
+      <p>The language that makes the web beautiful. Everything you see styled on this portfolio? That's CSS doing its magic.</p>
+      <div class="level-badge">🎨 Level: Intermediate · Since 2023</div>
+    </div>
+  </div>
+
+  <section>
+    <h2 class="sec-title">📖 My Journey</h2>
+    <div class="journey-card">
+      <p>I started learning CSS in <span>2023</span> — right alongside HTML, because what's a skeleton without some style? 💙 My first CSS moment was changing a heading color and thinking "wait… I can make it look however I want?!" — and I was instantly obsessed.<br><br>
+      I went from basic <span>colors and fonts</span> to understanding the <span>box model</span> — how every element has margin, border, padding and content. Then came <span>Flexbox</span>, which completely changed how I thought about layouts. Then <span>CSS Grid</span>, then <span>animations</span> and <span>hover effects</span>.<br><br>
+      Today, almost every visual effect on this portfolio — the glowing cards, the neon animations, the star field, the particle effects — is CSS working its magic. It's honestly my favourite part of coding! ✨</p>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="sec-title">💡 What I Know</h2>
+    <div class="skills-grid">
+      <div class="skill-item"><div class="skill-dot"></div><div class="skill-item-text"><h4>Selectors & Specificity</h4><p>Class, ID, element, pseudo-class selectors and how they stack</p></div></div>
+      <div class="skill-item"><div class="skill-dot"></div><div class="skill-item-text"><h4>Box Model</h4><p>Margin, border, padding, content — understanding layout spacing</p></div></div>
+      <div class="skill-item"><div class="skill-dot"></div><div class="skill-item-text"><h4>Flexbox</h4><p>justify-content, align-items, flex-wrap — perfect for 1D layouts</p></div></div>
+      <div class="skill-item"><div class="skill-dot"></div><div class="skill-item-text"><h4>CSS Grid</h4><p>grid-template-columns, auto-fit, minmax — powerful 2D layouts</p></div></div>
+      <div class="skill-item"><div class="skill-dot"></div><div class="skill-item-text"><h4>Animations & Keyframes</h4><p>@keyframes, animation-duration, transform — bringing things to life</p></div></div>
+      <div class="skill-item"><div class="skill-dot"></div><div class="skill-item-text"><h4>Hover Effects & Transitions</h4><p>Smooth transitions, scale, color changes on hover</p></div></div>
+      <div class="skill-item"><div class="skill-dot"></div><div class="skill-item-text"><h4>CSS Variables</h4><p>--custom-properties for reusable colors and values across a page</p></div></div>
+      <div class="skill-item"><div class="skill-dot"></div><div class="skill-item-text"><h4>Gradients & Shadows</h4><p>Linear/radial gradients, box-shadow, text-shadow for visual depth</p></div></div>
+      <div class="skill-item"><div class="skill-dot"></div><div class="skill-item-text"><h4>Responsive Design</h4><p>Media queries and flexible layouts that work on any screen size</p></div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="sec-title">✨ Live CSS Demos</h2>
+    <div class="demo-grid">
+      <div class="demo-card">
+        <div class="demo-label">Gradient</div>
+        <div class="demo-box demo-gradient">linear-gradient ✨</div>
+      </div>
+      <div class="demo-card">
+        <div class="demo-label">Glow Shadow</div>
+        <div class="demo-box demo-shadow">box-shadow 💙</div>
+      </div>
+      <div class="demo-card">
+        <div class="demo-label">Animation</div>
+        <div class="demo-box demo-anim">@keyframes 🎬</div>
+      </div>
+      <div class="demo-card">
+        <div class="demo-label">Flexbox</div>
+        <div class="demo-box demo-flex">
+          <div class="demo-flex-dot" style="background:#60a5fa;"></div>
+          <div class="demo-flex-dot" style="background:#818cf8;"></div>
+          <div class="demo-flex-dot" style="background:#a78bfa;"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="sec-title">📊 Proficiency Breakdown</h2>
+    <div class="prof-list" id="profList"></div>
+  </section>
+
+  <section>
+    <h2 class="sec-title">💻 Sample Code I Can Write</h2>
+    <div class="code-block">
+      <div class="code-bar">
+        <div class="code-dot r"></div><div class="code-dot y"></div><div class="code-dot g"></div>
+        <span class="code-filename">style.css</span>
+      </div>
+      <div class="code-content">
+<span class="c-comment">/* CSS Variables — my favourite trick 💙 */</span>
+<span class="c-sel">:root</span> {
+  <span class="c-prop">--blue</span>: <span class="c-val">#264de4</span>;
+  <span class="c-prop">--glow</span>: <span class="c-val">0 0 20px rgba(38,77,228,.6)</span>;
+}
+
+<span class="c-comment">/* Glowing card with hover effect */</span>
+<span class="c-sel">.card</span> {
+  <span class="c-prop">background</span>: <span class="c-val">linear-gradient(135deg, #060f2a, #0a1a3a)</span>;
+  <span class="c-prop">border-radius</span>: <span class="c-val">16<span class="c-unit">px</span></span>;
+  <span class="c-prop">padding</span>: <span class="c-val">24<span class="c-unit">px</span></span>;
+  <span class="c-prop">transition</span>: <span class="c-val">transform 0.3s, box-shadow 0.3s</span>;
+  <span class="c-prop">display</span>: <span class="c-val">flex</span>;
+  <span class="c-prop">align-items</span>: <span class="c-val">center</span>;
+  <span class="c-prop">gap</span>: <span class="c-val">16<span class="c-unit">px</span></span>;
+}
+
+<span class="c-sel">.card:hover</span> {
+  <span class="c-prop">transform</span>: <span class="c-val">translateY(-6px)</span>;
+  <span class="c-prop">box-shadow</span>: <span class="c-val">var(--glow)</span>;
+}
+
+<span class="c-comment">/* Keyframe animation */</span>
+<span class="c-sel">@keyframes</span> float {
+  <span class="c-sel">0%, 100%</span> { <span class="c-prop">transform</span>: <span class="c-val">translateY(0)</span>; }
+  <span class="c-sel">50%</span>      { <span class="c-prop">transform</span>: <span class="c-val">translateY(-10<span class="c-unit">px</span>)</span>; }
+}
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="sec-title">🚀 What's Next</h2>
+    <div class="next-card">
+      <p>I want to go deeper into <strong style="color:var(--text)">CSS architecture</strong> — writing cleaner, more organised stylesheets as projects grow bigger. I also want to master <strong style="color:var(--text)">CSS scroll animations</strong>, <strong style="color:var(--text)">clip-path</strong> for creative shapes, and eventually learn a framework like <strong style="color:var(--text)">Tailwind CSS</strong> to speed up my workflow!</p>
+      <div class="next-tags">
+        <span class="next-tag">Tailwind CSS</span>
+        <span class="next-tag">Scroll Animations</span>
+        <span class="next-tag">clip-path Shapes</span>
+        <span class="next-tag">CSS Architecture</span>
+        <span class="next-tag">Custom Properties ++</span>
+      </div>
+    </div>
+  </section>
+</div>
+
+<footer>Built with 💜 &amp; lots of caffeine-free passion · RV Codes © 2025</footer>
+
+<script>
+function toggleProjDropdown(e) {
+  e.preventDefault();
+  document.getElementById('projMenu').classList.toggle('show');
+}
+document.addEventListener('click', e => {
+  const d = document.getElementById('projDropdown');
+  if (d && !d.contains(e.target)) document.getElementById('projMenu').classList.remove('show');
+});
+
+const profs = [
+  { name:'Selectors & Box Model', pct:88 },
+  { name:'Flexbox', pct:82 },
+  { name:'CSS Grid', pct:75 },
+  { name:'Animations & Keyframes', pct:78 },
+  { name:'Responsive Design', pct:70 },
+];
+const list = document.getElementById('profList');
+profs.forEach(p => {
+  const item = document.createElement('div');
+  item.className = 'prof-item';
+  item.innerHTML = `
+    <div class="prof-top"><span class="prof-name">${p.name}</span><span class="prof-pct">${p.pct}%</span></div>
+    <div class="prof-track"><div class="prof-fill" data-w="${p.pct}%"></div></div>
+  `;
+  list.appendChild(item);
+});
+
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.prof-fill').forEach(b => b.style.width = b.dataset.w);
+      io.unobserve(e.target);
+    }
+  });
+}, { threshold:.3 });
+io.observe(list);
+</script>
+</body>
+</html>
