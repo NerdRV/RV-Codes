@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Study OS 🚀 | RV Codes</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@700&display=swap');
+
+  :root {
+    --bg: #f5f7fa;
+    --card: #ffffff;
+    --ink: #1a202c;
+    --sub: #718096;
+    --border: #e2e8f0;
+    --blue: #4299e1;
+    --purple: #805ad5;
+    --green: #48bb78;
+    --red: #fc8181;
+    --yellow: #f6e05e;
+    --sidebar: #1a202c;
+    --sidebar-text: rgba(255,255,255,.7);
+    --active: rgba(255,255,255,.12);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--ink); min-height:100vh; }
+
+  /* NAV */
+  nav {
+    display:flex; justify-content:space-between; align-items:center;
+    padding:14px 24px; background:#fff;
+    box-shadow:0 1px 8px rgba(0,0,0,.06); position:relative; z-index:50;
+  }
+  .nav-logo { font-family:'Orbitron',monospace; font-weight:700; color:var(--purple); text-decoration:none; font-size:.9rem; }
+  .nav-links { display:flex; gap:20px; align-items:center; }
+  .nav-links a { color:var(--sub); text-decoration:none; font-size:.88rem; font-weight:500; }
+  .nav-links a:hover { color:var(--ink); }
+  .nav-dropdown { position:relative; display:inline-block; }
+  .nav-dropdown-menu { display:none; position:absolute; top:100%; right:0; margin-top:10px; background:#fff; border:1px solid var(--border); border-radius:14px; padding:8px; min-width:210px; box-shadow:0 10px 30px rgba(0,0,0,.1); z-index:200; }
+  .nav-dropdown:hover .nav-dropdown-menu { display:block; }
+  .nav-dropdown-menu.show { display:block; }
+  .nav-dropdown-menu a { display:block; padding:9px 12px; border-radius:10px; color:var(--ink) !important; font-size:.85rem !important; }
+  .nav-dropdown-menu a:hover { background:var(--bg); }
+
+  /* OS LAYOUT */
+  .os-wrap { display:flex; height:calc(100vh - 57px); overflow:hidden; }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: 220px; flex-shrink:0;
+    background:var(--sidebar);
+    display:flex; flex-direction:column;
+    padding:20px 12px;
+    gap:4px;
+  }
+  .sidebar-title { font-size:.7rem; font-weight:700; color:rgba(255,255,255,.3); letter-spacing:2px; text-transform:uppercase; padding:8px 12px 4px; }
+  .sidebar-btn {
+    display:flex; align-items:center; gap:10px;
+    padding:11px 14px; border-radius:10px; border:none;
+    background:none; color:var(--sidebar-text);
+    font-family:'Inter',sans-serif; font-size:.9rem; font-weight:500;
+    cursor:pointer; text-align:left; width:100%; transition:.2s;
+  }
+  .sidebar-btn:hover { background:var(--active); color:#fff; }
+  .sidebar-btn.active { background:var(--active); color:#fff; font-weight:600; }
+  .sidebar-btn .icon { font-size:1.1rem; width:22px; flex-shrink:0; }
+
+  .sidebar-clock { margin-top:auto; padding:14px; background:rgba(255,255,255,.06); border-radius:12px; text-align:center; }
+  .clock-time { font-size:1.4rem; font-weight:700; color:#fff; font-variant-numeric:tabular-nums; }
+  .clock-date { font-size:.72rem; color:rgba(255,255,255,.4); margin-top:2px; }
+
+  /* MAIN PANEL */
+  .main-panel { flex:1; overflow-y:auto; padding:28px 24px; }
+  .panel { display:none; }
+  .panel.active { display:block; }
+
+  .panel-title { font-size:1.4rem; font-weight:800; margin-bottom:4px; }
+  .panel-sub { color:var(--sub); font-size:.88rem; margin-bottom:24px; }
+
+  /* ── TIMETABLE ── */
+  .tt-grid { display:grid; grid-template-columns:80px repeat(5,1fr); gap:8px; }
+  .tt-header { background:var(--sidebar); color:#fff; border-radius:8px; padding:10px; text-align:center; font-size:.78rem; font-weight:600; }
+  .tt-time { background:var(--card); border:1px solid var(--border); border-radius:8px; padding:8px; text-align:center; font-size:.75rem; color:var(--sub); font-weight:600; display:flex; align-items:center; justify-content:center; }
+  .tt-cell {
+    background:var(--card); border:1px solid var(--border); border-radius:8px;
+    padding:8px; min-height:56px; cursor:pointer; transition:.2s; position:relative;
+    display:flex; align-items:center; justify-content:center; text-align:center;
+  }
+  .tt-cell:hover { border-color:var(--blue); background:#ebf8ff; }
+  .tt-cell.filled { border:none; }
+  .tt-cell.filled .cell-text { font-size:.75rem; font-weight:600; color:#fff; line-height:1.3; }
+  .tt-cell .plus { color:var(--border); font-size:1.1rem; }
+
+  .tt-input-row { display:flex; gap:10px; margin-top:14px; flex-wrap:wrap; }
+  .tt-input { padding:9px 12px; border:1.5px solid var(--border); border-radius:10px; font-family:'Inter',sans-serif; font-size:.85rem; outline:none; transition:.2s; }
+  .tt-input:focus { border-color:var(--blue); }
+  .tt-btn { padding:9px 18px; border:none; border-radius:10px; font-family:'Inter',sans-serif; font-weight:600; font-size:.85rem; cursor:pointer; transition:.2s; }
+  .tt-btn.primary { background:var(--blue); color:#fff; }
+  .tt-btn.primary:hover { transform:scale(1.03); }
+  .tt-btn.clear { background:var(--bg); color:var(--sub); border:1px solid var(--border); }
+
+  /* ── TO-DO ── */
+  .todo-input-row { display:flex; gap:10px; margin-bottom:18px; }
+  .todo-input { flex:1; padding:12px 16px; border:1.5px solid var(--border); border-radius:12px; font-family:'Inter',sans-serif; font-size:.9rem; outline:none; transition:.2s; }
+  .todo-input:focus { border-color:var(--purple); }
+  .todo-add-btn { padding:12px 20px; background:var(--purple); color:#fff; border:none; border-radius:12px; font-family:'Inter',sans-serif; font-weight:600; cursor:pointer; font-size:.9rem; transition:.2s; }
+  .todo-add-btn:hover { transform:scale(1.03); }
+
+  .todo-filters { display:flex; gap:8px; margin-bottom:16px; }
+  .filter-btn { padding:6px 16px; border-radius:20px; border:1.5px solid var(--border); background:#fff; font-family:'Inter',sans-serif; font-size:.82rem; font-weight:600; cursor:pointer; color:var(--sub); transition:.2s; }
+  .filter-btn.active { background:var(--purple); color:#fff; border-color:var(--purple); }
+
+  .todo-list { display:flex; flex-direction:column; gap:8px; }
+  .todo-item { background:#fff; border:1px solid var(--border); border-radius:12px; padding:14px 16px; display:flex; align-items:center; gap:12px; transition:.2s; }
+  .todo-item:hover { box-shadow:0 2px 10px rgba(0,0,0,.06); }
+  .todo-item.done { opacity:.5; }
+  .todo-item.done .todo-text { text-decoration:line-through; }
+  .todo-check { width:20px; height:20px; border-radius:6px; border:2px solid var(--border); cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:.2s; }
+  .todo-check.checked { background:var(--green); border-color:var(--green); }
+  .todo-text { flex:1; font-size:.9rem; }
+  .todo-tag { padding:3px 10px; border-radius:20px; font-size:.72rem; font-weight:600; }
+  .todo-del { background:none; border:none; color:var(--border); font-size:1rem; cursor:pointer; transition:.2s; }
+  .todo-del:hover { color:var(--red); }
+
+  .priority-sel { padding:6px 10px; border:1px solid var(--border); border-radius:8px; font-family:'Inter',sans-serif; font-size:.82rem; outline:none; }
+
+  /* ── TIMER ── */
+  .timer-wrap { display:flex; flex-direction:column; align-items:center; gap:20px; }
+  .timer-modes { display:flex; gap:8px; }
+  .mode-btn { padding:8px 20px; border-radius:20px; border:1.5px solid var(--border); background:#fff; font-family:'Inter',sans-serif; font-size:.85rem; font-weight:600; cursor:pointer; color:var(--sub); transition:.2s; }
+  .mode-btn.active { background:var(--red); color:#fff; border-color:var(--red); }
+
+  .timer-face {
+    width:220px; height:220px; border-radius:50%;
+    background:#fff; border:6px solid var(--border);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    box-shadow:0 8px 32px rgba(0,0,0,.08);
+    position:relative;
+  }
+  .timer-svg { position:absolute; top:-6px; left:-6px; width:232px; height:232px; transform:rotate(-90deg); }
+  .timer-ring { fill:none; stroke:var(--red); stroke-width:6; stroke-linecap:round; transition:stroke-dashoffset .5s linear; }
+  .timer-display { font-size:3rem; font-weight:800; font-variant-numeric:tabular-nums; z-index:1; }
+  .timer-label { font-size:.8rem; color:var(--sub); font-weight:600; z-index:1; }
+
+  .timer-controls { display:flex; gap:12px; }
+  .timer-ctrl-btn {
+    padding:12px 28px; border-radius:30px; border:none;
+    font-family:'Inter',sans-serif; font-weight:700; font-size:.9rem; cursor:pointer; transition:.2s;
+  }
+  .timer-ctrl-btn:hover { transform:scale(1.04); }
+  .btn-start { background:var(--green); color:#fff; box-shadow:0 4px 14px rgba(72,187,120,.3); }
+  .btn-pause { background:var(--yellow); color:#333; }
+  .btn-reset { background:var(--bg); color:var(--sub); border:1px solid var(--border); }
+
+  .session-count { font-size:.85rem; color:var(--sub); font-weight:600; }
+  .session-dots { display:flex; gap:6px; margin-top:4px; }
+  .session-dot { width:10px; height:10px; border-radius:50%; background:var(--border); }
+  .session-dot.done { background:var(--red); }
+
+  footer { text-align:center; padding:20px; color:#b0bbc8; font-size:.8rem; }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">RV⚡CODES</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="about-me.html">About</a>
+    <div class="nav-dropdown" id="projDropdown">
+      <a href="javascript:void(0)" onclick="toggleProjDropdown(event)">Projects ▾</a>
+      <div class="nav-dropdown-menu" id="projMenu">
+        <a href="my-first-website.html">🌟 My First Website</a>
+        <a href="hyphenbot.html">🤖 HyphenBot</a>
+        <a href="mini-js-game.html">🎮 Star Catcher Game</a>
+        <a href="ai-study-buddy.html">🧠 AI Study Buddy</a>
+        <a href="My-K-Pop-AI-Diary-Studio.html">💜 K-pop Mood Diary</a>
+        <a href="quiz-app.html">❓ Quiz App</a>
+        <a href="marks-analyzer.html">📊 Marks Analyzer</a>
+        <a href="smart-study-os.html">🚀 Smart Study OS</a>
+        <a href="index.html">🚀 RV Codes Portfolio</a>
+      </div>
+    </div>
+    <a href="mailto:aaradhyaberi01@gmail.com">Contact</a>
+  </div>
+</nav>
+
+<div class="os-wrap">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-title">Smart Study OS</div>
+    <button class="sidebar-btn active" onclick="switchPanel('timetable',this)"><span class="icon">📅</span> Timetable</button>
+    <button class="sidebar-btn" onclick="switchPanel('todo',this)"><span class="icon">✅</span> To-Do List</button>
+    <button class="sidebar-btn" onclick="switchPanel('timer',this)"><span class="icon">⏱️</span> Focus Timer</button>
+
+    <div class="sidebar-clock">
+      <div class="clock-time" id="clock">00:00</div>
+      <div class="clock-date" id="clockDate"></div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main-panel">
+
+    <!-- TIMETABLE -->
+    <div class="panel active" id="panel-timetable">
+      <div class="panel-title">📅 Weekly Timetable</div>
+      <div class="panel-sub">Click any cell to add a subject for that slot</div>
+      <div class="tt-grid" id="ttGrid"></div>
+      <div class="tt-input-row" id="ttInputRow" style="display:none;">
+        <input class="tt-input" id="ttSubject" placeholder="Subject name..." style="flex:1;">
+        <input type="color" id="ttColor" value="#4299e1" style="height:38px;width:46px;border:1.5px solid var(--border);border-radius:10px;cursor:pointer;padding:2px;">
+        <button class="tt-btn primary" onclick="saveCell()">Save</button>
+        <button class="tt-btn clear" onclick="clearCellInput()">Cancel</button>
+      </div>
+    </div>
+
+    <!-- TO-DO -->
+    <div class="panel" id="panel-todo">
+      <div class="panel-title">✅ To-Do List</div>
+      <div class="panel-sub">Add tasks, set priority, and check them off!</div>
+      <div class="todo-input-row">
+        <input class="todo-input" id="todoInput" placeholder="Add a new task..." onkeydown="if(event.key==='Enter')addTodo()">
+        <select class="priority-sel" id="todoPriority">
+          <option value="high">🔴 High</option>
+          <option value="med" selected>🟡 Medium</option>
+          <option value="low">🟢 Low</option>
+        </select>
+        <button class="todo-add-btn" onclick="addTodo()">+ Add</button>
+      </div>
+      <div class="todo-filters">
+        <button class="filter-btn active" onclick="filterTodos('all',this)">All</button>
+        <button class="filter-btn" onclick="filterTodos('active',this)">Active</button>
+        <button class="filter-btn" onclick="filterTodos('done',this)">Done</button>
+      </div>
+      <div class="todo-list" id="todoList"></div>
+    </div>
+
+    <!-- TIMER -->
+    <div class="panel" id="panel-timer">
+      <div class="panel-title">⏱️ Focus Timer</div>
+      <div class="panel-sub">Stay focused with Pomodoro-style sessions</div>
+      <div class="timer-wrap">
+        <div class="timer-modes">
+          <button class="mode-btn active" onclick="setMode('focus',this)">🎯 Focus (25m)</button>
+          <button class="mode-btn" onclick="setMode('short',this)">☕ Short Break (5m)</button>
+          <button class="mode-btn" onclick="setMode('long',this)">🛋️ Long Break (15m)</button>
+        </div>
+        <div class="timer-face">
+          <svg class="timer-svg" viewBox="0 0 232 232">
+            <circle cx="116" cy="116" r="104" fill="none" stroke="#e2e8f0" stroke-width="6"/>
+            <circle class="timer-ring" id="timerRing" cx="116" cy="116" r="104"
+              stroke-dasharray="653" stroke-dashoffset="0"/>
+          </svg>
+          <div class="timer-display" id="timerDisplay">25:00</div>
+          <div class="timer-label" id="timerLabel">FOCUS</div>
+        </div>
+        <div class="timer-controls">
+          <button class="timer-ctrl-btn btn-start" id="startBtn" onclick="startTimer()">▶ Start</button>
+          <button class="timer-ctrl-btn btn-reset" onclick="resetTimer()">↺ Reset</button>
+        </div>
+        <div style="text-align:center;">
+          <div class="session-count">Sessions completed: <span id="sessionCount">0</span></div>
+          <div class="session-dots" id="sessionDots">
+            <div class="session-dot"></div>
+            <div class="session-dot"></div>
+            <div class="session-dot"></div>
+            <div class="session-dot"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* ── DROPDOWN ── */
+function toggleProjDropdown(e) {
+  e.preventDefault();
+  document.getElementById('projMenu').classList.toggle('show');
+}
+document.addEventListener('click', e => {
+  const d = document.getElementById('projDropdown');
+  if (d && !d.contains(e.target)) document.getElementById('projMenu').classList.remove('show');
+});
+
+/* ── SIDEBAR SWITCH ── */
+function switchPanel(id, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+/* ── CLOCK ── */
+function updateClock() {
+  const now = new Date();
+  const h = String(now.getHours()).padStart(2,'0');
+  const m = String(now.getMinutes()).padStart(2,'0');
+  document.getElementById('clock').textContent = h + ':' + m;
+  document.getElementById('clockDate').textContent = now.toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short'});
+}
+updateClock(); setInterval(updateClock, 1000);
+
+/* ── TIMETABLE ── */
+const days = ['Mon','Tue','Wed','Thu','Fri'];
+const times = ['8:00','9:00','10:00','11:00','12:00','1:00','2:00','3:00'];
+let ttData = JSON.parse(localStorage.getItem('ssOs_tt') || '{}');
+let selectedCell = null;
+
+function buildTT() {
+  const grid = document.getElementById('ttGrid');
+  grid.innerHTML = '';
+  grid.appendChild(Object.assign(document.createElement('div'), {className:'tt-header',style:'background:transparent;'}));
+  days.forEach(d => {
+    const h = document.createElement('div');
+    h.className = 'tt-header'; h.textContent = d;
+    grid.appendChild(h);
+  });
+  times.forEach(t => {
+    const tEl = document.createElement('div');
+    tEl.className = 'tt-time'; tEl.textContent = t;
+    grid.appendChild(tEl);
+    days.forEach(d => {
+      const key = `${d}-${t}`;
+      const cell = document.createElement('div');
+      cell.className = 'tt-cell';
+      cell.id = 'cell-' + key;
+      if (ttData[key]) {
+        cell.classList.add('filled');
+        cell.style.background = ttData[key].color;
+        cell.innerHTML = `<span class="cell-text">${ttData[key].subject}</span>`;
+      } else {
+        cell.innerHTML = `<span class="plus">+</span>`;
+      }
+      cell.onclick = () => selectCell(key, cell);
+      grid.appendChild(cell);
+    });
+  });
+}
+buildTT();
+
+function selectCell(key, cell) {
+  selectedCell = key;
+  const row = document.getElementById('ttInputRow');
+  row.style.display = 'flex';
+  if (ttData[key]) {
+    document.getElementById('ttSubject').value = ttData[key].subject;
+    document.getElementById('ttColor').value = ttData[key].color;
+  } else {
+    document.getElementById('ttSubject').value = '';
+  }
+  document.getElementById('ttSubject').focus();
+}
+
+function saveCell() {
+  const sub = document.getElementById('ttSubject').value.trim();
+  const color = document.getElementById('ttColor').value;
+  if (!sub || !selectedCell) return;
+  ttData[selectedCell] = { subject: sub, color };
+  localStorage.setItem('ssOs_tt', JSON.stringify(ttData));
+  clearCellInput();
+  buildTT();
+}
+
+function clearCellInput() {
+  document.getElementById('ttInputRow').style.display = 'none';
+  selectedCell = null;
+}
+
+/* ── TO-DO ── */
+let todos = JSON.parse(localStorage.getItem('ssOs_todos') || '[]');
+let currentFilter = 'all';
+
+const priorityConfig = {
+  high: { label:'🔴 High', color:'#fc8181', bg:'rgba(252,129,129,.1)' },
+  med:  { label:'🟡 Med',  color:'#f6ad55', bg:'rgba(246,173,85,.1)' },
+  low:  { label:'🟢 Low',  color:'#68d391', bg:'rgba(104,211,145,.1)' },
+};
+
+function addTodo() {
+  const val = document.getElementById('todoInput').value.trim();
+  const pri = document.getElementById('todoPriority').value;
+  if (!val) return;
+  todos.unshift({ id: Date.now(), text: val, priority: pri, done: false });
+  localStorage.setItem('ssOs_todos', JSON.stringify(todos));
+  document.getElementById('todoInput').value = '';
+  renderTodos();
+}
+
+function toggleTodo(id) {
+  todos = todos.map(t => t.id === id ? {...t, done: !t.done} : t);
+  localStorage.setItem('ssOs_todos', JSON.stringify(todos));
+  renderTodos();
+}
+
+function deleteTodo(id) {
+  todos = todos.filter(t => t.id !== id);
+  localStorage.setItem('ssOs_todos', JSON.stringify(todos));
+  renderTodos();
+}
+
+function filterTodos(f, btn) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTodos();
+}
+
+function renderTodos() {
+  const list = document.getElementById('todoList');
+  let filtered = todos;
+  if (currentFilter === 'active') filtered = todos.filter(t => !t.done);
+  if (currentFilter === 'done') filtered = todos.filter(t => t.done);
+  if (filtered.length === 0) {
+    list.innerHTML = `<div style="text-align:center;color:var(--sub);padding:30px;font-size:.9rem;">No tasks here! Add one above ✅</div>`;
+    return;
+  }
+  list.innerHTML = '';
+  filtered.forEach(t => {
+    const p = priorityConfig[t.priority];
+    const item = document.createElement('div');
+    item.className = 'todo-item' + (t.done ? ' done' : '');
+    item.innerHTML = `
+      <div class="todo-check ${t.done?'checked':''}" onclick="toggleTodo(${t.id})">${t.done?'✓':''}</div>
+      <span class="todo-text">${t.text}</span>
+      <span class="todo-tag" style="color:${p.color};background:${p.bg}">${p.label}</span>
+      <button class="todo-del" onclick="deleteTodo(${t.id})">✕</button>
+    `;
+    list.appendChild(item);
+  });
+}
+renderTodos();
+
+/* ── FOCUS TIMER ── */
+const modes = { focus:25*60, short:5*60, long:15*60 };
+const modeLabels = { focus:'FOCUS', short:'BREAK', long:'LONG BREAK' };
+let currentMode = 'focus';
+let timeLeft = modes.focus;
+let timerRunning = false;
+let timerInterval = null;
+let sessions = 0;
+const circumference = 2 * Math.PI * 104;
+
+function setMode(mode, btn) {
+  if (timerRunning) return;
+  currentMode = mode;
+  document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  timeLeft = modes[mode];
+  updateTimerDisplay();
+  document.getElementById('timerLabel').textContent = modeLabels[mode];
+  document.getElementById('timerRing').style.stroke = mode === 'focus' ? '#fc8181' : mode === 'short' ? '#68d391' : '#63b3ed';
+}
+
+function updateTimerDisplay() {
+  const m = Math.floor(timeLeft / 60);
+  const s = timeLeft % 60;
+  document.getElementById('timerDisplay').textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  const total = modes[currentMode];
+  const offset = circumference * (1 - timeLeft / total);
+  document.getElementById('timerRing').style.strokeDashoffset = offset;
+}
+
+function startTimer() {
+  if (timerRunning) {
+    clearInterval(timerInterval);
+    timerRunning = false;
+    document.getElementById('startBtn').textContent = '▶ Resume';
+    document.getElementById('startBtn').className = 'timer-ctrl-btn btn-start';
+  } else {
+    timerRunning = true;
+    document.getElementById('startBtn').textContent = '⏸ Pause';
+    document.getElementById('startBtn').className = 'timer-ctrl-btn btn-pause';
+    timerInterval = setInterval(() => {
+      timeLeft--;
+      updateTimerDisplay();
+      if (timeLeft <= 0) {
+        clearInterval(timerInterval);
+        timerRunning = false;
+        document.getElementById('startBtn').textContent = '▶ Start';
+        document.getElementById('startBtn').className = 'timer-ctrl-btn btn-start';
+        if (currentMode === 'focus') {
+          sessions = Math.min(sessions + 1, 4);
+          document.getElementById('sessionCount').textContent = sessions;
+          updateSessionDots();
+        }
+        timeLeft = modes[currentMode];
+        updateTimerDisplay();
+      }
+    }, 1000);
+  }
+}
+
+function resetTimer() {
+  clearInterval(timerInterval);
+  timerRunning = false;
+  timeLeft = modes[currentMode];
+  document.getElementById('startBtn').textContent = '▶ Start';
+  document.getElementById('startBtn').className = 'timer-ctrl-btn btn-start';
+  updateTimerDisplay();
+}
+
+function updateSessionDots() {
+  document.querySelectorAll('.session-dot').forEach((dot, i) => {
+    dot.classList.toggle('done', i < sessions);
+  });
+}
+
+updateTimerDisplay();
+</script>
+
+</body>
+</html>
