@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JavaScript Skill | RV Codes</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Orbitron:wght@700;900&display=swap');
+
+  :root {
+    --yellow: #f7df1e;
+    --yellow2: #f0c000;
+    --yellow-dark: #c9a800;
+    --bg: #0a0900;
+    --card: #151200;
+    --border: rgba(247,223,30,.2);
+    --text: #fff8e0;
+    --sub: rgba(255,248,224,.6);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Space Grotesk',sans-serif; background:var(--bg); color:var(--text); min-height:100vh;
+    background-image: radial-gradient(circle at 10% 10%, rgba(247,223,30,.12) 0%, transparent 50%),
+                      radial-gradient(circle at 90% 90%, rgba(240,192,0,.08) 0%, transparent 50%);
+  }
+
+  nav { display:flex; justify-content:space-between; align-items:center; padding:16px 24px; background:rgba(0,0,0,.5); backdrop-filter:blur(10px); border-bottom:1px solid var(--border); position:relative; z-index:50; }
+  .nav-logo { font-family:'Orbitron',monospace; font-weight:700; color:#fff; text-decoration:none; font-size:.9rem; text-shadow:0 0 16px var(--yellow); }
+  .nav-links { display:flex; gap:20px; align-items:center; }
+  .nav-links a { color:var(--sub); text-decoration:none; font-size:.9rem; font-weight:500; }
+  .nav-links a:hover { color:var(--yellow); }
+  .nav-dropdown { position:relative; display:inline-block; }
+  .nav-dropdown-menu { display:none; position:absolute; top:100%; right:0; margin-top:10px; background:#151200; border:1px solid var(--border); border-radius:14px; padding:8px; min-width:210px; box-shadow:0 10px 30px rgba(0,0,0,.5); z-index:200; }
+  .nav-dropdown:hover .nav-dropdown-menu { display:block; }
+  .nav-dropdown-menu.show { display:block; }
+  .nav-dropdown-menu a { display:block; padding:9px 12px; border-radius:10px; color:var(--text) !important; font-size:.85rem !important; }
+  .nav-dropdown-menu a:hover { background:rgba(247,223,30,.08); }
+
+  .wrapper { max-width:800px; margin:0 auto; padding:50px 20px 80px; }
+
+  /* HERO */
+  .hero { display:flex; align-items:center; gap:30px; margin-bottom:50px; flex-wrap:wrap; }
+  .js-logo {
+    width:110px; height:110px; border-radius:24px; flex-shrink:0;
+    background:var(--yellow);
+    display:flex; align-items:center; justify-content:center;
+    font-size:2rem; font-weight:900; color:#000;
+    box-shadow:0 0 40px rgba(247,223,30,.5), 0 0 80px rgba(247,223,30,.2);
+    font-family:'Orbitron',monospace;
+    animation:glow 3s ease-in-out infinite;
+  }
+  @keyframes glow { 0%,100%{box-shadow:0 0 40px rgba(247,223,30,.5),0 0 80px rgba(247,223,30,.2);} 50%{box-shadow:0 0 60px rgba(247,223,30,.9),0 0 120px rgba(247,223,30,.4);} }
+
+  .hero-text h1 { font-family:'Orbitron',monospace; font-size:clamp(2rem,6vw,3rem); font-weight:900; color:#fff; margin-bottom:6px; }
+  .hero-text h1 span { color:var(--yellow); }
+  .hero-text p { color:var(--sub); font-size:1rem; line-height:1.6; max-width:420px; }
+  .level-badge { display:inline-flex; align-items:center; gap:8px; background:rgba(247,223,30,.1); border:1px solid rgba(247,223,30,.3); border-radius:30px; padding:8px 18px; margin-top:14px; font-size:.85rem; font-weight:600; color:var(--yellow); }
+
+  .sec-title { font-family:'Orbitron',monospace; font-size:1rem; font-weight:700; color:var(--yellow); letter-spacing:3px; text-transform:uppercase; margin-bottom:20px; display:flex; align-items:center; gap:12px; }
+  .sec-title::after { content:''; flex:1; height:1px; background:linear-gradient(to right,var(--yellow),transparent); }
+  section { margin-bottom:48px; }
+
+  /* JOURNEY */
+  .journey-card { background:var(--card); border:1px solid var(--border); border-radius:20px; padding:28px; }
+  .journey-card p { color:var(--sub); font-size:1rem; line-height:1.8; }
+  .journey-card p span { color:var(--yellow); font-weight:600; }
+
+  /* SKILLS GRID */
+  .skills-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:14px; }
+  .skill-item { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:18px; display:flex; align-items:flex-start; gap:12px; transition:.2s; }
+  .skill-item:hover { border-color:var(--yellow); transform:translateY(-3px); box-shadow:0 0 20px rgba(247,223,30,.1); }
+  .skill-dot { width:10px; height:10px; border-radius:50%; background:var(--yellow); flex-shrink:0; margin-top:5px; box-shadow:0 0 8px var(--yellow); }
+  .skill-item-text h4 { font-size:.92rem; font-weight:700; color:#fff; margin-bottom:3px; }
+  .skill-item-text p { font-size:.78rem; color:var(--sub); line-height:1.5; }
+
+  /* INTERACTIVE DEMO */
+  .demo-wrap { background:var(--card); border:1px solid var(--border); border-radius:20px; padding:24px; }
+  .demo-wrap p { color:var(--sub); font-size:.88rem; margin-bottom:16px; }
+  .demo-btns { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:16px; }
+  .demo-btn { padding:10px 20px; border:none; border-radius:10px; background:rgba(247,223,30,.12); border:1px solid rgba(247,223,30,.25); color:var(--yellow); font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:.85rem; cursor:pointer; transition:.2s; }
+  .demo-btn:hover { background:rgba(247,223,30,.22); transform:scale(1.04); }
+  .demo-output { background:#000; border-radius:12px; padding:16px; font-family:'Courier New',monospace; font-size:.88rem; color:#00ff9d; min-height:60px; border:1px solid rgba(247,223,30,.1); }
+  .demo-output span { color:var(--yellow); }
+
+  /* PROFICIENCY */
+  .prof-list { display:flex; flex-direction:column; gap:14px; }
+  .prof-item { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:16px 18px; }
+  .prof-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+  .prof-name { font-size:.9rem; font-weight:600; }
+  .prof-pct { font-size:.85rem; font-weight:700; color:var(--yellow); }
+  .prof-track { height:6px; background:rgba(255,255,255,.08); border-radius:6px; overflow:hidden; }
+  .prof-fill { height:100%; background:linear-gradient(to right,var(--yellow-dark),var(--yellow)); border-radius:6px; width:0; transition:width 1.2s ease; }
+
+  /* CODE */
+  .code-block { background:#050400; border:1px solid var(--border); border-radius:16px; overflow:hidden; }
+  .code-bar { background:#151200; padding:12px 18px; display:flex; gap:8px; align-items:center; border-bottom:1px solid var(--border); }
+  .code-dot { width:11px; height:11px; border-radius:50%; }
+  .code-dot.r{background:#ff5f56;} .code-dot.y{background:#ffbd2e;} .code-dot.g{background:#27c93f;}
+  .code-filename { font-size:.75rem; color:var(--sub); margin-left:8px; }
+  .code-content { padding:20px; font-family:'Courier New',monospace; font-size:.85rem; line-height:1.8; overflow-x:auto; }
+  .c-kw { color:#f7df1e; }
+  .c-fn { color:#60a5fa; }
+  .c-str { color:#86efac; }
+  .c-num { color:#fca5a5; }
+  .c-comment { color:#4a5568; }
+  .c-var { color:#e2e8f0; }
+
+  /* NEXT */
+  .next-card { background:linear-gradient(135deg,rgba(247,223,30,.08),rgba(240,192,0,.04)); border:1px solid var(--border); border-radius:20px; padding:28px; }
+  .next-card p { color:var(--sub); font-size:.95rem; line-height:1.8; margin-bottom:16px; }
+  .next-tags { display:flex; flex-wrap:wrap; gap:10px; }
+  .next-tag { background:rgba(247,223,30,.1); border:1px solid rgba(247,223,30,.25); border-radius:20px; padding:6px 16px; font-size:.82rem; font-weight:600; color:var(--yellow); }
+
+  .back-link { display:inline-flex; align-items:center; gap:8px; color:var(--sub); text-decoration:none; font-size:.88rem; font-weight:600; margin-bottom:30px; transition:.2s; }
+  .back-link:hover { color:var(--yellow); }
+
+  footer { text-align:center; padding:30px 0; color:rgba(255,248,224,.2); font-size:.8rem; }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">RV⚡CODES</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="about-me.html">About</a>
+    <div class="nav-dropdown" id="projDropdown">
+      <a href="javascript:void(0)" onclick="toggleProjDropdown(event)">Projects ▾</a>
+      <div class="nav-dropdown-menu" id="projMenu">
+        <a href="my-first-website.html">🌟 My First Website</a>
+        <a href="hyphenbot.html">🤖 HyphenBot</a>
+        <a href="mini-js-game.html">🎮 Star Catcher Game</a>
+        <a href="ai-study-buddy.html">🧠 AI Study Buddy</a>
+        <a href="My-K-Pop-AI-Diary-Studio.html">💜 K-pop Mood Diary</a>
+        <a href="quiz-app.html">❓ Quiz App</a>
+        <a href="marks-analyzer.html">📊 Marks Analyzer</a>
+        <a href="smart-study-os.html">🚀 Smart Study OS</a>
+        <a href="index.html">🚀 RV Codes Portfolio</a>
+      </div>
+    </div>
+    <a href="mailto:aaradhyaberi01@gmail.com">Contact</a>
+  </div>
+</nav>
+
+<div class="wrapper">
+  <a href="index.html" class="back-link">← Back to Portfolio</a>
+
+  <div class="hero">
+    <div class="js-logo">JS</div>
+    <div class="hero-text">
+      <h1><span>JavaScript</span> Skill</h1>
+      <p>The language that makes websites think. Every interactive thing on this portfolio — the chatbot, the game, the quiz — JavaScript made it happen.</p>
+      <div class="level-badge">⚡ Level: Intermediate · Since 2023</div>
+    </div>
+  </div>
+
+  <section>
+    <h2 class="sec-title">📖 My Journey</h2>
+    <div class="journey-card">
+      <p>I started learning JavaScript in <span>2023</span> — after HTML and CSS felt comfortable. My first JS moment was using <span>document.getElementById()</span> to change text on a page and watching it update instantly. That feeling of "the page is REACTING to me" was unreal. 🤯<br><br>
+      I learned <span>variables, loops, and functions</span> first — the basic building blocks. Then I discovered <span>DOM manipulation</span>, which lets JavaScript control everything you see on a webpage. Then came <span>events</span> — making things happen when a user clicks, types, or moves the mouse.<br><br>
+      Today, JavaScript is how I bring all my projects to life. HyphenBot, Star Catcher, the Quiz Maker, the Study Buddy — every single one runs on JavaScript. It's the most powerful tool in my toolkit right now! ⚡</p>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="sec-title">💡 What I Know</h2>
+    <div class="skills-grid">
+      <div class="skill-item"><div class="skill-dot"></div><div class="skill-item-text"><h4>Variables & Data Types</h4><p>let, const, var — strings, numbers, booleans, arrays, objects</p></div></div>
+      <div class="skill-item"><div class="skill-dot"></div><div class="skill-item-text"><h4>Functions</h4><p>Regular functions, arrow functions, parameters and return values</p></div></div>
+      <div class="skill-item"><div class="skill-dot"></div><div class="skill-item-text"><h4>Loops & Conditionals</h4><p>for, while, forEach — if/else, switch — controlling flow</p></div></div>
+      <div class="skill-item"><div class="skill-dot"></div><div class="skill-item-text"><h4>DOM Manipulation</h4><p>getElementById, querySelector, innerHTML, createElement, appendChild</p></div></div>
+      <div class="skill-item"><div class="skill-dot"></div><div class="skill-item-text"><h4>Events</h4><p>onclick, addEventListener, keyboard & mouse events</p></div></div>
+      <div class="skill-item"><div class="skill-dot"></div><div class="skill-item-text"><h4>Arrays & Objects</h4><p>map, filter, forEach, push, splice — working with data structures</p></div></div>
+      <div class="skill-item"><div class="skill-dot"></div><div class="skill-item-text"><h4>Timers</h4><p>setTimeout, setInterval — for animations, countdowns and games</p></div></div>
+      <div class="skill-item"><div class="skill-dot"></div><div class="skill-item-text"><h4>localStorage</h4><p>Saving data to the browser so it persists after refresh</p></div></div>
+      <div class="skill-item"><div class="skill-dot"></div><div class="skill-item-text"><h4>Canvas API</h4><p>Drawing shapes and building games using the HTML5 canvas element</p></div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="sec-title">⚡ Interactive Demo</h2>
+    <div class="demo-wrap">
+      <p>These buttons run real JavaScript code — try them! 👇</p>
+      <div class="demo-btns">
+        <button class="demo-btn" onclick="runDemo('greet')">👋 Say Hello</button>
+        <button class="demo-btn" onclick="runDemo('random')">🎲 Random Number</button>
+        <button class="demo-btn" onclick="runDemo('time')">⏰ Current Time</button>
+        <button class="demo-btn" onclick="runDemo('reverse')">🔄 Reverse a Word</button>
+        <button class="demo-btn" onclick="runDemo('joke')">😂 JS Joke</button>
+      </div>
+      <div class="demo-output" id="demoOutput">// Click a button to run some JavaScript! ⚡</div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="sec-title">📊 Proficiency Breakdown</h2>
+    <div class="prof-list" id="profList"></div>
+  </section>
+
+  <section>
+    <h2 class="sec-title">💻 Sample Code I Can Write</h2>
+    <div class="code-block">
+      <div class="code-bar">
+        <div class="code-dot r"></div><div class="code-dot y"></div><div class="code-dot g"></div>
+        <span class="code-filename">script.js</span>
+      </div>
+      <div class="code-content">
+<span class="c-comment">// A quiz checker I actually built ⚡</span>
+<span class="c-kw">const</span> <span class="c-var">questions</span> = [
+  { <span class="c-var">q</span>: <span class="c-str">"What does HTML stand for?"</span>, <span class="c-var">a</span>: <span class="c-num">0</span> },
+  { <span class="c-var">q</span>: <span class="c-str">"Which language styles pages?"</span>, <span class="c-var">a</span>: <span class="c-num">1</span> },
+];
+
+<span class="c-kw">function</span> <span class="c-fn">checkAnswer</span>(<span class="c-var">qIndex</span>, <span class="c-var">userAnswer</span>) {
+  <span class="c-kw">const</span> <span class="c-var">correct</span> = questions[<span class="c-var">qIndex</span>].<span class="c-var">a</span>;
+  <span class="c-kw">if</span> (<span class="c-var">userAnswer</span> === <span class="c-var">correct</span>) {
+    <span class="c-fn">document.getElementById</span>(<span class="c-str">'result'</span>).<span class="c-var">textContent</span> = <span class="c-str">"✅ Correct!"</span>;
+  } <span class="c-kw">else</span> {
+    <span class="c-fn">document.getElementById</span>(<span class="c-str">'result'</span>).<span class="c-var">textContent</span> = <span class="c-str">"❌ Try again!"</span>;
+  }
+}
+
+<span class="c-comment">// Event listener — runs when user clicks</span>
+<span class="c-fn">document.getElementById</span>(<span class="c-str">'btn'</span>)
+  .<span class="c-fn">addEventListener</span>(<span class="c-str">'click'</span>, () => <span class="c-fn">checkAnswer</span>(<span class="c-num">0</span>, <span class="c-num">0</span>));
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="sec-title">🚀 What's Next</h2>
+    <div class="next-card">
+      <p>I want to level up into <strong style="color:var(--text)">async JavaScript</strong> — fetch API, promises and async/await so I can pull real data from the internet into my projects. I also want to learn <strong style="color:var(--text)">ES6+ features</strong> more deeply and eventually get into a framework like <strong style="color:var(--text)">React</strong> to build bigger, more powerful apps!</p>
+      <div class="next-tags">
+        <span class="next-tag">Async / Await</span>
+        <span class="next-tag">Fetch API</span>
+        <span class="next-tag">ES6+ Features</span>
+        <span class="next-tag">React.js</span>
+        <span class="next-tag">Node.js Basics</span>
+      </div>
+    </div>
+  </section>
+</div>
+
+<footer>Built with 💜 &amp; lots of caffeine-free passion · RV Codes © 2025</footer>
+
+<script>
+function toggleProjDropdown(e) {
+  e.preventDefault();
+  document.getElementById('projMenu').classList.toggle('show');
+}
+document.addEventListener('click', e => {
+  const d = document.getElementById('projDropdown');
+  if (d && !d.contains(e.target)) document.getElementById('projMenu').classList.remove('show');
+});
+
+/* INTERACTIVE DEMO */
+const jokes = [
+  "Why do JS devs wear glasses? Because they don't C# 😂",
+  "A SQL query walks into a bar, walks up to two tables and asks: 'Can I join you?' 😂",
+  "Why did the programmer quit? Because they didn't get arrays! 😂"
+];
+function runDemo(type) {
+  const out = document.getElementById('demoOutput');
+  if (type === 'greet') {
+    out.innerHTML = `<span>> </span>console.log("Hello from Aaradhya! 👋");\n<span style="color:#86efac">Hello from Aaradhya! 👋</span>`;
+  } else if (type === 'random') {
+    const n = Math.floor(Math.random()*100)+1;
+    out.innerHTML = `<span>> </span>Math.floor(Math.random() * 100) + 1;\n<span style="color:#fca5a5">${n}</span>`;
+  } else if (type === 'time') {
+    const t = new Date().toLocaleTimeString();
+    out.innerHTML = `<span>> </span>new Date().toLocaleTimeString();\n<span style="color:#86efac">"${t}"</span>`;
+  } else if (type === 'reverse') {
+    const word = 'Aaradhya';
+    const rev = word.split('').reverse().join('');
+    out.innerHTML = `<span>> </span>"${word}".split('').reverse().join('');\n<span style="color:#86efac">"${rev}"</span>`;
+  } else if (type === 'joke') {
+    out.innerHTML = `<span>> </span>getJoke();\n<span style="color:#f7df1e">"${jokes[Math.floor(Math.random()*jokes.length)]}"</span>`;
+  }
+}
+
+/* PROFICIENCY BARS */
+const profs = [
+  { name:'Variables, Functions & Loops', pct:85 },
+  { name:'DOM Manipulation', pct:80 },
+  { name:'Events & Listeners', pct:78 },
+  { name:'Arrays & Objects', pct:75 },
+  { name:'Canvas & Games', pct:65 },
+];
+const list = document.getElementById('profList');
+profs.forEach(p => {
+  const item = document.createElement('div');
+  item.className = 'prof-item';
+  item.innerHTML = `
+    <div class="prof-top"><span class="prof-name">${p.name}</span><span class="prof-pct">${p.pct}%</span></div>
+    <div class="prof-track"><div class="prof-fill" data-w="${p.pct}%"></div></div>
+  `;
+  list.appendChild(item);
+});
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.prof-fill').forEach(b => b.style.width = b.dataset.w);
+      io.unobserve(e.target);
+    }
+  });
+}, { threshold:.3 });
+io.observe(list);
+</script>
+</body>
+</html>
