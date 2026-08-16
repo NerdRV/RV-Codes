@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marks Analyzer 📊 | RV Codes</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Orbitron:wght@700&display=swap');
+
+  :root {
+    --bg: #f0f4ff;
+    --card: #ffffff;
+    --ink: #1e2a3a;
+    --sub: #64748b;
+    --blue: #4f6ef7;
+    --green: #22c55e;
+    --yellow: #f59e0b;
+    --orange: #f97316;
+    --red: #ef4444;
+    --purple: #8b5cf6;
+    --border: #e2e8f0;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Plus Jakarta Sans',sans-serif; background:var(--bg); color:var(--ink); min-height:100vh; }
+
+  nav {
+    display:flex; justify-content:space-between; align-items:center;
+    padding:16px 24px; background:#fff;
+    box-shadow:0 2px 12px rgba(0,0,0,.06);
+    position:relative; z-index:50;
+  }
+  .nav-logo { font-family:'Orbitron',monospace; font-weight:700; color:var(--blue); text-decoration:none; font-size:.95rem; }
+  .nav-links { display:flex; gap:20px; align-items:center; }
+  .nav-links a { color:var(--sub); text-decoration:none; font-size:.9rem; font-weight:600; }
+  .nav-links a:hover { color:var(--blue); }
+
+  .nav-dropdown { position:relative; display:inline-block; }
+  .nav-dropdown-menu {
+    display:none; position:absolute; top:100%; right:0; margin-top:10px;
+    background:#fff; border:1px solid var(--border); border-radius:14px;
+    padding:8px; min-width:210px; box-shadow:0 10px 30px rgba(0,0,0,.1); z-index:200;
+  }
+  .nav-dropdown:hover .nav-dropdown-menu { display:block; }
+  .nav-dropdown-menu.show { display:block; }
+  .nav-dropdown-menu a { display:block; padding:9px 12px; border-radius:10px; color:var(--ink) !important; font-size:.85rem !important; }
+  .nav-dropdown-menu a:hover { background:var(--bg); }
+
+  .wrapper { max-width:740px; margin:0 auto; padding:36px 20px 80px; }
+
+  .hero { text-align:center; margin-bottom:34px; }
+  .hero h1 { font-size:clamp(1.8rem,5vw,2.4rem); font-weight:800; margin-bottom:6px; }
+  .hero h1 span { color:var(--blue); }
+  .hero p { color:var(--sub); font-size:.95rem; }
+
+  /* INPUT CARD */
+  .input-card { background:var(--card); border-radius:20px; padding:28px; box-shadow:0 4px 20px rgba(0,0,0,.06); margin-bottom:20px; }
+  .input-card h2 { font-size:1.1rem; font-weight:700; margin-bottom:18px; display:flex; align-items:center; gap:8px; }
+
+  .subject-row {
+    display:grid; grid-template-columns:1fr 120px auto; gap:10px; align-items:center;
+    margin-bottom:10px;
+  }
+  .subject-row input {
+    padding:11px 14px; border:1.5px solid var(--border); border-radius:10px;
+    font-family:'Plus Jakarta Sans',sans-serif; font-size:.9rem; color:var(--ink); outline:none;
+    transition:border-color .2s;
+  }
+  .subject-row input:focus { border-color:var(--blue); }
+  .subject-row input::placeholder { color:#b0bbc8; }
+  .del-row-btn {
+    width:34px; height:34px; border-radius:50%; border:none;
+    background:rgba(239,68,68,.1); color:var(--red); font-size:1rem;
+    cursor:pointer; display:flex; align-items:center; justify-content:center;
+    transition:.2s; flex-shrink:0;
+  }
+  .del-row-btn:hover { background:rgba(239,68,68,.2); }
+
+  .total-row { display:grid; grid-template-columns:1fr 120px auto; gap:10px; align-items:center; margin-bottom:16px; }
+  .total-label { font-size:.8rem; font-weight:600; color:var(--sub); text-align:right; padding-right:4px; }
+
+  .add-subject-btn {
+    background:none; border:1.5px dashed var(--blue); border-radius:10px;
+    padding:10px; width:100%; color:var(--blue); font-family:'Plus Jakarta Sans',sans-serif;
+    font-size:.9rem; font-weight:600; cursor:pointer; transition:.2s; margin-bottom:18px;
+  }
+  .add-subject-btn:hover { background:rgba(79,110,247,.06); }
+
+  .analyze-btn {
+    width:100%; padding:15px; border:none; border-radius:50px;
+    background:linear-gradient(135deg,var(--blue),var(--purple));
+    color:#fff; font-family:'Plus Jakarta Sans',sans-serif; font-size:1rem; font-weight:700;
+    cursor:pointer; box-shadow:0 8px 20px rgba(79,110,247,.3); transition:transform .2s;
+  }
+  .analyze-btn:hover { transform:scale(1.02); }
+
+  /* RESULTS */
+  .results { display:none; }
+  .results.show { display:block; }
+
+  .report-card {
+    background:var(--card); border-radius:20px; padding:28px;
+    box-shadow:0 4px 20px rgba(0,0,0,.06); margin-bottom:20px;
+  }
+  .report-card h2 { font-size:1.1rem; font-weight:700; margin-bottom:20px; display:flex; align-items:center; gap:8px; }
+
+  /* SUMMARY ROW */
+  .summary-row { display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:14px; margin-bottom:24px; }
+  .summary-pill {
+    border-radius:16px; padding:18px 14px; text-align:center;
+  }
+  .summary-pill .pill-val { font-size:1.8rem; font-weight:800; margin-bottom:4px; }
+  .summary-pill .pill-label { font-size:.75rem; font-weight:600; opacity:.7; text-transform:uppercase; letter-spacing:1px; }
+
+  /* SUBJECT TABLE */
+  .subject-table { width:100%; border-collapse:separate; border-spacing:0 8px; }
+  .subject-table th { font-size:.75rem; font-weight:700; color:var(--sub); text-transform:uppercase; letter-spacing:1px; padding:4px 12px; text-align:left; }
+  .subject-table td { padding:12px 14px; background:var(--bg); font-size:.92rem; }
+  .subject-table td:first-child { border-radius:10px 0 0 10px; font-weight:600; }
+  .subject-table td:last-child { border-radius:0 10px 10px 0; }
+
+  .grade-badge {
+    display:inline-block; padding:4px 12px; border-radius:20px;
+    font-size:.78rem; font-weight:700; letter-spacing:.5px;
+  }
+
+  /* BAR CHART */
+  .bar-chart { display:flex; flex-direction:column; gap:10px; }
+  .bar-row { display:flex; align-items:center; gap:12px; }
+  .bar-subject { width:100px; font-size:.82rem; font-weight:600; color:var(--sub); text-align:right; flex-shrink:0; }
+  .bar-track { flex:1; height:14px; background:var(--bg); border-radius:10px; overflow:hidden; }
+  .bar-fill { height:100%; border-radius:10px; transition:width 1s ease; }
+  .bar-val { font-size:.82rem; font-weight:700; width:40px; flex-shrink:0; }
+
+  /* INSIGHT BOX */
+  .insight-box {
+    border-radius:14px; padding:18px 20px;
+    display:flex; gap:14px; align-items:flex-start;
+    margin-bottom:10px;
+  }
+  .insight-icon { font-size:1.6rem; flex-shrink:0; }
+  .insight-text { font-size:.9rem; line-height:1.6; }
+  .insight-text strong { font-weight:700; }
+
+  .reset-btn {
+    display:block; margin:20px auto 0; padding:12px 32px;
+    border:1.5px solid var(--border); border-radius:30px; background:#fff;
+    font-family:'Plus Jakarta Sans',sans-serif; font-size:.9rem; font-weight:600;
+    color:var(--sub); cursor:pointer; transition:.2s;
+  }
+  .reset-btn:hover { border-color:var(--blue); color:var(--blue); }
+
+  footer { text-align:center; padding:30px 0; color:#b0bbc8; font-size:.85rem; }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">RV⚡CODES</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="about-me.html">About</a>
+    <div class="nav-dropdown" id="projDropdown">
+      <a href="javascript:void(0)" onclick="toggleProjDropdown(event)">Projects ▾</a>
+      <div class="nav-dropdown-menu" id="projMenu">
+        <a href="my-first-website.html">🌟 My First Website</a>
+        <a href="hyphenbot.html">🤖 HyphenBot</a>
+        <a href="mini-js-game.html">🎮 Star Catcher Game</a>
+        <a href="ai-study-buddy.html">🧠 AI Study Buddy</a>
+        <a href="My-K-Pop-AI-Diary-Studio.html">💜 K-pop Mood Diary</a>
+        <a href="quiz-app.html">❓ Quiz App</a>
+        <a href="marks-analyzer.html">📊 Marks Analyzer</a>
+        <a href="index.html#proj-grid">🚀 Smart Study OS</a>
+        <a href="index.html#proj-grid">🚀 RV Codes Portfolio</a>
+      </div>
+    </div>
+    <a href="mailto:aaradhyaberi01@gmail.com">Contact</a>
+  </div>
+</nav>
+
+<div class="wrapper">
+
+  <div class="hero">
+    <h1>📊 <span>Marks</span> Analyzer</h1>
+    <p>Enter your subject marks and get instant grades, averages & performance insights!</p>
+  </div>
+
+  <!-- INPUT -->
+  <div class="input-card">
+    <h2>✏️ Enter Your Marks</h2>
+    <div style="display:grid;grid-template-columns:1fr 120px auto;gap:10px;margin-bottom:8px;">
+      <span style="font-size:.78rem;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:1px;">Subject</span>
+      <span style="font-size:.78rem;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:1px;">Marks</span>
+      <span style="width:34px;"></span>
+    </div>
+    <div id="subjectRows"></div>
+    <button class="add-subject-btn" onclick="addRow()">+ Add Subject</button>
+    <button class="analyze-btn" onclick="analyze()">🔍 Analyze My Marks</button>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="results" id="results">
+
+    <div class="report-card">
+      <h2>🏆 Your Report Card</h2>
+      <div class="summary-row" id="summaryRow"></div>
+      <table class="subject-table">
+        <thead>
+          <tr>
+            <th>Subject</th>
+            <th>Marks</th>
+            <th>Percentage</th>
+            <th>Grade</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+
+    <div class="report-card">
+      <h2>📈 Performance Chart</h2>
+      <div class="bar-chart" id="barChart"></div>
+    </div>
+
+    <div class="report-card">
+      <h2>💡 Insights</h2>
+      <div id="insightsBox"></div>
+    </div>
+
+    <button class="reset-btn" onclick="resetAll()">🔄 Analyze Again</button>
+  </div>
+
+</div>
+
+<footer>Built with 💜 &amp; lots of caffeine-free passion · RV Codes © 2025</footer>
+
+<script>
+/* ── DROPDOWN ── */
+function toggleProjDropdown(e) {
+  e.preventDefault();
+  document.getElementById('projMenu').classList.toggle('show');
+}
+document.addEventListener('click', e => {
+  const d = document.getElementById('projDropdown');
+  if (d && !d.contains(e.target)) document.getElementById('projMenu').classList.remove('show');
+});
+
+/* ── ROWS ── */
+let rowCount = 0;
+const defaultSubjects = ['Mathematics','Science','English','Social Studies','Computer Science'];
+
+function addRow(name='') {
+  rowCount++;
+  const id = rowCount;
+  const row = document.createElement('div');
+  row.className = 'subject-row';
+  row.id = `row-${id}`;
+  row.innerHTML = `
+    <input type="text" id="sub-${id}" placeholder="e.g. Mathematics" value="${name}">
+    <input type="number" id="marks-${id}" placeholder="e.g. 85" min="0" max="100">
+    <button class="del-row-btn" onclick="delRow(${id})">✕</button>
+  `;
+  document.getElementById('subjectRows').appendChild(row);
+}
+
+function delRow(id) {
+  const el = document.getElementById(`row-${id}`);
+  if (el) el.remove();
+}
+
+// prefill default subjects
+defaultSubjects.forEach(s => addRow(s));
+
+/* ── GRADE LOGIC ── */
+function getGrade(pct) {
+  if (pct >= 90) return { g:'A+', color:'#22c55e', bg:'rgba(34,197,94,.12)' };
+  if (pct >= 80) return { g:'A',  color:'#22c55e', bg:'rgba(34,197,94,.1)' };
+  if (pct >= 70) return { g:'B+', color:'#3b82f6', bg:'rgba(59,130,246,.1)' };
+  if (pct >= 60) return { g:'B',  color:'#3b82f6', bg:'rgba(59,130,246,.08)' };
+  if (pct >= 50) return { g:'C',  color:'#f59e0b', bg:'rgba(245,158,11,.1)' };
+  if (pct >= 40) return { g:'D',  color:'#f97316', bg:'rgba(249,115,22,.1)' };
+  return { g:'F', color:'#ef4444', bg:'rgba(239,68,68,.1)' };
+}
+
+function getOverallGrade(avg) {
+  if (avg >= 90) return '🏆 Outstanding!';
+  if (avg >= 80) return '🌟 Excellent!';
+  if (avg >= 70) return '😊 Good Job!';
+  if (avg >= 60) return '👍 Average';
+  if (avg >= 50) return '💪 Keep Going!';
+  return '📚 Needs Improvement';
+}
+
+function getBarColor(pct) {
+  if (pct >= 80) return 'linear-gradient(to right,#22c55e,#16a34a)';
+  if (pct >= 60) return 'linear-gradient(to right,#3b82f6,#4f6ef7)';
+  if (pct >= 40) return 'linear-gradient(to right,#f59e0b,#f97316)';
+  return 'linear-gradient(to right,#ef4444,#dc2626)';
+}
+
+/* ── ANALYZE ── */
+function analyze() {
+  const rows = document.querySelectorAll('.subject-row');
+  const data = [];
+
+  for (const row of rows) {
+    const id = row.id.replace('row-','');
+    const sub = document.getElementById(`sub-${id}`)?.value.trim();
+    const marks = parseFloat(document.getElementById(`marks-${id}`)?.value);
+    if (!sub || isNaN(marks)) { alert('Please fill in all subject names and marks! ✏️'); return; }
+    if (marks < 0 || marks > 100) { alert('Marks should be between 0 and 100! 📊'); return; }
+    data.push({ sub, marks });
+  }
+
+  if (data.length === 0) { alert('Add at least one subject! ➕'); return; }
+
+  const total = data.reduce((s, d) => s + d.marks, 0);
+  const avg = total / data.length;
+  const highest = data.reduce((a, b) => a.marks > b.marks ? a : b);
+  const lowest = data.reduce((a, b) => a.marks < b.marks ? a : b);
+
+  /* SUMMARY */
+  const summaryRow = document.getElementById('summaryRow');
+  summaryRow.innerHTML = `
+    <div class="summary-pill" style="background:rgba(79,110,247,.1);">
+      <div class="pill-val" style="color:var(--blue)">${avg.toFixed(1)}%</div>
+      <div class="pill-label" style="color:var(--blue)">Average</div>
+    </div>
+    <div class="summary-pill" style="background:rgba(34,197,94,.1);">
+      <div class="pill-val" style="color:var(--green)">${highest.marks}</div>
+      <div class="pill-label" style="color:var(--green)">Highest</div>
+    </div>
+    <div class="summary-pill" style="background:rgba(239,68,68,.1);">
+      <div class="pill-val" style="color:var(--red)">${lowest.marks}</div>
+      <div class="pill-label" style="color:var(--red)">Lowest</div>
+    </div>
+    <div class="summary-pill" style="background:rgba(139,92,246,.1);">
+      <div class="pill-val" style="color:var(--purple)">${getGrade(avg).g}</div>
+      <div class="pill-label" style="color:var(--purple)">Overall Grade</div>
+    </div>
+  `;
+
+  /* TABLE */
+  const tbody = document.getElementById('tableBody');
+  tbody.innerHTML = '';
+  data.forEach(d => {
+    const { g, color, bg } = getGrade(d.marks);
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${d.sub}</td>
+      <td>${d.marks} / 100</td>
+      <td>${d.marks}%</td>
+      <td><span class="grade-badge" style="color:${color};background:${bg}">${g}</span></td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  /* BAR CHART */
+  const barChart = document.getElementById('barChart');
+  barChart.innerHTML = '';
+  data.forEach(d => {
+    const row = document.createElement('div');
+    row.className = 'bar-row';
+    const shortName = d.sub.length > 12 ? d.sub.slice(0,12)+'…' : d.sub;
+    row.innerHTML = `
+      <div class="bar-subject">${shortName}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:0%;background:${getBarColor(d.marks)}" data-width="${d.marks}%"></div></div>
+      <div class="bar-val" style="color:${getGrade(d.marks).color}">${d.marks}%</div>
+    `;
+    barChart.appendChild(row);
+  });
+  setTimeout(() => {
+    document.querySelectorAll('.bar-fill').forEach(b => b.style.width = b.dataset.width);
+  }, 100);
+
+  /* INSIGHTS */
+  const insights = document.getElementById('insightsBox');
+  insights.innerHTML = '';
+  const addInsight = (icon, bg, text) => {
+    const box = document.createElement('div');
+    box.className = 'insight-box';
+    box.style.background = bg;
+    box.innerHTML = `<div class="insight-icon">${icon}</div><div class="insight-text">${text}</div>`;
+    insights.appendChild(box);
+  };
+
+  addInsight('📊', 'rgba(79,110,247,.07)', `Your overall average is <strong>${avg.toFixed(1)}%</strong> — that gives you an overall grade of <strong>${getGrade(avg).g}</strong>. ${getOverallGrade(avg)}`);
+  addInsight('🌟', 'rgba(34,197,94,.07)', `Your strongest subject is <strong>${highest.sub}</strong> with <strong>${highest.marks}%</strong>! Keep it up — you clearly have a talent for this one.`);
+
+  if (lowest.marks < 60) {
+    addInsight('💪', 'rgba(245,158,11,.07)', `<strong>${lowest.sub}</strong> needs a little more love with <strong>${lowest.marks}%</strong>. Don't worry — a bit of focused revision will make a big difference!`);
+  } else {
+    addInsight('✅', 'rgba(34,197,94,.07)', `Even your lowest subject — <strong>${lowest.sub}</strong> at <strong>${lowest.marks}%</strong> — is still passing! Well balanced performance across the board.`);
+  }
+
+  const failing = data.filter(d => d.marks < 40);
+  if (failing.length > 0) {
+    addInsight('📚', 'rgba(239,68,68,.07)', `You have ${failing.length} subject${failing.length > 1 ? 's' : ''} below 40%: <strong>${failing.map(d=>d.sub).join(', ')}</strong>. These need urgent attention — but you've got this! 💜`);
+  }
+
+  if (avg >= 80) {
+    addInsight('🎉', 'rgba(139,92,246,.07)', `Scoring above 80% average is seriously impressive! You should be really proud of yourself. Keep this energy going! 🚀`);
+  }
+
+  document.getElementById('results').classList.add('show');
+  document.getElementById('results').scrollIntoView({ behavior:'smooth' });
+}
+
+function resetAll() {
+  document.getElementById('results').classList.remove('show');
+  window.scrollTo({ top:0, behavior:'smooth' });
+}
+</script>
+
+</body>
+</html>
