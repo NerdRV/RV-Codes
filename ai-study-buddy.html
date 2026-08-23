@@ -5,178 +5,105 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AI Study Buddy 🧠 | RV Codes</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Lexend:wght@400;500;600;700&display=swap');
-
+  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Lexend:wght@400;500;600;700&display=swap');
   :root {
-    --sage: #7fa896;
-    --sage-light: #e8f3ee;
-    --lavender: #9b8fd9;
-    --lavender-light: #f0edfb;
-    --peach: #f2b88b;
-    --peach-light: #fdf0e4;
-    --sky: #7fb8d9;
-    --sky-light: #e8f4fb;
-    --ink: #3a4750;
-    --bg: #f7f8fa;
+    --bg:#f0f4ff;--card:#fff;--ink:#1e2a3a;--sub:#64748b;
+    --blue:#4f6ef7;--green:#22c55e;--yellow:#f59e0b;--red:#ef4444;--purple:#8b5cf6;
+    --border:#e2e8f0;
   }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;}
 
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body {
-    font-family: 'Poppins', sans-serif;
-    background: var(--bg);
-    color: var(--ink);
-    min-height: 100vh;
-  }
+  nav{display:flex;justify-content:space-between;align-items:center;padding:16px 24px;background:#fff;box-shadow:0 2px 12px rgba(0,0,0,.06);position:relative;z-index:50;}
+  .nav-logo{font-family:'Lexend',sans-serif;font-weight:700;color:var(--ink);text-decoration:none;}
+  .nav-links{display:flex;gap:20px;align-items:center;}
+  .nav-links a{color:var(--sub);text-decoration:none;font-size:.9rem;font-weight:500;}
+  .nav-links a:hover{color:var(--blue);}
+  .nav-dropdown{position:relative;display:inline-block;}
+  .nav-dropdown-menu{display:none;position:absolute;top:100%;right:0;margin-top:10px;background:#fff;border:1px solid var(--border);border-radius:14px;padding:8px;min-width:210px;box-shadow:0 10px 30px rgba(0,0,0,.1);z-index:200;}
+  .nav-dropdown:hover .nav-dropdown-menu{display:block;}
+  .nav-dropdown-menu.show{display:block;}
+  .nav-dropdown-menu a{display:block;padding:9px 12px;border-radius:10px;color:var(--ink)!important;font-size:.85rem!important;}
+  .nav-dropdown-menu a:hover{background:var(--bg);}
 
-  nav {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 16px 24px;
-    background: #fff;
-    box-shadow: 0 2px 12px rgba(0,0,0,.05);
-    position: relative; z-index: 50;
-  }
-  .nav-logo { font-family:'Lexend',sans-serif; font-weight:700; color: var(--ink); text-decoration:none; }
-  .nav-links { display: flex; gap: 20px; align-items: center; }
-  .nav-links a { color: #8a96a3; text-decoration: none; font-size: .9rem; font-weight: 500; }
-  .nav-links a:hover { color: var(--lavender); }
+  .wrapper{max-width:860px;margin:0 auto;padding:36px 20px 70px;}
+  .screen{display:none;}.screen.active{display:block;}
 
-  .nav-dropdown { position: relative; display: inline-block; }
-  .nav-dropdown-menu {
-    display: none; position: absolute; top: 100%; right: 0; margin-top: 10px;
-    background: #fff; border: 1px solid #eee; border-radius: 14px; padding: 8px;
-    min-width: 200px; box-shadow: 0 10px 30px rgba(0,0,0,.1); z-index: 200;
-  }
-  .nav-dropdown:hover .nav-dropdown-menu { display: block; }
-  .nav-dropdown-menu.show { display: block; }
-  .nav-dropdown-menu a { display:block; padding:9px 12px; border-radius:10px; color:var(--ink) !important; font-size:.85rem !important; }
-  .nav-dropdown-menu a:hover { background: var(--lavender-light); }
+  /* HERO */
+  .hero{text-align:center;margin-bottom:30px;}
+  .hero h1{font-family:'Lexend',sans-serif;font-size:clamp(1.8rem,5vw,2.4rem);margin-bottom:6px;}
+  .hero p{color:var(--sub);font-size:.95rem;}
 
-  .wrapper { max-width: 720px; margin: 0 auto; padding: 36px 20px 70px; }
-
-  .hero { text-align: center; margin-bottom: 30px; }
-  .hero h1 { font-family:'Lexend',sans-serif; font-size: clamp(1.8rem,5vw,2.4rem); color: var(--ink); margin-bottom:6px; }
-  .hero p { color: #8a96a3; font-size: .95rem; }
+  /* GRADE SELECT */
+  .grade-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px;}
+  .grade-card{background:#fff;border:2px solid var(--border);border-radius:16px;padding:20px 10px;text-align:center;cursor:pointer;transition:.2s;font-weight:700;}
+  .grade-card:hover{border-color:var(--blue);transform:translateY(-3px);box-shadow:0 8px 20px rgba(79,110,247,.15);}
+  .grade-card .g-num{font-family:'Lexend',sans-serif;font-size:1.6rem;color:var(--blue);}
+  .grade-card .g-label{font-size:.72rem;color:var(--sub);margin-top:2px;}
 
   /* SUBJECT SELECT */
-  .subject-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(180px,1fr)); gap: 16px; }
-  .subject-card {
-    background: #fff;
-    border-radius: 18px;
-    padding: 26px 18px;
-    text-align: center;
-    cursor: pointer;
-    border: 2px solid transparent;
-    box-shadow: 0 4px 16px rgba(0,0,0,.05);
-    transition: transform .2s, box-shadow .2s, border-color .2s;
-  }
-  .subject-card:hover { transform: translateY(-4px); box-shadow: 0 10px 24px rgba(0,0,0,.1); border-color: var(--accent); }
-  .subject-icon { font-size: 2.2rem; margin-bottom: 10px; }
-  .subject-name { font-family:'Lexend',sans-serif; font-weight: 600; font-size: 1rem; margin-bottom: 4px; }
-  .subject-count { font-size: .78rem; color: #9aa5b1; }
+  .subj-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:14px;}
+  .subj-card{background:#fff;border:2px solid var(--border);border-radius:16px;padding:22px 16px;text-align:center;cursor:pointer;transition:.2s;position:relative;}
+  .subj-card:hover{transform:translateY(-4px);box-shadow:0 10px 24px rgba(0,0,0,.1);}
+  .subj-card .s-icon{font-size:2rem;margin-bottom:8px;}
+  .subj-card .s-name{font-family:'Lexend',sans-serif;font-weight:600;font-size:.95rem;}
+  .subj-card .s-count{font-size:.72rem;color:var(--sub);margin-top:3px;}
+  .subj-card.locked{opacity:.45;cursor:not-allowed;}
+  .subj-card.locked:hover{transform:none;box-shadow:none;}
+  .lock-badge{position:absolute;top:10px;right:10px;font-size:.85rem;}
+  .unlock-badge{position:absolute;top:8px;right:8px;background:var(--green);color:#fff;font-size:.65rem;font-weight:700;padding:2px 6px;border-radius:10px;}
 
-  /* QUIZ SCREEN */
-  .quiz-screen { display: none; }
-  .quiz-screen.active { display: block; }
-  .subject-screen.hidden { display: none; }
+  /* QUIZ */
+  .quiz-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px;}
+  .back-btn{background:none;border:none;color:var(--sub);font-family:'Plus Jakarta Sans',sans-serif;font-size:.9rem;cursor:pointer;display:flex;align-items:center;gap:4px;}
+  .back-btn:hover{color:var(--ink);}
+  .prog-pill{background:#fff;border-radius:30px;padding:8px 18px;font-size:.85rem;font-weight:600;box-shadow:0 2px 8px rgba(0,0,0,.06);}
+  .prog-track{height:8px;background:#e8eaed;border-radius:8px;margin-bottom:28px;overflow:hidden;}
+  .prog-fill{height:100%;background:var(--blue);border-radius:8px;transition:width .3s ease;width:0%;}
 
-  .quiz-header {
-    display: flex; justify-content: space-between; align-items: center;
-    margin-bottom: 20px; flex-wrap: wrap; gap: 10px;
-  }
-  .back-btn {
-    background: none; border: none; color: #8a96a3;
-    font-family:'Poppins',sans-serif; font-size: .9rem; cursor: pointer;
-    display: flex; align-items: center; gap: 4px;
-  }
-  .back-btn:hover { color: var(--ink); }
+  .q-card{background:#fff;border-radius:20px;padding:28px 24px;box-shadow:0 6px 24px rgba(0,0,0,.06);margin-bottom:20px;}
+  .q-num{font-size:.78rem;color:var(--sub);font-weight:600;margin-bottom:8px;}
+  .q-text{font-family:'Lexend',sans-serif;font-size:1.05rem;font-weight:600;line-height:1.5;margin-bottom:22px;}
 
-  .progress-pill {
-    background: #fff; border-radius: 30px; padding: 8px 18px;
-    font-size: .85rem; font-weight: 600; box-shadow: 0 2px 8px rgba(0,0,0,.06);
-  }
+  .opts-list{display:flex;flex-direction:column;gap:10px;}
+  .opt-btn{background:var(--bg);border:2px solid transparent;border-radius:14px;padding:13px 18px;text-align:left;font-family:'Plus Jakarta Sans',sans-serif;font-size:.92rem;cursor:pointer;transition:.2s;display:flex;align-items:center;gap:10px;}
+  .opt-btn:hover:not(.disabled){background:#eff3ff;}
+  .opt-btn.correct{border-color:var(--green);background:#e8fbf0;}
+  .opt-btn.wrong{border-color:var(--red);background:#fdeaea;}
+  .opt-btn.disabled{cursor:default;opacity:.85;}
+  .opt-letter{width:26px;height:26px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:700;flex-shrink:0;border:1px solid #ddd;}
 
-  .progress-bar-track {
-    height: 8px; background: #e8eaed; border-radius: 8px; margin-bottom: 28px; overflow: hidden;
-  }
-  .progress-bar-fill {
-    height: 100%; background: var(--accent); border-radius: 8px;
-    transition: width .3s ease; width: 0%;
-  }
-
-  .question-card {
-    background: #fff;
-    border-radius: 20px;
-    padding: 28px 24px;
-    box-shadow: 0 6px 24px rgba(0,0,0,.06);
-    margin-bottom: 20px;
-  }
-  .question-num { font-size: .8rem; color: #9aa5b1; font-weight: 600; margin-bottom: 8px; }
-  .question-text { font-family:'Lexend',sans-serif; font-size: 1.1rem; font-weight: 600; line-height: 1.5; margin-bottom: 22px; }
-
-  .options-list { display: flex; flex-direction: column; gap: 12px; }
-  .option-btn {
-    background: var(--bg);
-    border: 2px solid transparent;
-    border-radius: 14px;
-    padding: 14px 18px;
-    text-align: left;
-    font-family: 'Poppins', sans-serif;
-    font-size: .95rem;
-    cursor: pointer;
-    transition: .2s;
-    display: flex; align-items: center; gap: 10px;
-  }
-  .option-btn:hover:not(.disabled) { background: var(--accent-light); }
-  .option-btn.selected { border-color: var(--accent); background: var(--accent-light); }
-  .option-btn.correct { border-color: #6fcf97; background: #e8fbf0; }
-  .option-btn.wrong { border-color: #f17c7c; background: #fdeaea; }
-  .option-btn.disabled { cursor: default; opacity: .85; }
-  .option-letter {
-    width: 26px; height: 26px; border-radius: 50%;
-    background: #fff; display:flex; align-items:center; justify-content:center;
-    font-size: .8rem; font-weight: 700; flex-shrink: 0;
-    border: 1px solid #ddd;
-  }
-
-  .next-btn-row { display: flex; justify-content: flex-end; }
-  .next-btn {
-    background: var(--accent); color: #fff; border: none;
-    padding: 12px 28px; border-radius: 30px;
-    font-family:'Lexend',sans-serif; font-weight: 600; font-size: .9rem;
-    cursor: pointer; transition: transform .2s;
-    display: none;
-  }
-  .next-btn.show { display: inline-block; }
-  .next-btn:hover { transform: scale(1.04); }
+  .next-row{display:flex;justify-content:flex-end;margin-top:16px;}
+  .next-btn{background:var(--blue);color:#fff;border:none;padding:12px 28px;border-radius:30px;font-family:'Lexend',sans-serif;font-weight:600;font-size:.9rem;cursor:pointer;display:none;transition:.2s;}
+  .next-btn.show{display:inline-block;}
+  .next-btn:hover{transform:scale(1.04);}
 
   /* RESULTS */
-  .results-screen { display: none; text-align: center; }
-  .results-screen.active { display: block; }
-  .result-emoji { font-size: 3.4rem; margin-bottom: 10px; }
-  .result-score { font-family:'Lexend',sans-serif; font-size: 2.2rem; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
-  .result-msg { color: #8a96a3; margin-bottom: 24px; }
-  .result-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-  .result-btn {
-    border: none; border-radius: 30px; padding: 12px 24px;
-    font-family:'Lexend',sans-serif; font-weight: 600; font-size: .9rem; cursor: pointer;
-    transition: transform .2s;
-  }
-  .result-btn:hover { transform: scale(1.04); }
-  .result-btn.primary { background: var(--accent); color: #fff; }
-  .result-btn.secondary { background: #fff; color: var(--ink); box-shadow: 0 2px 10px rgba(0,0,0,.08); }
+  .results-screen{text-align:center;}
+  .res-emoji{font-size:3.4rem;margin-bottom:10px;}
+  .res-score{font-family:'Lexend',sans-serif;font-size:2.2rem;font-weight:700;margin-bottom:4px;}
+  .res-msg{color:var(--sub);margin-bottom:24px;}
+  .res-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+  .res-btn{border:none;border-radius:30px;padding:12px 24px;font-family:'Lexend',sans-serif;font-weight:600;font-size:.9rem;cursor:pointer;transition:.2s;}
+  .res-btn:hover{transform:scale(1.04);}
+  .res-btn.primary{background:var(--blue);color:#fff;}
+  .res-btn.secondary{background:#fff;color:var(--ink);box-shadow:0 2px 10px rgba(0,0,0,.08);}
+  .review-list{text-align:left;margin-top:28px;display:flex;flex-direction:column;gap:10px;}
+  .review-item{background:#fff;border-radius:14px;padding:14px 18px;font-size:.85rem;box-shadow:0 2px 10px rgba(0,0,0,.05);}
+  .review-item.correct{border-left:4px solid var(--green);}
+  .review-item.wrong{border-left:4px solid var(--red);}
+  .review-q{font-weight:600;margin-bottom:4px;}
+  .review-a{color:var(--sub);}
 
-  .review-list { text-align: left; margin-top: 30px; display: flex; flex-direction: column; gap: 10px; }
-  .review-item { background: #fff; border-radius: 14px; padding: 14px 18px; font-size: .85rem; box-shadow: 0 2px 10px rgba(0,0,0,.05); }
-  .review-item.correct { border-left: 4px solid #6fcf97; }
-  .review-item.wrong { border-left: 4px solid #f17c7c; }
-  .review-q { font-weight: 600; margin-bottom: 4px; }
-  .review-a { color: #8a96a3; }
+  .sec-label{font-family:'Lexend',sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:16px;color:var(--ink);}
+  .breadcrumb{display:flex;align-items:center;gap:8px;font-size:.85rem;color:var(--sub);margin-bottom:20px;flex-wrap:wrap;}
+  .breadcrumb span{color:var(--blue);font-weight:600;cursor:pointer;}
+  .breadcrumb span:hover{text-decoration:underline;}
 
-  footer { text-align: center; padding: 30px 0; color: #b3bcc6; font-size: .85rem; }
+  footer{text-align:center;padding:30px 0;color:#b0bbc8;font-size:.85rem;}
 </style>
 </head>
 <body>
-
 <nav>
   <a href="index.html" class="nav-logo">RV ⚡ CODES</a>
   <div class="nav-links">
@@ -185,7 +112,7 @@
     <div class="nav-dropdown" id="projDropdown">
       <a href="javascript:void(0)" onclick="toggleProjDropdown(event)">Projects ▾</a>
       <div class="nav-dropdown-menu" id="projMenu">
-        <a href="my-first-website.html">🌟 My First Website</a> 
+        <a href="my-first-website.html">🌟 My First Website</a>
         <a href="hyphenbot.html">🤖 HyphenBot</a>
         <a href="mini-js-game.html">🎮 Star Catcher Game</a>
         <a href="ai-study-buddy.html">🧠 AI Study Buddy</a>
@@ -202,293 +129,619 @@
 
 <div class="wrapper">
 
-  <!-- SUBJECT SELECT SCREEN -->
-  <div class="subject-screen" id="subjectScreen">
+  <!-- GRADE SCREEN -->
+  <div class="screen active" id="gradeScreen">
     <div class="hero">
       <h1>🧠 AI Study Buddy</h1>
-      <p>Pick a subject and test yourself with a 15-question quiz!</p>
+      <p>Pick your grade to get started — questions are tailored just for you!</p>
     </div>
-    <div class="subject-grid" id="subjectGrid"></div>
+    <div class="sec-label">📚 Select Your Grade</div>
+    <div class="grade-grid" id="gradeGrid"></div>
+  </div>
+
+  <!-- SUBJECT SCREEN -->
+  <div class="screen" id="subjectScreen">
+    <div class="breadcrumb" id="breadcrumb"></div>
+    <div class="sec-label" id="subjectLabel"></div>
+    <div class="subj-grid" id="subjectGrid"></div>
   </div>
 
   <!-- QUIZ SCREEN -->
-  <div class="quiz-screen" id="quizScreen">
+  <div class="screen" id="quizScreen">
     <div class="quiz-header">
-      <button class="back-btn" onclick="exitQuiz()">← Back to subjects</button>
-      <div class="progress-pill" id="progressPill">Question 1 / 15</div>
+      <button class="back-btn" onclick="goToSubjects()">← Back to subjects</button>
+      <div class="prog-pill" id="progPill">Question 1 / 15</div>
     </div>
-    <div class="progress-bar-track"><div class="progress-bar-fill" id="progressFill"></div></div>
-
-    <div class="question-card">
-      <div class="question-num" id="questionNum">QUESTION 1</div>
-      <div class="question-text" id="questionText"></div>
-      <div class="options-list" id="optionsList"></div>
+    <div class="prog-track"><div class="prog-fill" id="progFill"></div></div>
+    <div class="q-card">
+      <div class="q-num" id="qNum"></div>
+      <div class="q-text" id="qText"></div>
+      <div class="opts-list" id="optsList"></div>
     </div>
-
-    <div class="next-btn-row">
-      <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Next →</button>
-    </div>
+    <div class="next-row"><button class="next-btn" id="nextBtn" onclick="nextQ()">Next →</button></div>
   </div>
 
   <!-- RESULTS SCREEN -->
-  <div class="results-screen" id="resultsScreen">
-    <div class="result-emoji" id="resultEmoji">🎉</div>
-    <div class="result-score" id="resultScore">12 / 15</div>
-    <div class="result-msg" id="resultMsg">Great job!</div>
-    <div class="result-actions">
-      <button class="result-btn primary" onclick="retrySubject()">🔁 Retry Quiz</button>
-      <button class="result-btn secondary" onclick="exitQuiz()">📚 Choose Another Subject</button>
+  <div class="screen" id="resultsScreen">
+    <div class="results-screen">
+      <div class="res-emoji" id="resEmoji"></div>
+      <div class="res-score" id="resScore"></div>
+      <div class="res-msg" id="resMsg"></div>
+      <div class="res-btns">
+        <button class="res-btn primary" onclick="retryQuiz()">🔁 Try Again</button>
+        <button class="res-btn secondary" onclick="goToSubjects()">📚 Other Subjects</button>
+        <button class="res-btn secondary" onclick="goToGrades()">🏠 Change Grade</button>
+      </div>
+      <div class="review-list" id="reviewList"></div>
     </div>
-    <div class="review-list" id="reviewList"></div>
   </div>
 
 </div>
-
 <footer>Built with 💜 &amp; lots of caffeine-free passion · RV Codes © 2025</footer>
 
 <script>
-/* ── PROJECTS DROPDOWN ── */
-function toggleProjDropdown(e) {
-  e.preventDefault();
-  document.getElementById('projMenu').classList.toggle('show');
-}
-document.addEventListener('click', function(e) {
-  const dropdown = document.getElementById('projDropdown');
-  if (dropdown && !dropdown.contains(e.target)) {
-    document.getElementById('projMenu').classList.remove('show');
-  }
-});
+function toggleProjDropdown(e){e.preventDefault();document.getElementById('projMenu').classList.toggle('show');}
+document.addEventListener('click',e=>{const d=document.getElementById('projDropdown');if(d&&!d.contains(e.target))document.getElementById('projMenu').classList.remove('show');});
 
-/* ── SUBJECTS DATA (5 subjects x 15 questions) ── */
-const subjects = {
+/* ══════════════════════════════════════
+   SUBJECTS CONFIG
+   core = all grades, minGrade = unlock grade
+══════════════════════════════════════ */
+const SUBJECTS = [
+  {id:'math',    name:'Math',        icon:'➗', core:true,  minGrade:1},
+  {id:'english', name:'English',     icon:'📖', core:true,  minGrade:1},
+  {id:'science', name:'Science',     icon:'🔬', core:true,  minGrade:1},
+  {id:'gk',      name:'G.K.',        icon:'🌍', core:true,  minGrade:1},
+  {id:'social',  name:'Social Studies',icon:'🗺️',core:false, minGrade:1},
+  {id:'computer',name:'Computer',    icon:'💻', core:false, minGrade:3},
+  {id:'history', name:'History',     icon:'📜', core:false, minGrade:6},
+  {id:'geo',     name:'Geography',   icon:'🌐', core:false, minGrade:6},
+  {id:'civics',  name:'Civics',      icon:'⚖️', core:false, minGrade:6},
+  {id:'physics', name:'Physics',     icon:'⚡', core:false, minGrade:9},
+  {id:'chemistry',name:'Chemistry',  icon:'🧪', core:false, minGrade:9},
+  {id:'biology', name:'Biology',     icon:'🧬', core:false, minGrade:9},
+  {id:'coding',  name:'Coding',      icon:'👾', core:false, minGrade:7},
+  {id:'economics',name:'Economics',  icon:'📈', core:false, minGrade:10},
+];
+
+/* ══════════════════════════════════════
+   QUESTION BANK  (15 per subject per tier)
+   Tiers: 1=Gr1-3, 2=Gr4-6, 3=Gr7-9, 4=Gr10-12
+══════════════════════════════════════ */
+const QB = {
   math: {
-    name: "Math", icon: "➗", color: "#7fb8d9", colorLight: "#e8f4fb",
-    questions: [
-      { q:"What is 7 × 8?", o:["54","56","58","64"], a:1 },
-      { q:"What is the square root of 144?", o:["10","11","12","14"], a:2 },
-      { q:"What is 15% of 200?", o:["20","25","30","35"], a:2 },
-      { q:"Solve: 3x = 27. What is x?", o:["6","7","8","9"], a:3 },
-      { q:"What is the value of π (pi) rounded to 2 decimal places?", o:["3.41","3.14","3.12","3.16"], a:1 },
-      { q:"What is 9² (9 squared)?", o:["81","72","99","18"], a:0 },
-      { q:"How many sides does a hexagon have?", o:["5","6","7","8"], a:1 },
-      { q:"What is 100 ÷ 4?", o:["20","25","30","40"], a:1 },
-      { q:"What is the sum of angles in a triangle?", o:["90°","180°","270°","360°"], a:1 },
-      { q:"What is 5! (5 factorial)?", o:["20","60","100","120"], a:3 },
-      { q:"What is -3 + 7?", o:["-4","4","10","-10"], a:1 },
-      { q:"Simplify: 2/4", o:["1/4","1/2","2/3","3/4"], a:1 },
-      { q:"What is the next prime number after 7?", o:["8","9","10","11"], a:3 },
-      { q:"What is 12 × 12?", o:["124","144","148","154"], a:1 },
-      { q:"If a triangle has a 90° angle, it's called a:", o:["Equilateral triangle","Right triangle","Obtuse triangle","Isosceles triangle"], a:1 }
-    ]
+    1:[
+      {q:"What is 5 + 3?",o:["6","7","8","9"],a:2},
+      {q:"What is 10 - 4?",o:["5","6","7","8"],a:1},
+      {q:"What is 3 × 2?",o:["5","6","7","8"],a:1},
+      {q:"How many sides does a triangle have?",o:["2","3","4","5"],a:1},
+      {q:"What comes after 19?",o:["18","20","21","22"],a:1},
+      {q:"What is half of 8?",o:["2","3","4","5"],a:2},
+      {q:"What is 7 + 6?",o:["11","12","13","14"],a:2},
+      {q:"Which number is biggest?",o:["9","5","3","7"],a:0},
+      {q:"What is 4 × 3?",o:["10","11","12","13"],a:2},
+      {q:"How many days in a week?",o:["5","6","7","8"],a:2},
+      {q:"What is 15 - 8?",o:["5","6","7","8"],a:2},
+      {q:"What is 2 + 2 + 2?",o:["4","5","6","7"],a:2},
+      {q:"What shape has 4 equal sides?",o:["Rectangle","Square","Triangle","Circle"],a:1},
+      {q:"What is 10 ÷ 2?",o:["3","4","5","6"],a:2},
+      {q:"What is 9 - 3?",o:["4","5","6","7"],a:2},
+    ],
+    2:[
+      {q:"What is 12 × 7?",o:["74","82","84","86"],a:2},
+      {q:"What is 144 ÷ 12?",o:["10","11","12","13"],a:2},
+      {q:"What is 25% of 80?",o:["15","20","25","30"],a:1},
+      {q:"What is the perimeter of a square with side 6?",o:["18","22","24","36"],a:2},
+      {q:"What is 3² + 4²?",o:["21","23","25","27"],a:2},
+      {q:"What is LCM of 4 and 6?",o:["8","10","12","14"],a:2},
+      {q:"What is 0.5 as a fraction?",o:["1/4","1/3","1/2","2/3"],a:2},
+      {q:"How many metres in 1 km?",o:["10","100","1000","10000"],a:2},
+      {q:"What is the area of a rectangle 5×4?",o:["18","20","22","24"],a:1},
+      {q:"What is 7 × 8?",o:["54","56","58","64"],a:1},
+      {q:"What is HCF of 12 and 18?",o:["3","4","6","9"],a:2},
+      {q:"What is 1000 - 367?",o:["623","633","643","653"],a:1},
+      {q:"What is 15% of 200?",o:["20","25","30","35"],a:2},
+      {q:"Round 3.67 to the nearest whole number:",o:["3","4","5","6"],a:1},
+      {q:"What is 2³?",o:["6","8","10","12"],a:1},
+    ],
+    3:[
+      {q:"Solve: 3x + 7 = 22. x = ?",o:["4","5","6","7"],a:1},
+      {q:"What is the square root of 196?",o:["12","13","14","15"],a:2},
+      {q:"What is 15% of 340?",o:["48","51","54","57"],a:1},
+      {q:"The sum of angles in a triangle is:",o:["90°","180°","270°","360°"],a:1},
+      {q:"What is 2⁵?",o:["16","24","32","40"],a:2},
+      {q:"What is the value of π (2dp)?",o:["3.12","3.14","3.16","3.41"],a:1},
+      {q:"Simplify: 4x + 3x - 2x",o:["3x","4x","5x","6x"],a:2},
+      {q:"What is the area of a circle with r=7? (π≈22/7)",o:["144","154","164","174"],a:1},
+      {q:"What is the slope of y = 3x + 5?",o:["1","3","5","8"],a:1},
+      {q:"What is 5! (factorial)?",o:["60","100","120","150"],a:2},
+      {q:"What is the median of 3,7,5,9,1?",o:["3","5","7","9"],a:1},
+      {q:"Solve: x² = 64. x = ?",o:["6","7","8","9"],a:2},
+      {q:"What is sin 30°?",o:["0","0.5","0.75","1"],a:1},
+      {q:"What is 40% of 250?",o:["80","90","100","110"],a:2},
+      {q:"What is the volume of a cube with side 3?",o:["9","18","27","36"],a:2},
+    ],
+    4:[
+      {q:"Integrate: ∫2x dx",o:["x","x²","2x²","x²+C"],a:3},
+      {q:"What is log₁₀(1000)?",o:["2","3","4","5"],a:1},
+      {q:"What is the derivative of x³?",o:["x²","2x²","3x²","3x³"],a:2},
+      {q:"What is sin²θ + cos²θ?",o:["0","0.5","1","2"],a:2},
+      {q:"What are the roots of x²-5x+6=0?",o:["1,6","2,3","2,4","3,4"],a:1},
+      {q:"What is the determinant of [[2,1],[4,3]]?",o:["2","4","6","8"],a:0},
+      {q:"What is lim(x→0) sinx/x?",o:["0","0.5","1","∞"],a:2},
+      {q:"What is the general term of an AP: a, a+d, a+2d...?",o:["a+nd","a+(n-1)d","a+nd+1","nd"],a:1},
+      {q:"What is the sum of first n natural numbers?",o:["n(n+1)","n(n+1)/2","n²","n(n-1)/2"],a:1},
+      {q:"What is cos 60°?",o:["0","0.5","√3/2","1"],a:1},
+      {q:"Probability of rolling a 6 on a fair die:",o:["1/3","1/4","1/5","1/6"],a:3},
+      {q:"What is the slope of a line perpendicular to y=2x+1?",o:["-2","-1/2","1/2","2"],a:1},
+      {q:"What is 3C2 (combination)?",o:["2","3","6","9"],a:1},
+      {q:"What is e⁰?",o:["0","1","e","∞"],a:1},
+      {q:"What is the principal value of arcsin(1)?",o:["0°","30°","60°","90°"],a:3},
+    ],
   },
-  science: {
-    name: "Science", icon: "🔬", color: "#7fa896", colorLight: "#e8f3ee",
-    questions: [
-      { q:"What planet is known as the Red Planet?", o:["Venus","Mars","Jupiter","Saturn"], a:1 },
-      { q:"What gas do plants absorb from the air?", o:["Oxygen","Nitrogen","Carbon dioxide","Hydrogen"], a:2 },
-      { q:"What is the chemical symbol for water?", o:["H2O","O2","CO2","NaCl"], a:0 },
-      { q:"How many bones are in the adult human body?", o:["196","206","216","226"], a:1 },
-      { q:"What force pulls objects toward Earth?", o:["Magnetism","Friction","Gravity","Tension"], a:2 },
-      { q:"What is the powerhouse of the cell?", o:["Nucleus","Ribosome","Mitochondria","Cytoplasm"], a:2 },
-      { q:"What is the boiling point of water at sea level (°C)?", o:["90","95","100","110"], a:2 },
-      { q:"Which planet is closest to the sun?", o:["Earth","Venus","Mercury","Mars"], a:2 },
-      { q:"What do you call animals that eat only plants?", o:["Carnivores","Herbivores","Omnivores","Decomposers"], a:1 },
-      { q:"What is the largest organ in the human body?", o:["Heart","Liver","Skin","Lungs"], a:2 },
-      { q:"What part of the plant absorbs water?", o:["Leaves","Stem","Roots","Flowers"], a:2 },
-      { q:"What is the chemical symbol for gold?", o:["Go","Gd","Au","Ag"], a:2 },
-      { q:"How many chambers does the human heart have?", o:["2","3","4","5"], a:2 },
-      { q:"What type of energy does the sun give off?", o:["Chemical","Solar","Nuclear","Kinetic"], a:1 },
-      { q:"What is the process by which plants make food called?", o:["Respiration","Photosynthesis","Digestion","Evaporation"], a:1 }
-    ]
-  },
+
   english: {
-    name: "English", icon: "📖", color: "#9b8fd9", colorLight: "#f0edfb",
-    questions: [
-      { q:"What is a synonym for 'happy'?", o:["Sad","Joyful","Angry","Tired"], a:1 },
-      { q:"Which word is a noun?", o:["Run","Quickly","Happiness","Blue"], a:2 },
-      { q:"What is the past tense of 'go'?", o:["Goed","Gone","Went","Going"], a:2 },
-      { q:"What punctuation mark ends a question?", o:["Period","Comma","Question mark","Exclamation mark"], a:2 },
-      { q:"What is an antonym for 'big'?", o:["Large","Huge","Small","Tall"], a:2 },
-      { q:"Which of these is an adjective?", o:["Quickly","Beautiful","Run","Jump"], a:1 },
-      { q:"What is the plural of 'child'?", o:["Childs","Childes","Children","Childies"], a:2 },
-      { q:"Which sentence is grammatically correct?", o:["She don't like it","She doesn't likes it","She doesn't like it","She not like it"], a:2 },
-      { q:"What type of word is 'quickly'?", o:["Noun","Verb","Adverb","Adjective"], a:2 },
-      { q:"What do you call a word that sounds like what it means (e.g. 'buzz')?", o:["Simile","Onomatopoeia","Metaphor","Alliteration"], a:1 },
-      { q:"What is the main character in a story called?", o:["Villain","Narrator","Protagonist","Author"], a:2 },
-      { q:"Which word means the same as 'enormous'?", o:["Tiny","Huge","Quiet","Fast"], a:1 },
-      { q:"What is a group of sentences about one topic called?", o:["A word","A paragraph","A letter","A title"], a:1 },
-      { q:"What is the opposite of 'ancient'?", o:["Old","Modern","Historic","Antique"], a:1 },
-      { q:"Which is a proper noun?", o:["city","India","river","school"], a:1 }
-    ]
+    1:[
+      {q:"Which is a vowel?",o:["b","c","a","d"],a:2},
+      {q:"Which word rhymes with 'cat'?",o:["dog","bat","car","cup"],a:1},
+      {q:"What is the opposite of 'big'?",o:["tall","large","small","wide"],a:2},
+      {q:"Which is a fruit?",o:["Chair","Apple","Book","Shoe"],a:1},
+      {q:"How many letters in the alphabet?",o:["24","25","26","27"],a:2},
+      {q:"Which word is a colour?",o:["Run","Blue","Jump","Sit"],a:1},
+      {q:"Complete: The sun is ___ in the sky.",o:["swim","shine","shines","shining"],a:2},
+      {q:"What is the plural of 'cat'?",o:["cates","cats","catt","caties"],a:1},
+      {q:"Which letter comes after 'D'?",o:["C","E","F","G"],a:1},
+      {q:"Which word is an animal?",o:["Table","Lion","Pen","Cup"],a:1},
+      {q:"What is the opposite of 'hot'?",o:["warm","cool","cold","icy"],a:2},
+      {q:"I ___ a student.",o:["am","is","are","be"],a:0},
+      {q:"Which is a number word?",o:["Seven","Run","Blue","Fast"],a:0},
+      {q:"Which word begins with 'sh'?",o:["Star","Ship","Spin","Slip"],a:1},
+      {q:"What is the opposite of 'day'?",o:["Sun","Moon","Night","Sky"],a:2},
+    ],
+    2:[
+      {q:"What is a synonym for 'happy'?",o:["Sad","Joyful","Angry","Tired"],a:1},
+      {q:"Which word is a noun?",o:["Run","Quickly","Happiness","Blue"],a:2},
+      {q:"What is the past tense of 'go'?",o:["Goed","Gone","Went","Going"],a:2},
+      {q:"Which is an adjective?",o:["Quickly","Beautiful","Run","Jump"],a:1},
+      {q:"What is the plural of 'child'?",o:["Childs","Childes","Children","Childies"],a:2},
+      {q:"Which sentence is correct?",o:["She don't like it","She doesn't likes it","She doesn't like it","She not like it"],a:2},
+      {q:"What type of word is 'quickly'?",o:["Noun","Verb","Adverb","Adjective"],a:2},
+      {q:"What is the main character in a story called?",o:["Villain","Narrator","Protagonist","Author"],a:2},
+      {q:"Which is a proper noun?",o:["city","India","river","school"],a:1},
+      {q:"What is a group of sentences on one topic?",o:["Word","Paragraph","Letter","Title"],a:1},
+      {q:"What punctuation ends a question?",o:["Period","Comma","?","!"],a:2},
+      {q:"What does 'enormous' mean?",o:["Tiny","Huge","Quiet","Fast"],a:1},
+      {q:"What is an antonym for 'ancient'?",o:["Old","Modern","Historic","Antique"],a:1},
+      {q:"Which word is a verb?",o:["Table","Quickly","Dance","Happy"],a:2},
+      {q:"What is onomatopoeia? E.g. 'buzz'",o:["Simile","Onomatopoeia","Metaphor","Alliteration"],a:1},
+    ],
+    3:[
+      {q:"What is a metaphor?",o:["A direct comparison using 'like'","An indirect comparison","A word that sounds like its meaning","Repetition of a letter"],a:1},
+      {q:"What is the passive voice of 'She ate the cake'?",o:["The cake was ate by her","The cake ate her","The cake was eaten by her","She was eating the cake"],a:2},
+      {q:"What is the subjunctive mood?",o:["Expressing a command","Expressing a condition or wish","Expressing a question","Expressing the past"],a:1},
+      {q:"Identify the clause type: 'Although it rained...'",o:["Main clause","Noun clause","Adverbial clause","Relative clause"],a:2},
+      {q:"What is an oxymoron?",o:["Two words that rhyme","Two contradictory terms together","Repetition of a sound","A comparison using 'like'"],a:1},
+      {q:"The book ___ I wanted is sold out. (correct relative pronoun)",o:["who","whom","whose","that"],a:3},
+      {q:"What figure of speech is 'The wind whispered'?",o:["Simile","Metaphor","Personification","Alliteration"],a:2},
+      {q:"What is the superlative of 'good'?",o:["Gooder","Better","Best","Most good"],a:2},
+      {q:"Which is NOT a type of irony?",o:["Verbal","Situational","Dramatic","Literal"],a:3},
+      {q:"What does 'verbose' mean?",o:["Brief","Silent","Using too many words","Colourful"],a:2},
+      {q:"What is an ellipsis used for?",o:["Showing excitement","Indicating omission or pause","Listing items","Showing ownership"],a:1},
+      {q:"'Neither the students nor the teacher ___ ready.' Correct form?",o:["were","was","are","is"],a:1},
+      {q:"What is alliteration?",o:["Repetition of vowel sounds","Repetition of consonant sounds at start of words","Comparison using 'like'","Exaggeration"],a:1},
+      {q:"What is the tone of a piece of writing?",o:["The topic","The author's attitude","The setting","The plot"],a:1},
+      {q:"What is a soliloquy?",o:["A conversation between two characters","A speech by a character alone on stage","A summary of a play","An introductory paragraph"],a:1},
+    ],
+    4:[
+      {q:"What is stream of consciousness in literature?",o:["A narrative technique showing a character's thoughts","A type of poem","A plot device","A figure of speech"],a:0},
+      {q:"What does 'dénouement' mean in a story?",o:["The climax","The falling action and resolution","The rising action","The exposition"],a:1},
+      {q:"Which literary device is used in 'It was the best of times, it was the worst of times'?",o:["Metaphor","Oxymoron","Paradox","Juxtaposition"],a:3},
+      {q:"What is a Bildungsroman?",o:["A tragic poem","A coming-of-age novel","A short story collection","A historical drama"],a:1},
+      {q:"What is an unreliable narrator?",o:["A narrator who speaks too slowly","A narrator whose credibility is compromised","A narrator who is omniscient","A narrator who is a child"],a:1},
+      {q:"'The pen is mightier than the sword' is an example of:",o:["Simile","Hyperbole","Metonymy","Alliteration"],a:2},
+      {q:"Which form of poetry has no rhyme and no fixed metre?",o:["Sonnet","Haiku","Free verse","Ballad"],a:2},
+      {q:"What is the dramatic unities concept from Aristotle?",o:["Time, place, action","Character, plot, theme","Beginning, middle, end","Conflict, climax, resolution"],a:0},
+      {q:"What is intertextuality?",o:["Writing between the lines","References to other texts within a text","A type of narrator","A poetic structure"],a:1},
+      {q:"What is the Freytag Pyramid used for?",o:["Describing poetic structure","Analysing dramatic structure","Classifying literary genres","Defining characters"],a:1},
+      {q:"What does 'verisimilitude' mean in fiction?",o:["A type of plot twist","The appearance of being real or true","A character's flaw","An unreliable narrator"],a:1},
+      {q:"What is a foil character?",o:["The main character","A character who contrasts the protagonist","The villain","A minor character"],a:1},
+      {q:"What is the difference between theme and motif?",o:["They are the same thing","Theme is central message; motif is a recurring element","Motif is central; theme is minor","Neither appear in novels"],a:1},
+      {q:"What poetic device is 'I've told you a million times'?",o:["Metaphor","Irony","Hyperbole","Paradox"],a:2},
+      {q:"What is chiasmus?",o:["A reversal of grammatical structures","A type of rhyme","A narrative technique","A type of metaphor"],a:0},
+    ],
   },
-  coding: {
-    name: "Coding", icon: "💻", color: "#f2b88b", colorLight: "#fdf0e4",
-    questions: [
-      { q:"What does HTML stand for?", o:["Hyper Text Markup Language","High Tech Modern Language","Hyperlink Text Marking Language","Home Tool Markup Language"], a:0 },
-      { q:"Which tag is used to create a hyperlink in HTML?", o:["<link>","<a>","<href>","<url>"], a:1 },
-      { q:"What does CSS stand for?", o:["Computer Style Sheets","Cascading Style Sheets","Creative Style System","Color Style Sheets"], a:1 },
-      { q:"Which symbol is used for comments in JavaScript?", o:["#","//","<!-- -->","**"], a:1 },
-      { q:"What does a 'for loop' do?", o:["Stores data","Repeats code a number of times","Deletes a variable","Creates a function"], a:1 },
-      { q:"Which of these is a programming language?", o:["HTML","CSS","Python","All of the above"], a:3 },
-      { q:"What does 'console.log()' do in JavaScript?", o:["Deletes data","Prints output to the console","Creates a webpage","Stores a file"], a:1 },
-      { q:"What is a variable used for?", o:["Storing data","Deleting files","Designing pages","Connecting to internet"], a:0 },
-      { q:"What does 'if/else' help you do in code?", o:["Repeat actions","Make decisions","Store data","Style text"], a:1 },
-      { q:"What file extension is used for Python files?", o:[".html",".css",".py",".js"], a:2 },
-      { q:"What does CSS control on a webpage?", o:["Logic","Structure","Appearance/Style","Data storage"], a:2 },
-      { q:"What is a 'function' in programming?", o:["A type of variable","A reusable block of code","A color code","A file format"], a:1 },
-      { q:"Which company developed Python?", o:["Microsoft","Google","Python Software Foundation","Apple"], a:2 },
-      { q:"What does 'bug' mean in coding?", o:["A feature","An error in code","A type of variable","A loop"], a:1 },
-      { q:"What does GitHub help developers do?", o:["Design logos","Store and share code","Edit photos","Send emails"], a:1 }
-    ]
+
+  science: {
+    1:[
+      {q:"What do plants need to grow?",o:["Only water","Sunlight, water, soil","Only sunlight","Only soil"],a:1},
+      {q:"What gives us light during the day?",o:["Moon","Stars","Sun","Lamp"],a:2},
+      {q:"Which animal says 'moo'?",o:["Dog","Cat","Cow","Sheep"],a:2},
+      {q:"What do we use to see?",o:["Ears","Eyes","Nose","Mouth"],a:1},
+      {q:"Which is a living thing?",o:["Rock","Water","Tree","Soil"],a:2},
+      {q:"What season comes after winter?",o:["Autumn","Summer","Spring","Monsoon"],a:2},
+      {q:"What do fish breathe with?",o:["Lungs","Gills","Skin","Nose"],a:1},
+      {q:"Which floats on water?",o:["Stone","Iron","Wood","Sand"],a:2},
+      {q:"Where do birds lay eggs?",o:["Burrows","Nests","Ponds","Trees (in nests)"],a:3},
+      {q:"What comes down as rain?",o:["Snow","Water","Hail","Wind"],a:1},
+      {q:"Which sense do we use to smell?",o:["Eyes","Ears","Nose","Tongue"],a:2},
+      {q:"What do caterpillars turn into?",o:["Beetles","Butterflies","Bees","Moths"],a:1},
+      {q:"Which is a source of light?",o:["Mirror","Table","Bulb","Book"],a:2},
+      {q:"What is the colour of grass?",o:["Blue","Red","Yellow","Green"],a:3},
+      {q:"Which animal lives in water?",o:["Cat","Dog","Fish","Rabbit"],a:2},
+    ],
+    2:[
+      {q:"What gas do plants absorb?",o:["Oxygen","Nitrogen","Carbon dioxide","Hydrogen"],a:2},
+      {q:"What is the chemical symbol for water?",o:["H2O","O2","CO2","NaCl"],a:0},
+      {q:"What force pulls objects to Earth?",o:["Magnetism","Friction","Gravity","Tension"],a:2},
+      {q:"What is the powerhouse of the cell?",o:["Nucleus","Ribosome","Mitochondria","Cytoplasm"],a:2},
+      {q:"What planet is closest to the sun?",o:["Earth","Venus","Mercury","Mars"],a:2},
+      {q:"How many bones in the adult human body?",o:["196","206","216","226"],a:1},
+      {q:"What is the process plants use to make food?",o:["Respiration","Photosynthesis","Digestion","Evaporation"],a:1},
+      {q:"What is the boiling point of water (°C)?",o:["90","95","100","110"],a:2},
+      {q:"Which organ pumps blood?",o:["Lungs","Liver","Heart","Kidneys"],a:2},
+      {q:"What type of energy does the sun produce?",o:["Chemical","Solar","Nuclear","Kinetic"],a:1},
+      {q:"What is the largest organ in the body?",o:["Heart","Liver","Skin","Lungs"],a:2},
+      {q:"What do we call animals that eat only plants?",o:["Carnivores","Herbivores","Omnivores","Decomposers"],a:1},
+      {q:"Which part of the plant absorbs water?",o:["Leaves","Stem","Roots","Flowers"],a:2},
+      {q:"What is the chemical symbol for gold?",o:["Go","Gd","Au","Ag"],a:2},
+      {q:"How many chambers in the human heart?",o:["2","3","4","5"],a:2},
+    ],
+    3:[
+      {q:"What is Newton's Second Law?",o:["F=mv","F=ma","F=m/a","F=v/t"],a:1},
+      {q:"What is the atomic number of carbon?",o:["4","6","8","12"],a:1},
+      {q:"What is the formula for speed?",o:["Speed=Distance×Time","Speed=Distance/Time","Speed=Time/Distance","Speed=Force/Mass"],a:1},
+      {q:"What is osmosis?",o:["Movement of solute","Movement of water through a semi-permeable membrane","Dissolving of salt","Movement of heat"],a:1},
+      {q:"What is the periodic table?",o:["A table of foods","An arrangement of elements by atomic number","A list of compounds","A chemistry formula sheet"],a:1},
+      {q:"What is the pH of pure water?",o:["5","6","7","8"],a:2},
+      {q:"What part of the cell contains DNA?",o:["Cytoplasm","Cell wall","Nucleus","Mitochondria"],a:2},
+      {q:"What is the law of conservation of energy?",o:["Energy can be created","Energy cannot be created or destroyed","Energy is always lost","Energy equals mass"],a:1},
+      {q:"What is the unit of electric current?",o:["Volt","Ohm","Ampere","Watt"],a:2},
+      {q:"What is the formula for density?",o:["D=M+V","D=M×V","D=M/V","D=V/M"],a:2},
+      {q:"What type of rock is formed from magma?",o:["Sedimentary","Metamorphic","Igneous","Limestone"],a:2},
+      {q:"What is the function of red blood cells?",o:["Fight infection","Carry oxygen","Clot blood","Produce hormones"],a:1},
+      {q:"What is refraction?",o:["Reflection of light","Bending of light as it passes between mediums","Absorption of light","Scattering of light"],a:1},
+      {q:"What is the greenhouse effect?",o:["Cooling of the Earth","Warming of the Earth due to trapped gases","The growth of plants","Rain formation"],a:1},
+      {q:"What is the chemical formula for glucose?",o:["C6H12O6","C2H5OH","CH4","CO2"],a:0},
+    ],
+    4:[
+      {q:"What is quantum mechanics?",o:["Study of large objects","Study of subatomic particles and energy","Study of the universe","Study of chemical reactions"],a:1},
+      {q:"What does DNA stand for?",o:["Deoxyribonucleic acid","Dinitrogen acid","Deoxyribose nucleotide acid","Double nucleic acid"],a:0},
+      {q:"What is the Heisenberg Uncertainty Principle?",o:["Energy is always conserved","You cannot know both position and momentum precisely simultaneously","Light has a constant speed","Atoms are indivisible"],a:1},
+      {q:"What is the process of meiosis?",o:["Cell growth","Cell division producing 4 haploid cells","Cell repair","DNA replication"],a:1},
+      {q:"What is Le Chatelier's Principle?",o:["A system will shift to oppose a change in equilibrium","A system always increases in entropy","Reactions are always exothermic","Gases expand indefinitely"],a:0},
+      {q:"What is the electromagnetic spectrum?",o:["A range of sounds","A range of electromagnetic waves by frequency","A type of chemical bond","A property of magnets"],a:1},
+      {q:"What is enzyme action described as?",o:["Lock and key model","Chain model","Zipper model","Ball and socket model"],a:0},
+      {q:"What is Avogadro's number?",o:["6.022×10²²","6.022×10²³","6.022×10²⁴","6.022×10²⁵"],a:1},
+      {q:"What is the function of the endoplasmic reticulum?",o:["Energy production","Protein and lipid synthesis and transport","Cell division","DNA storage"],a:1},
+      {q:"What is nuclear fission?",o:["Joining of atomic nuclei","Splitting of an atomic nucleus","Movement of electrons","Formation of ions"],a:1},
+      {q:"What is the role of ATP in cells?",o:["Store genetic information","Carry oxygen","Store and transfer energy","Build cell walls"],a:2},
+      {q:"What is a covalent bond?",o:["Transfer of electrons","Sharing of electrons","Attraction between ions","Metallic bonding"],a:1},
+      {q:"What is natural selection?",o:["Humans choosing organisms","Survival and reproduction of fittest organisms","Random mutation","Genetic engineering"],a:1},
+      {q:"What is Ohm's Law?",o:["V=IR","V=I/R","V=I+R","V=I×P"],a:0},
+      {q:"What is the half-life of a radioactive substance?",o:["Time for all atoms to decay","Time for half the atoms to decay","Time for double the atoms to form","Time for a chemical reaction"],a:1},
+    ],
   },
-  geography: {
-    name: "Geography", icon: "🌍", color: "#d98f8f", colorLight: "#fbeaea",
-    questions: [
-      { q:"What is the capital of India?", o:["Mumbai","New Delhi","Kolkata","Chennai"], a:1 },
-      { q:"What is the largest continent by area?", o:["Africa","Europe","Asia","North America"], a:2 },
-      { q:"Which river is the longest in the world?", o:["Amazon","Nile","Yangtze","Mississippi"], a:1 },
-      { q:"What is the smallest country in the world?", o:["Monaco","Vatican City","San Marino","Malta"], a:1 },
-      { q:"Which ocean is the largest?", o:["Atlantic","Indian","Arctic","Pacific"], a:3 },
-      { q:"What is the tallest mountain in the world?", o:["K2","Kangchenjunga","Mount Everest","Makalu"], a:2 },
-      { q:"Which desert is the largest in the world?", o:["Sahara","Gobi","Antarctic Desert","Arabian Desert"], a:2 },
-      { q:"How many continents are there?", o:["5","6","7","8"], a:2 },
-      { q:"Which country has the largest population?", o:["USA","India","China","Russia"], a:1 },
-      { q:"What is the capital of Japan?", o:["Seoul","Beijing","Tokyo","Bangkok"], a:2 },
-      { q:"Which country is known as the Land of the Rising Sun?", o:["China","Japan","Thailand","Korea"], a:1 },
-      { q:"What is the longest mountain range in the world?", o:["Himalayas","Rockies","Andes","Alps"], a:2 },
-      { q:"Which country has the most natural lakes?", o:["USA","Canada","Russia","Finland"], a:1 },
-      { q:"What is the largest island in the world?", o:["Madagascar","Greenland","Borneo","New Guinea"], a:1 },
-      { q:"Which line divides the Earth into the Northern and Southern Hemispheres?", o:["Prime Meridian","Tropic of Cancer","Equator","International Date Line"], a:2 }
-    ]
-  }
+
+  gk:[
+    {q:"What is the capital of India?",o:["Mumbai","New Delhi","Kolkata","Chennai"],a:1},
+    {q:"How many continents are there?",o:["5","6","7","8"],a:2},
+    {q:"What is the largest ocean?",o:["Atlantic","Indian","Arctic","Pacific"],a:3},
+    {q:"Who invented the telephone?",o:["Edison","Bell","Tesla","Marconi"],a:1},
+    {q:"What is the tallest mountain?",o:["K2","Kangchenjunga","Mount Everest","Makalu"],a:2},
+    {q:"What is the national animal of India?",o:["Lion","Elephant","Tiger","Leopard"],a:2},
+    {q:"How many planets are in our solar system?",o:["7","8","9","10"],a:1},
+    {q:"What is the currency of Japan?",o:["Yuan","Won","Yen","Baht"],a:2},
+    {q:"Which planet is known as the Red Planet?",o:["Venus","Mars","Jupiter","Saturn"],a:1},
+    {q:"Who wrote Romeo and Juliet?",o:["Dickens","Shakespeare","Austen","Tolstoy"],a:1},
+    {q:"What is the capital of France?",o:["Rome","Madrid","Paris","Berlin"],a:2},
+    {q:"Which country has the largest population?",o:["USA","India","China","Russia"],a:1},
+    {q:"What is the smallest country in the world?",o:["Monaco","Vatican City","San Marino","Malta"],a:1},
+    {q:"Who painted the Mona Lisa?",o:["Picasso","Michelangelo","da Vinci","Raphael"],a:2},
+    {q:"What is the chemical symbol for gold?",o:["Go","Gd","Au","Ag"],a:2},
+  ],
+
+  social:[
+    {q:"What is a democracy?",o:["Rule by one person","Rule by the people","Rule by the military","Rule by religion"],a:1},
+    {q:"What does GDP stand for?",o:["Gross Domestic Product","General Domestic Policy","Global Development Plan","Gross Development Plan"],a:0},
+    {q:"What is the United Nations?",o:["A sports organisation","An international peacekeeping organisation","A trade company","A science group"],a:1},
+    {q:"What is a constitution?",o:["A type of election","A set of fundamental laws of a country","A government department","A type of tax"],a:1},
+    {q:"What is globalisation?",o:["Building walls between countries","Growing interconnection of world economies and cultures","A type of government","Local trade only"],a:1},
+    {q:"What is inflation?",o:["Decrease in prices","Increase in general price levels","Increase in taxes","Decrease in wages"],a:1},
+    {q:"What is the function of the judiciary?",o:["Make laws","Interpret and apply laws","Enforce laws","Collect taxes"],a:1},
+    {q:"What is a census?",o:["A type of vote","An official count of the population","A government budget","A court decision"],a:1},
+    {q:"What is the Human Development Index?",o:["A measure of economic growth only","A measure combining life expectancy, education and income","A measure of military power","A measure of trade"],a:1},
+    {q:"What are fundamental rights?",o:["Rights given only to rich citizens","Basic rights guaranteed to all citizens by the constitution","Rights given by employers","Rights only in wartime"],a:1},
+    {q:"What is a federal government?",o:["Power held only centrally","Power divided between central and state governments","Power held only locally","Military government"],a:1},
+    {q:"What is the barter system?",o:["Paying with money","Exchanging goods for goods without money","A type of taxation","A banking system"],a:1},
+    {q:"What is urbanisation?",o:["People moving to rural areas","People moving from rural to urban areas","Building more farms","Reducing city population"],a:1},
+    {q:"What does the legislative branch do?",o:["Enforces laws","Makes laws","Interprets laws","Manages the army"],a:1},
+    {q:"What is a primary source in history?",o:["A textbook","A direct, original source from the time period","A documentary","A summary by a historian"],a:1},
+  ],
+
+  computer:[
+    {q:"What does CPU stand for?",o:["Central Processing Unit","Computer Power Unit","Central Program Utility","Core Processing Unit"],a:0},
+    {q:"What does HTML stand for?",o:["Hyper Text Markup Language","High Tech Modern Language","Hyperlink Text Marking Language","Home Tool Markup Language"],a:0},
+    {q:"What is RAM?",o:["Random Access Memory","Read All Memory","Random Application Mode","Read Access Memory"],a:0},
+    {q:"What is a byte?",o:["4 bits","8 bits","16 bits","32 bits"],a:1},
+    {q:"Which is an input device?",o:["Monitor","Printer","Keyboard","Speaker"],a:2},
+    {q:"What does WWW stand for?",o:["World Wide Web","Wide World Web","World Web Wide","World Wireless Web"],a:0},
+    {q:"What is a binary digit called?",o:["Byte","Bit","Nibble","Word"],a:1},
+    {q:"Which language is used for styling web pages?",o:["HTML","JavaScript","CSS","Python"],a:2},
+    {q:"What is an operating system?",o:["A hardware component","Software that manages computer hardware and software","A programming language","A type of file"],a:1},
+    {q:"What does 'URL' stand for?",o:["Uniform Resource Locator","Universal Remote Link","Unified Resource Language","Uniform Remote Locator"],a:0},
+    {q:"What is a loop in programming?",o:["A type of variable","Repeating a block of code","A type of function","An error in code"],a:1},
+    {q:"What does 'if/else' do in code?",o:["Repeat actions","Make decisions","Store data","Style text"],a:1},
+    {q:"What is a variable in programming?",o:["A fixed value","A container that stores data","A type of loop","A web browser"],a:1},
+    {q:"What is the internet?",o:["A single website","A global network of connected computers","A type of computer","A programming language"],a:1},
+    {q:"What does 'debugging' mean?",o:["Writing new code","Finding and fixing errors in code","Deleting a program","Updating software"],a:1},
+  ],
+
+  history:[
+    {q:"In what year did World War I begin?",o:["1912","1914","1916","1918"],a:1},
+    {q:"Who was the first President of the USA?",o:["Abraham Lincoln","Thomas Jefferson","George Washington","John Adams"],a:2},
+    {q:"When did India gain independence?",o:["1945","1946","1947","1948"],a:2},
+    {q:"What ancient wonder was located in Egypt?",o:["Colosseum","Great Pyramid of Giza","Stonehenge","Parthenon"],a:1},
+    {q:"Who was Napoleon Bonaparte?",o:["British king","French military leader and emperor","Russian tsar","German chancellor"],a:1},
+    {q:"What caused the French Revolution?",o:["Invasion by England","Social inequality and financial crisis","A volcanic eruption","Religious conflict"],a:1},
+    {q:"When did the Berlin Wall fall?",o:["1987","1988","1989","1990"],a:2},
+    {q:"What is the Magna Carta?",o:["A painting","A charter limiting the power of the English king","A type of ship","A Roman law"],a:1},
+    {q:"Who was Mahatma Gandhi?",o:["An Indian king","The leader of India's independence movement through nonviolence","A British general","An Indian scientist"],a:1},
+    {q:"When did the Cold War end?",o:["1985","1989","1991","1993"],a:2},
+    {q:"What was the Renaissance?",o:["A war","A cultural and artistic revival in Europe","A type of government","A religious movement only"],a:1},
+    {q:"Who discovered America in 1492?",o:["Vasco da Gama","Christopher Columbus","Ferdinand Magellan","Amerigo Vespucci"],a:1},
+    {q:"What was the Industrial Revolution?",o:["A political revolution","A shift from agricultural to industrial production","A war between nations","A religious movement"],a:1},
+    {q:"In which year did World War II end?",o:["1943","1944","1945","1946"],a:2},
+    {q:"What was the Silk Road?",o:["A type of fabric","Ancient trade routes connecting East and West","A Roman road","A sea route"],a:1},
+  ],
+
+  geo:[
+    {q:"What is the longest river in the world?",o:["Amazon","Nile","Yangtze","Mississippi"],a:1},
+    {q:"Which continent is the largest by area?",o:["Africa","Europe","Asia","North America"],a:2},
+    {q:"What is the Ring of Fire?",o:["A forest fire zone","A zone of volcanic and seismic activity around the Pacific","A desert region","A trade route"],a:1},
+    {q:"What is latitude?",o:["Distance east or west of the prime meridian","Distance north or south of the equator","Height above sea level","Distance from the poles"],a:1},
+    {q:"What is a monsoon?",o:["A cold wind","A seasonal wind bringing heavy rainfall","A type of desert storm","A mountain wind"],a:1},
+    {q:"Which is the largest desert in the world?",o:["Sahara","Gobi","Antarctic Desert","Arabian Desert"],a:2},
+    {q:"What is the capital of Australia?",o:["Sydney","Melbourne","Canberra","Brisbane"],a:2},
+    {q:"What causes earthquakes?",o:["Volcanic eruptions","Movement of tectonic plates","Heavy rainfall","Ocean currents"],a:1},
+    {q:"What is the Greenwich Meridian?",o:["The equator","0° longitude passing through Greenwich, UK","The international date line","The Tropic of Cancer"],a:1},
+    {q:"Which ocean is the smallest?",o:["Atlantic","Indian","Arctic","Pacific"],a:2},
+    {q:"What is deforestation?",o:["Planting trees","Clearing forests","A type of weather","A conservation method"],a:1},
+    {q:"What is the Tropic of Cancer?",o:["0° latitude","23.5°N latitude","23.5°S latitude","66.5°N latitude"],a:1},
+    {q:"What is a delta?",o:["A mountain range","A landform at a river mouth","A type of ocean current","A desert region"],a:1},
+    {q:"Which country has the most natural lakes?",o:["USA","Canada","Russia","Finland"],a:1},
+    {q:"What is urbanisation?",o:["Growth of rural areas","Growth of urban areas","Decline of cities","Forest expansion"],a:1},
+  ],
+
+  civics:[
+    {q:"What is a fundamental right in India?",o:["Right to own property","Right to equality","Right to a job","Right to free food"],a:1},
+    {q:"What does the constitution of a country define?",o:["Trade policies","Fundamental laws and rights","Weather patterns","School curriculum"],a:1},
+    {q:"What is universal adult franchise?",o:["Right to work","Right of every adult to vote","Right to free education","Right to free healthcare"],a:1},
+    {q:"What is the role of the President of India?",o:["Head of government","Constitutional head of state","Chief Justice","Prime Minister"],a:1},
+    {q:"What is a bill in parliament?",o:["A proposed law","A government budget","A court case","An election result"],a:0},
+    {q:"What is the Preamble?",o:["The last section of the constitution","An introductory statement of the constitution's intent","A list of states","A court ruling"],a:1},
+    {q:"What does 'secular' mean in the Indian constitution?",o:["Only one official religion","No official state religion","Religion is banned","Only Hinduism is recognized"],a:1},
+    {q:"What is the function of the Supreme Court?",o:["Make laws","Enforce laws","Highest court interpreting the constitution","Collect taxes"],a:2},
+    {q:"How many seats are in the Lok Sabha?",o:["443","543","643","743"],a:1},
+    {q:"What is a coalition government?",o:["One party with majority","Multiple parties forming a government together","A military government","A state-level government"],a:1},
+    {q:"What is the right to constitutional remedies?",o:["Right to appeal tax decisions","Right to approach the Supreme Court to enforce fundamental rights","Right to free legal aid","Right to appeal criminal sentences"],a:1},
+    {q:"What is DPSP?",o:["Democratic Policies for State Protection","Directive Principles of State Policy","Department of Public Services and Planning","Direct Proportional State Policies"],a:1},
+    {q:"Who is the head of state government in India?",o:["President","Prime Minister","Chief Minister","Governor"],a:3},
+    {q:"What is judicial review?",o:["A judge reviewing a case","The court's power to review laws for constitutionality","A lawyer reviewing evidence","A public review of court decisions"],a:1},
+    {q:"What does 'republic' mean?",o:["A country with a king","A country where the head of state is elected","A country with no government","A country at war"],a:1},
+  ],
+
+  physics:[
+    {q:"What is Newton's First Law?",o:["F=ma","An object stays at rest or in uniform motion unless acted on by a force","Energy is conserved","Every action has an equal and opposite reaction"],a:1},
+    {q:"What is the unit of force?",o:["Joule","Watt","Newton","Pascal"],a:2},
+    {q:"What is the speed of light?",o:["2×10⁸ m/s","3×10⁸ m/s","4×10⁸ m/s","5×10⁸ m/s"],a:1},
+    {q:"What is kinetic energy?",o:["Energy stored in position","Energy of motion","Energy stored in chemicals","Energy from heat"],a:1},
+    {q:"What is Ohm's Law?",o:["V=IR","V=I/R","V=I+R","V=I×P"],a:0},
+    {q:"What is the unit of electrical resistance?",o:["Volt","Ampere","Ohm","Watt"],a:2},
+    {q:"What is potential energy?",o:["Energy of motion","Energy stored due to position or state","Energy from nuclear reactions","Energy from the sun"],a:1},
+    {q:"What is refraction?",o:["Reflection of light","Bending of light as it enters a new medium","Absorption of light","Scattering of light"],a:1},
+    {q:"What is the formula for work done?",o:["W=m×v","W=F×d","W=m×a","W=P×t"],a:1},
+    {q:"What is the acceleration due to gravity on Earth?",o:["8.9 m/s²","9.8 m/s²","10.8 m/s²","11.8 m/s²"],a:1},
+    {q:"What is a convex lens?",o:["A lens that diverges light","A lens that converges light","A flat lens","A coloured lens"],a:1},
+    {q:"What is the law of conservation of momentum?",o:["Momentum increases over time","Total momentum of a closed system remains constant","Momentum equals force","Momentum is always lost"],a:1},
+    {q:"What is the unit of power?",o:["Joule","Newton","Watt","Pascal"],a:2},
+    {q:"What is total internal reflection?",o:["Light reflected from a mirror","Light reflected inside a denser medium at a critical angle","Absorption of all light","Refraction at a surface"],a:1},
+    {q:"What is a magnetic field?",o:["A field of gravitational force","A region where magnetic force is experienced","A field of electric charge","A region with no force"],a:1},
+  ],
+
+  chemistry:[
+    {q:"What is the atomic number of hydrogen?",o:["0","1","2","3"],a:1},
+    {q:"What is a chemical bond?",o:["A physical force","A force holding atoms together","A type of reaction","A state of matter"],a:1},
+    {q:"What is the periodic table?",o:["A table of elements arranged by atomic number","A list of compounds","A formula sheet","A table of reactions"],a:0},
+    {q:"What is an exothermic reaction?",o:["A reaction that absorbs heat","A reaction that releases heat","A reaction with light","A slow reaction"],a:1},
+    {q:"What is the pH of an acid?",o:["Greater than 7","Equal to 7","Less than 7","Equal to 14"],a:2},
+    {q:"What is Avogadro's number?",o:["6.022×10²²","6.022×10²³","6.022×10²⁴","6.022×10²⁵"],a:1},
+    {q:"What is an ionic bond?",o:["Sharing of electrons","Transfer of electrons between atoms","A metallic bond","A hydrogen bond"],a:1},
+    {q:"What is the formula for sodium chloride (table salt)?",o:["NaCl","NaOH","HCl","Na₂O"],a:0},
+    {q:"What is oxidation?",o:["Gain of electrons","Loss of electrons","Gain of protons","Loss of neutrons"],a:1},
+    {q:"What is a catalyst?",o:["A substance that slows reactions","A substance that speeds up reactions without being consumed","A reactant","A product"],a:1},
+    {q:"What is the molar mass of water (H₂O)?",o:["16 g/mol","18 g/mol","20 g/mol","22 g/mol"],a:1},
+    {q:"What is an isotope?",o:["An atom with a different number of protons","An atom with a different number of neutrons","A different element","A charged atom"],a:1},
+    {q:"What does 'organic chemistry' study?",o:["Inorganic compounds","Carbon-containing compounds","Metal reactions","Nuclear reactions"],a:1},
+    {q:"What is a redox reaction?",o:["A reaction involving only acids","A reaction involving both oxidation and reduction","A reaction producing only water","A reaction involving metals only"],a:1},
+    {q:"What is Boyle's Law?",o:["V∝T at constant P","P∝T at constant V","P∝1/V at constant T","V∝n at constant P"],a:2},
+  ],
+
+  biology:[
+    {q:"What is the basic unit of life?",o:["Organ","Tissue","Cell","Organism"],a:2},
+    {q:"What is DNA?",o:["A protein","A type of fat","Deoxyribonucleic acid carrying genetic info","A carbohydrate"],a:2},
+    {q:"What is photosynthesis?",o:["Respiration in plants","Making food using sunlight, water and CO₂","Breaking down food","Absorbing minerals"],a:1},
+    {q:"What is mitosis?",o:["Cell division producing 4 cells","Cell division producing 2 identical cells","Protein synthesis","DNA replication only"],a:1},
+    {q:"What is the function of ribosomes?",o:["Energy production","DNA storage","Protein synthesis","Lipid transport"],a:2},
+    {q:"What is an ecosystem?",o:["A community of organisms and their environment","A type of cell","A type of tissue","A single species"],a:0},
+    {q:"What is the central dogma of molecular biology?",o:["DNA→RNA→Protein","RNA→DNA→Protein","Protein→RNA→DNA","DNA→Protein→RNA"],a:0},
+    {q:"What is natural selection?",o:["Humans choosing organisms","Survival and reproduction of the fittest","Random genetic changes","Artificial breeding"],a:1},
+    {q:"What is the role of the nervous system?",o:["Transport blood","Transmit signals between body parts and the brain","Produce hormones","Digest food"],a:1},
+    {q:"What is a gene?",o:["A segment of protein","A segment of DNA that codes for a trait","A type of cell","A type of enzyme"],a:1},
+    {q:"What is cellular respiration?",o:["Breathing in air","Converting glucose to ATP for energy","Producing glucose","Absorbing oxygen only"],a:1},
+    {q:"What is a food chain?",o:["A list of foods","A sequence showing energy transfer between organisms","A type of ecosystem","A list of producers"],a:1},
+    {q:"What is the function of the liver?",o:["Pump blood","Produce insulin","Detoxify blood and produce bile","Absorb nutrients"],a:2},
+    {q:"What is homeostasis?",o:["The study of hormones","Maintaining a stable internal environment","The process of digestion","The immune response"],a:1},
+    {q:"What is meiosis?",o:["Cell division for growth","Cell division producing 4 haploid cells for reproduction","Protein synthesis","Cell repair"],a:1},
+  ],
+
+  coding:[
+    {q:"What does OOP stand for?",o:["Object Oriented Programming","Online Open Protocol","Output Operation Process","Object Only Programming"],a:0},
+    {q:"What is a function in programming?",o:["A type of variable","A reusable block of code","A type of loop","A file format"],a:1},
+    {q:"What is recursion?",o:["A loop that runs once","A function that calls itself","A type of variable","A sorting algorithm"],a:1},
+    {q:"What is a binary search?",o:["Searching randomly","Searching by halving the search space each time","Searching from the end","Searching all elements"],a:1},
+    {q:"What is the time complexity of a linear search?",o:["O(1)","O(log n)","O(n)","O(n²)"],a:2},
+    {q:"What is an API?",o:["A type of computer","A set of rules for software communication","A programming language","A database"],a:1},
+    {q:"What is version control?",o:["Controlling app speed","Tracking and managing code changes over time","A type of testing","A type of debugging"],a:1},
+    {q:"What is a data structure?",o:["A programming language","A way of organising and storing data","A type of function","A software tool"],a:1},
+    {q:"What is the difference between == and === in JavaScript?",o:["No difference","== checks value only; === checks value and type","=== checks value only","== checks type only"],a:1},
+    {q:"What is a class in OOP?",o:["A function","A blueprint for creating objects","A type of variable","A loop structure"],a:1},
+    {q:"What is inheritance in OOP?",o:["A class copying all code","A class acquiring properties of another class","A function calling another","A type of loop"],a:1},
+    {q:"What is a stack data structure?",o:["First in, first out","Last in, first out","Random access","Sorted access"],a:1},
+    {q:"What is a Boolean?",o:["A number type","A true/false value","A string type","A list type"],a:1},
+    {q:"What does 'debugging' mean?",o:["Writing new code","Finding and fixing errors","Deleting a program","Updating software"],a:1},
+    {q:"What is the purpose of a README file?",o:["Store code","Document a project","Store images","Run the program"],a:1},
+  ],
+
+  economics:[
+    {q:"What is GDP?",o:["Government Development Policy","Gross Domestic Product","General Domestic Plan","Global Development Program"],a:1},
+    {q:"What is inflation?",o:["Decrease in prices","Increase in general price levels","Decrease in wages","Increase in taxes"],a:1},
+    {q:"What is the law of demand?",o:["As price rises, demand rises","As price rises, demand falls","Demand is always constant","Supply determines demand"],a:1},
+    {q:"What is a monopoly?",o:["A market with many sellers","A market with one seller dominating","A market with two sellers","A government-controlled market"],a:1},
+    {q:"What is fiscal policy?",o:["Central bank controlling money supply","Government use of taxation and spending to influence the economy","A trade agreement","An exchange rate policy"],a:1},
+    {q:"What is opportunity cost?",o:["The cost of producing a good","The value of the next best alternative foregone","The market price","The tax on a good"],a:1},
+    {q:"What is a recession?",o:["A period of economic growth","Two consecutive quarters of negative GDP growth","A rise in inflation","A decrease in unemployment"],a:1},
+    {q:"What is the difference between micro and macroeconomics?",o:["No difference","Micro studies individual units; macro studies the whole economy","Macro studies firms; micro studies countries","Micro is about global trade"],a:1},
+    {q:"What is supply and demand?",o:["A government policy","The relationship between product availability and consumer desire","A type of tax","A trade agreement"],a:1},
+    {q:"What is a budget deficit?",o:["When revenue exceeds spending","When spending exceeds revenue","When taxes increase","When imports exceed exports"],a:1},
+    {q:"What is foreign direct investment (FDI)?",o:["Buying foreign currency","Investment by a company in another country","A type of loan","A government grant"],a:1},
+    {q:"What is the role of the central bank?",o:["Collect taxes","Control money supply and interest rates","Run government spending","Set trade policies"],a:1},
+    {q:"What is comparative advantage?",o:["Producing everything better than others","Producing a good at a lower opportunity cost than others","Having more resources","Having better technology"],a:1},
+    {q:"What is a trade deficit?",o:["When exports exceed imports","When imports exceed exports","When trade is balanced","When trade stops"],a:1},
+    {q:"What is the multiplier effect?",o:["When prices multiply","An initial spending change leading to a larger change in national income","A tax increasing multiple times","Interest compounding"],a:1},
+  ],
 };
 
-let currentSubjectKey = null;
-let currentQuestions = [];
-let currentIndex = 0;
-let userAnswers = [];
-let score = 0;
+/* ── TIER by grade ── */
+function getTier(g){return g<=3?1:g<=6?2:g<=9?3:4;}
 
-/* ── BUILD SUBJECT CARDS ── */
-const subjectGrid = document.getElementById('subjectGrid');
-Object.keys(subjects).forEach(key => {
-  const s = subjects[key];
-  const card = document.createElement('div');
-  card.className = 'subject-card';
-  card.style.setProperty('--accent', s.color);
-  card.onclick = () => startQuiz(key);
-  card.innerHTML = `
-    <div class="subject-icon">${s.icon}</div>
-    <div class="subject-name">${s.name}</div>
-    <div class="subject-count">${s.questions.length} questions</div>
-  `;
-  subjectGrid.appendChild(card);
-});
+/* ── STATE ── */
+let selGrade=null, selSubject=null, questions=[], qIdx=0, score=0, answers=[];
 
-function startQuiz(key) {
-  currentSubjectKey = key;
-  currentQuestions = subjects[key].questions;
-  currentIndex = 0;
-  userAnswers = [];
-  score = 0;
+/* ── SCREENS ── */
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+function goToGrades(){showScreen('gradeScreen');}
+function goToSubjects(){showScreen('subjectScreen');}
 
-  document.documentElement.style.setProperty('--accent', subjects[key].color);
-  document.documentElement.style.setProperty('--accent-light', subjects[key].colorLight);
-
-  document.getElementById('subjectScreen').classList.add('hidden');
-  document.getElementById('resultsScreen').classList.remove('active');
-  document.getElementById('quizScreen').classList.add('active');
-
-  renderQuestion();
+/* ── BUILD GRADE GRID ── */
+const gg=document.getElementById('gradeGrid');
+for(let g=1;g<=12;g++){
+  const card=document.createElement('div');
+  card.className='grade-card';
+  card.innerHTML=`<div class="g-num">${g}</div><div class="g-label">Grade ${g}</div>`;
+  card.onclick=()=>selectGrade(g);
+  gg.appendChild(card);
 }
 
-function renderQuestion() {
-  const q = currentQuestions[currentIndex];
-  document.getElementById('questionNum').textContent = `QUESTION ${currentIndex+1}`;
-  document.getElementById('progressPill').textContent = `Question ${currentIndex+1} / ${currentQuestions.length}`;
-  document.getElementById('progressFill').style.width = ((currentIndex)/currentQuestions.length*100) + '%';
-  document.getElementById('questionText').textContent = q.q;
+function selectGrade(g){
+  selGrade=g;
+  document.getElementById('breadcrumb').innerHTML=`<span onclick="goToGrades()">All Grades</span> › Grade ${g}`;
+  document.getElementById('subjectLabel').textContent=`📚 Subjects for Grade ${g}`;
+  buildSubjectGrid(g);
+  showScreen('subjectScreen');
+}
 
-  const optionsList = document.getElementById('optionsList');
-  optionsList.innerHTML = '';
-  const letters = ['A','B','C','D'];
-
-  q.o.forEach((opt, i) => {
-    const btn = document.createElement('div');
-    btn.className = 'option-btn';
-    btn.innerHTML = `<span class="option-letter">${letters[i]}</span><span>${opt}</span>`;
-    btn.onclick = () => selectAnswer(i, btn);
-    optionsList.appendChild(btn);
+function buildSubjectGrid(g){
+  const grid=document.getElementById('subjectGrid');
+  grid.innerHTML='';
+  SUBJECTS.forEach(s=>{
+    const unlocked=g>=s.minGrade;
+    const card=document.createElement('div');
+    card.className='subj-card'+(unlocked?'':' locked');
+    const qCount=15;
+    card.innerHTML=`<div class="s-icon">${s.icon}</div><div class="s-name">${s.name}</div><div class="s-count">${qCount} questions</div>${unlocked&&g>=s.minGrade&&s.minGrade>1&&g===s.minGrade?'<div class="unlock-badge">NEW</div>':''}${!unlocked?'<div class="lock-badge">🔒</div>':''}`;
+    if(unlocked) card.onclick=()=>startQuiz(s.id);
+    grid.appendChild(card);
   });
+}
 
+function getQuestions(subjectId, grade){
+  const tier=getTier(grade);
+  const bank=QB[subjectId];
+  if(!bank) return [];
+  // If tiered (array of tiers), pick the right one; if flat array, use directly
+  if(Array.isArray(bank)) return [...bank].sort(()=>Math.random()-.5).slice(0,15);
+  const tierQs=bank[tier]||bank[Object.keys(bank)[0]];
+  return [...tierQs].sort(()=>Math.random()-.5).slice(0,15);
+}
+
+function startQuiz(subjectId){
+  selSubject=subjectId;
+  questions=getQuestions(subjectId,selGrade);
+  if(!questions.length){alert('Questions coming soon for this subject! 🚧');return;}
+  qIdx=0;score=0;answers=[];
+  showScreen('quizScreen');
+  renderQ();
+}
+
+function renderQ(){
+  const q=questions[qIdx];
+  const total=questions.length;
+  document.getElementById('qNum').textContent=`QUESTION ${qIdx+1}`;
+  document.getElementById('progPill').textContent=`Question ${qIdx+1} / ${total}`;
+  document.getElementById('progFill').style.width=((qIdx)/total*100)+'%';
+  document.getElementById('qText').textContent=q.q;
+
+  const opts=document.getElementById('optsList');
+  opts.innerHTML='';
+  const letters=['A','B','C','D'];
+  q.o.forEach((opt,i)=>{
+    const btn=document.createElement('button');
+    btn.className='opt-btn';
+    btn.innerHTML=`<span class="opt-letter">${letters[i]}</span><span>${opt}</span>`;
+    btn.onclick=()=>selectAns(i,btn,q);
+    opts.appendChild(btn);
+  });
   document.getElementById('nextBtn').classList.remove('show');
 }
 
-function selectAnswer(i, btnEl) {
-  const q = currentQuestions[currentIndex];
-  const allBtns = document.querySelectorAll('.option-btn');
-  allBtns.forEach(b => b.classList.add('disabled'));
-
-  if (i === q.a) {
-    btnEl.classList.add('correct');
-    score++;
-  } else {
-    btnEl.classList.add('wrong');
-    allBtns[q.a].classList.add('correct');
-  }
-
-  userAnswers.push({ question: q.q, chosen: q.o[i], correctAnswer: q.o[q.a], isCorrect: i === q.a });
+function selectAns(i,btn,q){
+  document.querySelectorAll('.opt-btn').forEach(b=>b.classList.add('disabled'));
+  const correct=i===q.a;
+  if(correct){btn.classList.add('correct');score++;}
+  else{btn.classList.add('wrong');document.querySelectorAll('.opt-btn')[q.a].classList.add('correct');}
+  answers.push({q:q.q,chosen:q.o[i],correct:q.o[q.a],ok:correct});
   document.getElementById('nextBtn').classList.add('show');
 }
 
-function nextQuestion() {
-  currentIndex++;
-  if (currentIndex < currentQuestions.length) {
-    renderQuestion();
-  } else {
-    showResults();
-  }
+function nextQ(){
+  qIdx++;
+  if(qIdx<questions.length){renderQ();}
+  else{showResults();}
 }
 
-function showResults() {
-  document.getElementById('quizScreen').classList.remove('active');
-  document.getElementById('resultsScreen').classList.add('active');
-  document.getElementById('progressFill').style.width = '100%';
+function retryQuiz(){startQuiz(selSubject);}
 
-  const total = currentQuestions.length;
-  document.getElementById('resultScore').textContent = `${score} / ${total}`;
+function showResults(){
+  showScreen('resultsScreen');
+  const total=questions.length;
+  const pct=score/total;
+  document.getElementById('resScore').textContent=`${score} / ${total}`;
+  const e=document.getElementById('resEmoji');
+  const m=document.getElementById('resMsg');
+  if(pct===1){e.textContent='🏆';m.textContent='PERFECT! You absolutely nailed it! 🎉';}
+  else if(pct>=.8){e.textContent='🌟';m.textContent='Amazing work! You really know your stuff!';}
+  else if(pct>=.5){e.textContent='💪';m.textContent='Good effort! A little more practice and you\'ll ace it!';}
+  else{e.textContent='📚';m.textContent='Keep studying — you\'ve got this! Every mistake is a lesson.';}
 
-  const pct = score/total;
-  const emoji = document.getElementById('resultEmoji');
-  const msg = document.getElementById('resultMsg');
-  if (pct === 1) { emoji.textContent = '🏆'; msg.textContent = 'Perfect score! You absolutely crushed it!'; }
-  else if (pct >= 0.8) { emoji.textContent = '🎉'; msg.textContent = 'Awesome job! You really know your stuff!'; }
-  else if (pct >= 0.5) { emoji.textContent = '🌟'; msg.textContent = 'Good effort! A little more practice and you\'ll master it!'; }
-  else { emoji.textContent = '💪'; msg.textContent = 'Keep practicing — you\'ll get better every time!'; }
-
-  const reviewList = document.getElementById('reviewList');
-  reviewList.innerHTML = '<h3 style="font-family:\'Lexend\',sans-serif;margin-bottom:10px;">📋 Review Your Answers</h3>';
-  userAnswers.forEach((a, idx) => {
-    const item = document.createElement('div');
-    item.className = 'review-item ' + (a.isCorrect ? 'correct' : 'wrong');
-    item.innerHTML = `
-      <div class="review-q">${idx+1}. ${a.question}</div>
-      <div class="review-a">${a.isCorrect ? '✅ Your answer: ' + a.chosen : '❌ Your answer: ' + a.chosen + ' · Correct: ' + a.correctAnswer}</div>
-    `;
-    reviewList.appendChild(item);
+  const rev=document.getElementById('reviewList');
+  rev.innerHTML='<div style="font-family:\'Lexend\',sans-serif;font-weight:700;margin-bottom:10px;">📋 Review</div>';
+  answers.forEach((a,i)=>{
+    const item=document.createElement('div');
+    item.className='review-item '+(a.ok?'correct':'wrong');
+    item.innerHTML=`<div class="review-q">${i+1}. ${a.q}</div><div class="review-a">${a.ok?'✅ '+a.chosen:'❌ You said: '+a.chosen+' · Correct: '+a.correct}</div>`;
+    rev.appendChild(item);
   });
 }
-
-function retrySubject() {
-  startQuiz(currentSubjectKey);
-}
-
-function exitQuiz() {
-  document.getElementById('quizScreen').classList.remove('active');
-  document.getElementById('resultsScreen').classList.remove('active');
-  document.getElementById('subjectScreen').classList.remove('hidden');
-}
 </script>
-
 </body>
 </html>
