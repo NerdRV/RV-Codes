@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aesthetic Wallpaper Generator 🎨 | RV Codes</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@400;600;700&display=swap');
+
+  :root {
+    --bg:#07010f;--card:rgba(255,255,255,.04);--border:rgba(177,79,255,.2);
+    --purple:#b14fff;--pink:#ff2d9b;--cyan:#00f5ff;--yellow:#ffe600;--text:#fff;--sub:rgba(255,255,255,.55);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Rajdhani',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+
+  #stars{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;}
+
+  nav{display:flex;justify-content:space-between;align-items:center;padding:16px 24px;background:rgba(7,1,15,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);position:relative;z-index:50;}
+  .nav-logo{font-family:'Orbitron',monospace;font-weight:700;color:#fff;text-decoration:none;font-size:.9rem;text-shadow:0 0 16px var(--purple);}
+  .nav-links{display:flex;gap:20px;align-items:center;}
+  .nav-links a{color:var(--sub);text-decoration:none;font-size:.9rem;font-weight:600;}
+  .nav-links a:hover{color:var(--cyan);}
+  .nav-dropdown{position:relative;display:inline-block;}
+  .nav-dropdown-menu{display:none;position:absolute;top:100%;right:0;margin-top:10px;background:#0d0118;border:1px solid var(--border);border-radius:14px;padding:8px;min-width:210px;box-shadow:0 10px 30px rgba(0,0,0,.6);z-index:200;}
+  .nav-dropdown:hover .nav-dropdown-menu,.nav-dropdown-menu.show{display:block;}
+  .nav-dropdown-menu a{display:block;padding:9px 12px;border-radius:10px;color:#fff!important;font-size:.85rem!important;}
+  .nav-dropdown-menu a:hover{background:rgba(177,79,255,.12);}
+
+  .wrapper{max-width:1000px;margin:0 auto;padding:36px 20px 80px;position:relative;z-index:1;}
+
+  .hero{text-align:center;margin-bottom:36px;}
+  .hero h1{font-family:'Orbitron',monospace;font-size:clamp(1.6rem,5vw,2.4rem);font-weight:900;margin-bottom:6px;background:linear-gradient(135deg,var(--pink),var(--purple),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+  .hero p{color:var(--sub);font-size:.95rem;}
+
+  /* CONTROLS */
+  .controls{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:28px;margin-bottom:24px;backdrop-filter:blur(10px);}
+  .controls-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
+  @media(max-width:600px){.controls-grid{grid-template-columns:1fr;}}
+
+  .ctrl-label{font-family:'Orbitron',monospace;font-size:.7rem;letter-spacing:3px;color:var(--purple);text-transform:uppercase;margin-bottom:12px;}
+
+  /* MOOD PILLS */
+  .mood-pills{display:flex;flex-wrap:wrap;gap:8px;}
+  .mood-pill{padding:8px 16px;border-radius:20px;border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--sub);font-family:'Rajdhani',sans-serif;font-size:.85rem;font-weight:600;cursor:pointer;transition:.25s;}
+  .mood-pill:hover{border-color:var(--purple);color:var(--purple);}
+  .mood-pill.active{background:rgba(177,79,255,.2);border-color:var(--purple);color:#fff;}
+
+  /* STYLE PILLS */
+  .style-pills{display:flex;flex-wrap:wrap;gap:8px;}
+  .style-pill{padding:8px 16px;border-radius:20px;border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--sub);font-family:'Rajdhani',sans-serif;font-size:.85rem;font-weight:600;cursor:pointer;transition:.25s;}
+  .style-pill:hover{border-color:var(--cyan);color:var(--cyan);}
+  .style-pill.active{background:rgba(0,245,255,.15);border-color:var(--cyan);color:#fff;}
+
+  /* COLOR PICKERS */
+  .color-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+  .color-swatch-wrap{display:flex;flex-direction:column;align-items:center;gap:4px;}
+  .color-swatch-wrap label{font-size:.7rem;color:var(--sub);}
+  input[type=color]{width:44px;height:44px;border:2px solid var(--border);border-radius:10px;cursor:pointer;background:none;padding:2px;}
+  input[type=color]::-webkit-color-swatch-wrapper{padding:0;border-radius:8px;}
+  input[type=color]::-webkit-color-swatch{border-radius:8px;border:none;}
+
+  /* SLIDERS */
+  .slider-row{display:flex;flex-direction:column;gap:10px;margin-top:8px;}
+  .slider-item{display:flex;align-items:center;gap:12px;}
+  .slider-item label{font-size:.8rem;color:var(--sub);min-width:80px;}
+  input[type=range]{flex:1;accent-color:var(--purple);height:4px;}
+  .slider-val{font-size:.8rem;color:var(--purple);font-weight:700;min-width:30px;text-align:right;}
+
+  /* GENERATE BTN */
+  .gen-btn{width:100%;margin-top:20px;padding:16px;border:none;border-radius:14px;background:linear-gradient(135deg,var(--pink),var(--purple),var(--cyan));color:#fff;font-family:'Orbitron',monospace;font-weight:700;font-size:.95rem;letter-spacing:2px;cursor:pointer;transition:.25s;box-shadow:0 8px 24px rgba(177,79,255,.3);}
+  .gen-btn:hover{transform:scale(1.02);box-shadow:0 12px 32px rgba(177,79,255,.5);}
+
+  /* CANVAS */
+  .canvas-wrap{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:20px;backdrop-filter:blur(10px);}
+  .canvas-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px;}
+  .canvas-title{font-family:'Orbitron',monospace;font-size:.8rem;letter-spacing:2px;color:var(--sub);}
+  .canvas-btns{display:flex;gap:10px;}
+  .action-btn{padding:9px 18px;border-radius:10px;border:none;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.85rem;cursor:pointer;transition:.2s;}
+  .action-btn.dl{background:linear-gradient(135deg,var(--purple),var(--pink));color:#fff;box-shadow:0 4px 16px rgba(177,79,255,.3);}
+  .action-btn.dl:hover{transform:scale(1.05);}
+  .action-btn.regen{background:rgba(255,255,255,.06);color:var(--sub);border:1px solid var(--border);}
+  .action-btn.regen:hover{border-color:var(--cyan);color:var(--cyan);}
+
+  canvas#wallpaper{width:100%;border-radius:14px;display:block;cursor:crosshair;}
+
+  /* SIZE SELECTOR */
+  .size-row{display:flex;gap:8px;flex-wrap:wrap;}
+  .size-btn{padding:6px 14px;border-radius:8px;border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--sub);font-family:'Rajdhani',sans-serif;font-size:.8rem;font-weight:600;cursor:pointer;transition:.2s;}
+  .size-btn:hover,.size-btn.active{border-color:var(--yellow);color:var(--yellow);}
+
+  footer{text-align:center;padding:30px 0;color:rgba(255,255,255,.2);font-size:.82rem;position:relative;z-index:1;}
+</style>
+</head>
+<body>
+<canvas id="stars"></canvas>
+
+<nav>
+  <a href="index.html" class="nav-logo">RV⚡CODES</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="about-me.html">About</a>
+    <div class="nav-dropdown" id="projDropdown">
+      <a href="javascript:void(0)" onclick="toggleDD(event)">Projects ▾</a>
+      <div class="nav-dropdown-menu" id="projMenu">
+        <a href="my-first-website.html">🌟 My First Website</a>
+        <a href="hyphenbot.html">🤖 HyphenBot</a>
+        <a href="mini-js-game.html">🎮 Star Catcher Game</a>
+        <a href="ai-study-buddy.html">🧠 AI Study Buddy</a>
+        <a href="My-K-Pop-AI-Diary-Studio.html">💜 K-pop Mood Diary</a>
+        <a href="quiz-app.html">❓ Quiz App</a>
+        <a href="marks-analyzer.html">📊 Marks Analyzer</a>
+        <a href="smart-study-os.html">🚀 Smart Study OS</a>
+        <a href="wallpaper-gen.html">🎨 Wallpaper Generator</a>
+      </div>
+    </div>
+    <a href="mailto:aaradhyaberi01@gmail.com">Contact</a>
+  </div>
+</nav>
+
+<div class="wrapper">
+  <div class="hero">
+    <h1>🎨 Aesthetic Wallpaper Generator</h1>
+    <p>Pick a mood, choose a style, customise your colours — then download your wallpaper!</p>
+  </div>
+
+  <div class="controls">
+    <div class="controls-grid">
+
+      <!-- LEFT -->
+      <div>
+        <div class="ctrl-label">✦ Pick a Mood</div>
+        <div class="mood-pills" id="moodPills"></div>
+
+        <div class="ctrl-label" style="margin-top:20px;">✦ Pick a Style</div>
+        <div class="style-pills" id="stylePills"></div>
+
+        <div class="ctrl-label" style="margin-top:20px;">✦ Canvas Size</div>
+        <div class="size-row" id="sizeRow">
+          <button class="size-btn active" data-w="1920" data-h="1080" onclick="setSize(this)">1920×1080</button>
+          <button class="size-btn" data-w="1080" data-h="1920" onclick="setSize(this)">1080×1920</button>
+          <button class="size-btn" data-w="1080" data-h="1080" onclick="setSize(this)">1080×1080</button>
+          <button class="size-btn" data-w="2560" data-h="1440" onclick="setSize(this)">2560×1440</button>
+        </div>
+      </div>
+
+      <!-- RIGHT -->
+      <div>
+        <div class="ctrl-label">✦ Custom Colours</div>
+        <div class="color-row">
+          <div class="color-swatch-wrap"><input type="color" id="c1" value="#b14fff"><label>Color 1</label></div>
+          <div class="color-swatch-wrap"><input type="color" id="c2" value="#ff2d9b"><label>Color 2</label></div>
+          <div class="color-swatch-wrap"><input type="color" id="c3" value="#00f5ff"><label>Color 3</label></div>
+          <div class="color-swatch-wrap"><input type="color" id="c4" value="#07010f"><label>BG</label></div>
+        </div>
+
+        <div class="ctrl-label" style="margin-top:20px;">✦ Settings</div>
+        <div class="slider-row">
+          <div class="slider-item">
+            <label>Density</label>
+            <input type="range" id="sDensity" min="10" max="200" value="80" oninput="updateSlider(this,'vDensity')">
+            <span class="slider-val" id="vDensity">80</span>
+          </div>
+          <div class="slider-item">
+            <label>Size</label>
+            <input type="range" id="sSize" min="2" max="60" value="20" oninput="updateSlider(this,'vSize')">
+            <span class="slider-val" id="vSize">20</span>
+          </div>
+          <div class="slider-item">
+            <label>Opacity</label>
+            <input type="range" id="sOpacity" min="10" max="100" value="80" oninput="updateSlider(this,'vOpacity')">
+            <span class="slider-val" id="vOpacity">80</span>
+          </div>
+          <div class="slider-item">
+            <label>Speed ✨</label>
+            <input type="range" id="sSpeed" min="1" max="10" value="4" oninput="updateSlider(this,'vSpeed')">
+            <span class="slider-val" id="vSpeed">4</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <button class="gen-btn" onclick="generate()">✨ Generate Wallpaper</button>
+  </div>
+
+  <div class="canvas-wrap">
+    <div class="canvas-header">
+      <span class="canvas-title" id="canvasLabel">PREVIEW — 1920 × 1080</span>
+      <div class="canvas-btns">
+        <button class="action-btn regen" onclick="generate()">🔄 Regenerate</button>
+        <button class="action-btn dl" onclick="download()">⬇️ Download</button>
+      </div>
+    </div>
+    <canvas id="wallpaper"></canvas>
+  </div>
+</div>
+
+<footer>Built with 💜 &amp; lots of caffeine-free passion · RV Codes © 2025</footer>
+
+<script>
+/* NAV */
+function toggleDD(e){e.preventDefault();document.getElementById('projMenu').classList.toggle('show');}
+document.addEventListener('click',e=>{const d=document.getElementById('projDropdown');if(d&&!d.contains(e.target))document.getElementById('projMenu').classList.remove('show');});
+
+/* STARS */
+const sc=document.getElementById('stars');const sctx=sc.getContext('2d');let st=[];
+function iS(){sc.width=innerWidth;sc.height=innerHeight;st=Array.from({length:160},()=>({x:Math.random()*sc.width,y:Math.random()*sc.height,r:Math.random()*1.2+.2,a:Math.random(),sp:Math.random()*.003+.001}));}
+function dS(){sctx.clearRect(0,0,sc.width,sc.height);st.forEach(s=>{s.a+=s.sp;if(s.a>1||s.a<0)s.sp*=-1;sctx.beginPath();sctx.arc(s.x,s.y,s.r,0,Math.PI*2);sctx.fillStyle=`rgba(255,255,255,${s.a})`;sctx.fill();});requestAnimationFrame(dS);}
+iS();dS();window.addEventListener('resize',iS);
+
+/* MOODS */
+const MOODS={
+  '🌙 Dreamy':['#1a0533','#6a0dad','#c77dff','#e0b4ff'],
+  '🔥 Bold':['#0d0000','#ff2d00','#ff6b35','#ffe600'],
+  '💙 Calm':['#020b18','#0077b6','#00b4d8','#90e0ef'],
+  '🌸 Soft':['#1a0010','#ff6b9d','#ffb3c6','#ffd6e0'],
+  '🌿 Nature':['#021a00','#1b4332','#40916c','#95d5b2'],
+  '🌌 Galaxy':['#000010','#240046','#7b2d8b','#e040fb'],
+  '⚡ Electric':['#000a1a','#003566','#0096c7','#00f5ff'],
+  '🖤 Dark':['#000000','#1a1a2e','#16213e','#533483'],
+};
+
+/* STYLES */
+const STYLES=['⭐ Stars','🔷 Geometric','🌊 Waves','🎆 Particles','🌀 Spiral','🔵 Bubbles','🌧️ Rain','✨ Sparkles','🌈 Gradient'];
+
+let selMood=null,selStyle='🌊 Waves',canvW=1920,canvH=1080,animId=null;
+
+/* BUILD PILLS */
+const mp=document.getElementById('moodPills');
+Object.keys(MOODS).forEach(m=>{const p=document.createElement('button');p.className='mood-pill';p.textContent=m;p.onclick=()=>{document.querySelectorAll('.mood-pill').forEach(x=>x.classList.remove('active'));p.classList.add('active');selMood=m;applyMood(m);};mp.appendChild(p);});
+
+const sp=document.getElementById('stylePills');
+STYLES.forEach((s,i)=>{const p=document.createElement('button');p.className='style-pill'+(i===1?' active':'');p.textContent=s;p.onclick=()=>{document.querySelectorAll('.style-pill').forEach(x=>x.classList.remove('active'));p.classList.add('active');selStyle=s;};sp.appendChild(p);});
+
+function applyMood(m){const cols=MOODS[m];document.getElementById('c4').value=cols[0];document.getElementById('c1').value=cols[1];document.getElementById('c2').value=cols[2];document.getElementById('c3').value=cols[3];}
+
+function setSize(btn){document.querySelectorAll('.size-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');canvW=parseInt(btn.dataset.w);canvH=parseInt(btn.dataset.h);document.getElementById('canvasLabel').textContent=`PREVIEW — ${canvW} × ${canvH}`;}
+
+function updateSlider(el,valId){document.getElementById(valId).textContent=el.value;}
+
+/* COLOURS */
+function getColors(){return{c1:document.getElementById('c1').value,c2:document.getElementById('c2').value,c3:document.getElementById('c3').value,bg:document.getElementById('c4').value};}
+function hexToRgb(h){const r=parseInt(h.slice(1,3),16),g=parseInt(h.slice(3,5),16),b=parseInt(h.slice(5,7),16);return{r,g,b};}
+function lerp(a,b,t){return a+(b-a)*t;}
+function lerpColor(c1,c2,t){const a=hexToRgb(c1),b=hexToRgb(c2);return`rgb(${Math.round(lerp(a.r,b.r,t))},${Math.round(lerp(a.g,b.g,t))},${Math.round(lerp(a.b,b.b,t))})`;}
+
+/* GENERATE */
+function generate(){
+  if(animId){cancelAnimationFrame(animId);animId=null;}
+  const cv=document.getElementById('wallpaper');
+  cv.width=canvW;cv.height=canvH;
+  const ctx=cv.getContext('2d');
+  const cols=getColors();
+  const density=parseInt(document.getElementById('sDensity').value);
+  const size=parseInt(document.getElementById('sSize').value);
+  const opacity=parseInt(document.getElementById('sOpacity').value)/100;
+  const speed=parseInt(document.getElementById('sSpeed').value);
+
+  if(selStyle==='⭐ Stars')drawStarsWall(ctx,cv,cols,density,size,opacity,speed);
+  else if(selStyle==='🔷 Geometric')drawGeo(ctx,cv,cols,density,size,opacity);
+  else if(selStyle==='🌊 Waves')drawWaves(ctx,cv,cols,density,size,opacity,speed);
+  else if(selStyle==='🎆 Particles')drawParticles(ctx,cv,cols,density,size,opacity,speed);
+  else if(selStyle==='🌀 Spiral')drawSpiral(ctx,cv,cols,density,size,opacity);
+  else if(selStyle==='🔵 Bubbles')drawBubbles(ctx,cv,cols,density,size,opacity);
+  else if(selStyle==='🌧️ Rain')drawRain(ctx,cv,cols,density,size,opacity,speed);
+  else if(selStyle==='✨ Sparkles')drawSparkles(ctx,cv,cols,density,size,opacity);
+  else if(selStyle==='🌈 Gradient')drawGradient(ctx,cv,cols);
+}
+
+/* ── STYLES ── */
+function fillBg(ctx,cv,bg){ctx.fillStyle=bg;ctx.fillRect(0,0,cv.width,cv.height);}
+
+function drawStarsWall(ctx,cv,c,density,size,opacity,speed){
+  fillBg(ctx,cv,c.bg);
+  const stars=Array.from({length:density*2},()=>({x:Math.random()*cv.width,y:Math.random()*cv.height,r:Math.random()*size*.4+1,a:Math.random(),sp:(Math.random()*.005+.002)*speed,col:[c.c1,c.c2,c.c3][Math.floor(Math.random()*3)]}));
+  function frame(){fillBg(ctx,cv,c.bg);stars.forEach(s=>{s.a+=s.sp;if(s.a>opacity||s.a<0)s.sp*=-1;const rgb=hexToRgb(s.col);ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fillStyle=`rgba(${rgb.r},${rgb.g},${rgb.b},${s.a})`;ctx.fill();/* glow */ctx.beginPath();ctx.arc(s.x,s.y,s.r*3,0,Math.PI*2);ctx.fillStyle=`rgba(${rgb.r},${rgb.g},${rgb.b},${s.a*.15})`;ctx.fill();});animId=requestAnimationFrame(frame);}
+  frame();
+}
+
+function drawGeo(ctx,cv,c,density,size,opacity){
+  fillBg(ctx,cv,c.bg);
+  const shapes=['triangle','square','hexagon','diamond'];
+  const cols=[c.c1,c.c2,c.c3];
+  for(let i=0;i<density;i++){
+    const x=Math.random()*cv.width,y=Math.random()*cv.height;
+    const s=size*.5+Math.random()*size;
+    const col=cols[i%3];const rgb=hexToRgb(col);
+    const shape=shapes[Math.floor(Math.random()*shapes.length)];
+    const a=Math.random()*opacity;
+    ctx.save();ctx.translate(x,y);ctx.rotate(Math.random()*Math.PI*2);
+    ctx.fillStyle=`rgba(${rgb.r},${rgb.g},${rgb.b},${a*.6})`;
+    ctx.strokeStyle=`rgba(${rgb.r},${rgb.g},${rgb.b},${a})`;
+    ctx.lineWidth=1.5;
+    ctx.beginPath();
+    if(shape==='triangle'){ctx.moveTo(0,-s);ctx.lineTo(s*.87,s*.5);ctx.lineTo(-s*.87,s*.5);ctx.closePath();}
+    else if(shape==='square'){ctx.rect(-s/2,-s/2,s,s);}
+    else if(shape==='hexagon'){for(let j=0;j<6;j++){const a2=j*Math.PI/3;ctx.lineTo(Math.cos(a2)*s,Math.sin(a2)*s);}ctx.closePath();}
+    else{ctx.moveTo(0,-s);ctx.lineTo(s*.6,0);ctx.lineTo(0,s);ctx.lineTo(-s*.6,0);ctx.closePath();}
+    ctx.fill();ctx.stroke();ctx.restore();
+  }
+}
+
+function drawWaves(ctx,cv,c,density,size,opacity,speed){
+  fillBg(ctx,cv,c.bg);
+  const cols=[c.c1,c.c2,c.c3];
+  let t=0;
+  const waves=Array.from({length:Math.max(6,Math.floor(density/10))},(_,i)=>({amp:cv.height*.04+Math.random()*cv.height*.08,freq:(i+1)*.003+Math.random()*.002,phase:Math.random()*Math.PI*2,y:(i+1)/(Math.max(6,Math.floor(density/10))+1)*cv.height,col:cols[i%3],width:size*1.5+Math.random()*size}));
+  function frame(){fillBg(ctx,cv,c.bg);waves.forEach(w=>{const rgb=hexToRgb(w.col);ctx.beginPath();ctx.moveTo(0,w.y);for(let x=0;x<=cv.width;x+=4){const y=w.y+Math.sin(x*w.freq+t+w.phase)*w.amp;ctx.lineTo(x,y);}ctx.strokeStyle=`rgba(${rgb.r},${rgb.g},${rgb.b},${opacity})`;ctx.lineWidth=w.width;ctx.stroke();});t+=.01*speed;animId=requestAnimationFrame(frame);}
+  frame();
+}
+
+function drawParticles(ctx,cv,c,density,size,opacity,speed){
+  fillBg(ctx,cv,c.bg);
+  const cols=[c.c1,c.c2,c.c3];
+  const parts=Array.from({length:density},()=>({x:Math.random()*cv.width,y:Math.random()*cv.height,vx:(Math.random()-.5)*speed*.5,vy:(Math.random()-.5)*speed*.5,r:Math.random()*size*.4+2,col:cols[Math.floor(Math.random()*3)]}));
+  function frame(){fillBg(ctx,cv,c.bg);parts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>cv.width)p.vx*=-1;if(p.y<0||p.y>cv.height)p.vy*=-1;const rgb=hexToRgb(p.col);/* line to nearest */parts.forEach(q=>{const d=Math.hypot(p.x-q.x,p.y-q.y);if(d<cv.width*.08){ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(q.x,q.y);ctx.strokeStyle=`rgba(${rgb.r},${rgb.g},${rgb.b},${(1-d/(cv.width*.08))*opacity*.4})`;ctx.lineWidth=.8;ctx.stroke();}});ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=`rgba(${rgb.r},${rgb.g},${rgb.b},${opacity})`;ctx.fill();});animId=requestAnimationFrame(frame);}
+  frame();
+}
+
+function drawSpiral(ctx,cv,c,density,size,opacity){
+  fillBg(ctx,cv,c.bg);
+  const cx=cv.width/2,cy=cv.height/2;
+  const cols=[c.c1,c.c2,c.c3];
+  for(let s=0;s<density;s++){
+    const arms=3+Math.floor(s/30);
+    for(let arm=0;arm<arms;arm++){
+      const offset=(arm/arms)*Math.PI*2;
+      ctx.beginPath();
+      for(let i=0;i<400;i++){
+        const t=i*.05;const r=t*size*.8;
+        const x=cx+r*Math.cos(t+offset);const y=cy+r*Math.sin(t+offset);
+        if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
+      }
+      const col=cols[arm%3];const rgb=hexToRgb(col);
+      ctx.strokeStyle=`rgba(${rgb.r},${rgb.g},${rgb.b},${opacity*.6})`;
+      ctx.lineWidth=size*.15;ctx.stroke();
+    }
+  }
+}
+
+function drawBubbles(ctx,cv,c,density,size,opacity,speed){
+  fillBg(ctx,cv,c.bg);
+  const cols=[c.c1,c.c2,c.c3];
+  const bubbles=Array.from({length:density},()=>({x:Math.random()*cv.width,y:Math.random()*cv.height+cv.height,r:Math.random()*size+size*.5,vy:-(Math.random()*speed*.3+.5),col:cols[Math.floor(Math.random()*3)],a:Math.random()*opacity}));
+  function frame(){fillBg(ctx,cv,c.bg);bubbles.forEach(b=>{b.y+=b.vy;if(b.y<-b.r*2)b.y=cv.height+b.r;const rgb=hexToRgb(b.col);/* fill */const g=ctx.createRadialGradient(b.x-b.r*.3,b.y-b.r*.3,b.r*.1,b.x,b.y,b.r);g.addColorStop(0,`rgba(255,255,255,${b.a*.4})`);g.addColorStop(1,`rgba(${rgb.r},${rgb.g},${rgb.b},${b.a*.1})`);ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();ctx.strokeStyle=`rgba(${rgb.r},${rgb.g},${rgb.b},${b.a})`;ctx.lineWidth=1.5;ctx.stroke();});animId=requestAnimationFrame(frame);}
+  frame();
+}
+
+function drawRain(ctx,cv,c,density,size,opacity,speed){
+  fillBg(ctx,cv,c.bg);
+  const cols=[c.c1,c.c2,c.c3];
+  const drops=Array.from({length:density},()=>({x:Math.random()*cv.width,y:Math.random()*cv.height,len:size*1.5+Math.random()*size,vy:speed*2+Math.random()*speed,col:cols[Math.floor(Math.random()*3)],a:Math.random()*opacity}));
+  function frame(){ctx.fillStyle=`rgba(${hexToRgb(c.bg).r},${hexToRgb(c.bg).g},${hexToRgb(c.bg).b},.3)`;ctx.fillRect(0,0,cv.width,cv.height);drops.forEach(d=>{d.y+=d.vy;if(d.y>cv.height+d.len)d.y=-d.len;const rgb=hexToRgb(d.col);ctx.beginPath();ctx.moveTo(d.x,d.y);ctx.lineTo(d.x-d.len*.2,d.y-d.len);ctx.strokeStyle=`rgba(${rgb.r},${rgb.g},${rgb.b},${d.a})`;ctx.lineWidth=size*.08+.5;ctx.stroke();});animId=requestAnimationFrame(frame);}
+  frame();
+}
+
+function drawSparkles(ctx,cv,c,density,size,opacity,speed){
+  fillBg(ctx,cv,c.bg);
+  const cols=[c.c1,c.c2,c.c3];
+  const sparkles=Array.from({length:density},()=>({x:Math.random()*cv.width,y:Math.random()*cv.height,r:Math.random()*size*.5+2,a:Math.random(),sp:(Math.random()*.02+.005)*speed,col:cols[Math.floor(Math.random()*3)]}));
+  function drawStar(ctx,x,y,r,col,a){const rgb=hexToRgb(col);ctx.save();ctx.translate(x,y);ctx.fillStyle=`rgba(${rgb.r},${rgb.g},${rgb.b},${a})`;for(let i=0;i<4;i++){ctx.beginPath();ctx.ellipse(0,0,r*.15,r,0,0,Math.PI*2);ctx.fill();ctx.rotate(Math.PI/4);}/* glow */ctx.beginPath();ctx.arc(0,0,r*.5,0,Math.PI*2);ctx.fillStyle=`rgba(${rgb.r},${rgb.g},${rgb.b},${a*.3})`;ctx.fill();ctx.restore();}
+  function frame(){fillBg(ctx,cv,c.bg);sparkles.forEach(s=>{s.a+=s.sp;if(s.a>opacity){s.sp*=-1;s.a=opacity;}if(s.a<0){s.a=0;s.sp=Math.abs(s.sp);s.x=Math.random()*cv.width;s.y=Math.random()*cv.height;}drawStar(ctx,s.x,s.y,s.r,s.col,s.a);});animId=requestAnimationFrame(frame);}
+  frame();
+}
+
+function drawGradient(ctx,cv,c){
+  const g=ctx.createLinearGradient(0,0,cv.width,cv.height);
+  g.addColorStop(0,c.bg);g.addColorStop(.33,c.c1);g.addColorStop(.66,c.c2);g.addColorStop(1,c.c3);
+  ctx.fillStyle=g;ctx.fillRect(0,0,cv.width,cv.height);
+  /* overlay pattern */
+  const g2=ctx.createRadialGradient(cv.width*.3,cv.height*.3,0,cv.width*.3,cv.height*.3,cv.width*.5);
+  g2.addColorStop(0,'rgba(255,255,255,.08)');g2.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=g2;ctx.fillRect(0,0,cv.width,cv.height);
+}
+
+/* DOWNLOAD */
+function download(){
+  const cv=document.getElementById('wallpaper');
+  const a=document.createElement('a');
+  a.download='rv-codes-wallpaper-'+Date.now()+'.png';
+  a.href=cv.toDataURL('image/png');
+  a.click();
+}
+
+/* AUTO GENERATE ON LOAD */
+generate();
+</script>
+</body>
+</html>
