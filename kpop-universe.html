@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>K-pop Universe 🌟 | RV Codes</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@400;600;700&family=Cormorant+Garamond:ital,wght@1,600&display=swap');
+  :root{--bg:#08010f;--card:rgba(255,255,255,.05);--border:rgba(255,255,255,.12);--text:#fff;--sub:rgba(255,255,255,.6);}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Rajdhani',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+  #stars{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;}
+
+  nav{display:flex;justify-content:space-between;align-items:center;padding:16px 24px;background:rgba(8,1,15,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);position:relative;z-index:50;}
+  .nav-logo{font-family:'Orbitron',monospace;font-weight:700;color:#fff;text-decoration:none;font-size:.9rem;text-shadow:0 0 16px #ff2d9b;}
+  .nav-links{display:flex;gap:20px;align-items:center;}
+  .nav-links a{color:var(--sub);text-decoration:none;font-size:.88rem;font-weight:600;}
+  .nav-links a:hover{color:#fff;}
+  .nav-dropdown{position:relative;display:inline-block;}
+  .nav-dropdown-menu{display:none;position:absolute;top:100%;right:0;margin-top:10px;background:#0d0118;border:1px solid var(--border);border-radius:14px;padding:8px;min-width:210px;box-shadow:0 10px 30px rgba(0,0,0,.6);z-index:200;}
+  .nav-dropdown:hover .nav-dropdown-menu,.nav-dropdown-menu.show{display:block;}
+  .nav-dropdown-menu a{display:block;padding:9px 12px;border-radius:10px;color:#fff!important;font-size:.85rem!important;}
+  .nav-dropdown-menu a:hover{background:rgba(255,255,255,.06);}
+
+  /* SCREENS */
+  .screen{display:none;animation:fadeUp .4s ease;}
+  .screen.active{display:block;}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+
+  /* ══ GROUP SELECT SCREEN ══ */
+  #selectScreen{position:relative;z-index:1;padding:40px 20px 80px;max-width:1100px;margin:0 auto;}
+  .select-hero{text-align:center;margin-bottom:36px;}
+  .select-hero h1{font-family:'Orbitron',monospace;font-size:clamp(1.6rem,5vw,2.6rem);font-weight:900;background:linear-gradient(135deg,#ff2d9b,#b14fff,#00f5ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px;}
+  .select-hero p{color:var(--sub);font-size:.95rem;}
+
+  .gen-label{font-family:'Orbitron',monospace;font-size:.65rem;letter-spacing:4px;color:rgba(255,255,255,.4);text-transform:uppercase;margin:24px 0 12px;text-align:center;}
+  .group-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;margin-bottom:8px;}
+  .group-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px 12px;text-align:center;cursor:pointer;transition:.3s;position:relative;overflow:hidden;}
+  .group-card::before{content:'';position:absolute;inset:0;background:var(--gc);opacity:0;transition:.3s;}
+  .group-card:hover::before{opacity:.15;}
+  .group-card:hover{transform:translateY(-5px);box-shadow:0 0 24px var(--gc);border-color:var(--gc);}
+  .group-emoji{font-size:2rem;margin-bottom:8px;display:block;}
+  .group-name{font-family:'Orbitron',monospace;font-size:.65rem;font-weight:700;letter-spacing:1px;color:#fff;}
+  .group-fandom{font-size:.6rem;color:var(--sub);margin-top:3px;}
+
+  /* ══ WELCOME SCREEN ══ */
+  #welcomeScreen{position:relative;z-index:1;}
+  .welcome-hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 20px;background:var(--wbg);}
+  .welcome-back-btn{position:fixed;top:80px;left:20px;z-index:60;padding:10px 18px;border-radius:20px;border:1px solid rgba(255,255,255,.2);background:rgba(0,0,0,.4);backdrop-filter:blur(8px);color:#fff;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.85rem;cursor:pointer;transition:.2s;}
+  .welcome-back-btn:hover{background:rgba(255,255,255,.1);}
+  .welcome-emoji{font-size:5rem;margin-bottom:16px;animation:float 3s ease-in-out infinite;}
+  @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-12px);}}
+  .welcome-group{font-family:'Orbitron',monospace;font-size:clamp(2.5rem,10vw,5rem);font-weight:900;color:#fff;text-shadow:0 0 40px var(--wc);margin-bottom:8px;line-height:1.1;}
+  .welcome-fandom{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-style:italic;color:rgba(255,255,255,.7);margin-bottom:20px;}
+  .welcome-tagline{color:rgba(255,255,255,.6);font-size:1rem;max-width:420px;line-height:1.7;margin-bottom:32px;}
+  .welcome-facts{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:36px;}
+  .wfact{background:rgba(255,255,255,.1);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.15);border-radius:14px;padding:14px 20px;text-align:center;}
+  .wfact-val{font-family:'Orbitron',monospace;font-size:1.2rem;font-weight:700;color:var(--wc);}
+  .wfact-label{font-size:.72rem;color:rgba(255,255,255,.5);margin-top:3px;}
+  .enter-btn{padding:16px 40px;border-radius:50px;border:none;background:var(--wc);color:#000;font-family:'Orbitron',monospace;font-weight:700;font-size:.9rem;letter-spacing:2px;cursor:pointer;transition:.25s;box-shadow:0 8px 28px rgba(0,0,0,.3);}
+  .enter-btn:hover{transform:scale(1.06);box-shadow:0 12px 36px rgba(0,0,0,.4);}
+
+  /* ══ ACTIVITIES SCREEN ══ */
+  #activitiesScreen{position:relative;z-index:1;max-width:860px;margin:0 auto;padding:36px 20px 80px;}
+  .act-header{display:flex;align-items:center;gap:14px;margin-bottom:28px;flex-wrap:wrap;}
+  .act-group-badge{padding:8px 18px;border-radius:20px;font-family:'Orbitron',monospace;font-size:.7rem;font-weight:700;letter-spacing:2px;}
+  .act-title{font-family:'Orbitron',monospace;font-size:1.2rem;color:#fff;}
+  .back-activities-btn{margin-left:auto;padding:8px 16px;border-radius:14px;border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--sub);font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.82rem;cursor:pointer;transition:.2s;}
+  .back-activities-btn:hover{border-color:#fff;color:#fff;}
+
+  /* ACTIVITY TABS */
+  .act-tabs{display:flex;gap:0;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:4px;margin-bottom:28px;overflow-x:auto;}
+  .act-tab{flex:1;padding:11px 8px;border:none;background:none;color:var(--sub);font-family:'Rajdhani',sans-serif;font-size:.82rem;font-weight:700;cursor:pointer;border-radius:10px;transition:.25s;white-space:nowrap;text-transform:uppercase;letter-spacing:1px;}
+  .act-tab.active{background:var(--wc);color:#000;}
+
+  .act-section{display:none;animation:fadeUp .3s ease;}
+  .act-section.active{display:block;}
+
+  /* IDOL NAME GEN */
+  .idol-gen-wrap{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:28px;text-align:center;}
+  .idol-input{width:100%;max-width:300px;padding:13px 18px;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:12px;font-family:'Rajdhani',sans-serif;font-size:1rem;color:#fff;outline:none;margin-bottom:14px;transition:.2s;}
+  .idol-input:focus{border-color:var(--wc);}
+  .idol-input::placeholder{color:rgba(255,255,255,.25);}
+  .gen-btn{padding:12px 28px;border-radius:30px;border:none;background:var(--wc);color:#000;font-family:'Orbitron',monospace;font-weight:700;font-size:.82rem;cursor:pointer;transition:.2s;letter-spacing:1px;}
+  .gen-btn:hover{transform:scale(1.05);}
+  .idol-result{margin-top:24px;padding:24px;background:rgba(255,255,255,.05);border-radius:16px;display:none;}
+  .idol-result.show{display:block;animation:fadeUp .4s ease;}
+  .idol-stage{font-family:'Orbitron',monospace;font-size:2rem;font-weight:900;color:var(--wc);margin-bottom:6px;}
+  .idol-sub{font-size:.85rem;color:var(--sub);line-height:1.6;}
+  .idol-role{display:inline-block;margin-top:10px;padding:5px 14px;border-radius:10px;font-size:.75rem;font-weight:700;background:rgba(255,255,255,.08);border:1px solid var(--border);}
+
+  /* TRIVIA */
+  .trivia-wrap{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:28px;}
+  .trivia-q{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-style:italic;color:#fff;margin-bottom:20px;line-height:1.5;}
+  .trivia-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  @media(max-width:480px){.trivia-opts{grid-template-columns:1fr;}}
+  .trivia-opt{padding:13px 16px;border-radius:12px;border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--sub);font-family:'Rajdhani',sans-serif;font-size:.9rem;font-weight:600;cursor:pointer;transition:.25s;text-align:left;}
+  .trivia-opt:hover:not(.disabled){border-color:var(--wc);color:#fff;background:rgba(255,255,255,.08);}
+  .trivia-opt.correct{border-color:#06d6a0;background:rgba(6,214,160,.12);color:#06d6a0;}
+  .trivia-opt.wrong{border-color:#ff4d4d;background:rgba(255,77,77,.1);color:#ff4d4d;}
+  .trivia-opt.disabled{cursor:default;}
+  .trivia-score{font-family:'Orbitron',monospace;font-size:.8rem;color:var(--sub);margin-bottom:16px;letter-spacing:1px;}
+  .trivia-next{display:none;margin-top:14px;padding:10px 22px;border-radius:20px;border:none;background:var(--wc);color:#000;font-family:'Orbitron',monospace;font-weight:700;font-size:.78rem;cursor:pointer;transition:.2s;}
+  .trivia-next.show{display:inline-block;}
+
+  /* ERA QUIZ */
+  .era-q{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-style:italic;color:#fff;margin-bottom:18px;line-height:1.5;}
+  .era-opts{display:flex;flex-direction:column;gap:10px;}
+  .era-opt{padding:13px 18px;border-radius:12px;border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--sub);font-family:'Rajdhani',sans-serif;font-size:.9rem;font-weight:600;cursor:pointer;transition:.25s;text-align:left;}
+  .era-opt:hover{border-color:var(--wc);color:#fff;}
+  .era-result{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:28px;text-align:center;display:none;}
+  .era-result.show{display:block;animation:fadeUp .4s ease;}
+  .era-name{font-family:'Orbitron',monospace;font-size:1.5rem;font-weight:900;color:var(--wc);margin-bottom:8px;}
+  .era-desc{color:var(--sub);font-size:.9rem;line-height:1.7;}
+
+  /* KDRAMA */
+  .drama-form{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:28px;margin-bottom:16px;}
+  .drama-inputs{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;}
+  @media(max-width:480px){.drama-inputs{grid-template-columns:1fr;}}
+  .drama-input{padding:11px 14px;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:10px;font-family:'Rajdhani',sans-serif;font-size:.9rem;color:#fff;outline:none;transition:.2s;width:100%;}
+  .drama-input:focus{border-color:var(--wc);}
+  .drama-input::placeholder{color:rgba(255,255,255,.25);}
+  .drama-input option{background:#1a0533;color:#fff;}
+  .drama-label{font-size:.72rem;font-weight:700;color:var(--sub);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;}
+  .drama-output{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:28px;display:none;}
+  .drama-output.show{display:block;animation:fadeUp .4s ease;}
+  .drama-title{font-family:'Orbitron',monospace;font-size:1.4rem;font-weight:900;color:var(--wc);margin-bottom:6px;}
+  .drama-meta{font-size:.78rem;color:var(--sub);margin-bottom:16px;letter-spacing:1px;}
+  .drama-synopsis{color:rgba(255,255,255,.8);font-size:.92rem;line-height:1.8;margin-bottom:20px;padding:16px;background:rgba(255,255,255,.04);border-radius:12px;border-left:3px solid var(--wc);}
+  .drama-cast{margin-bottom:20px;}
+  .cast-title{font-family:'Orbitron',monospace;font-size:.7rem;letter-spacing:3px;color:var(--wc);margin-bottom:10px;}
+  .cast-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;}
+  .cast-item{background:rgba(255,255,255,.04);border-radius:10px;padding:10px 14px;font-size:.82rem;}
+  .cast-member{color:#fff;font-weight:700;}
+  .cast-role{color:var(--sub);font-size:.75rem;}
+  .episodes-title{font-family:'Orbitron',monospace;font-size:.7rem;letter-spacing:3px;color:var(--wc);margin-bottom:12px;}
+  .ep-list{display:flex;flex-direction:column;gap:10px;max-height:400px;overflow-y:auto;}
+  .ep-item{background:rgba(255,255,255,.04);border-radius:12px;padding:14px 16px;border-left:3px solid rgba(255,255,255,.1);transition:.2s;cursor:default;}
+  .ep-item:hover{border-left-color:var(--wc);}
+  .ep-num{font-family:'Orbitron',monospace;font-size:.65rem;color:var(--wc);margin-bottom:4px;}
+  .ep-title{font-weight:700;color:#fff;font-size:.88rem;margin-bottom:4px;}
+  .ep-desc{font-size:.78rem;color:var(--sub);line-height:1.5;}
+
+  .g-card-sec{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:24px;margin-bottom:16px;}
+  .sec-title{font-family:'Orbitron',monospace;font-size:.8rem;letter-spacing:3px;color:var(--wc);margin-bottom:16px;}
+
+  footer{text-align:center;padding:30px 0;color:rgba(255,255,255,.2);font-size:.82rem;position:relative;z-index:1;}
+</style>
+</head>
+<body>
+<canvas id="stars"></canvas>
+
+<nav>
+  <a href="index.html" class="nav-logo">RV⚡CODES</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="about-me.html">About</a>
+    <div class="nav-dropdown" id="projDropdown">
+      <a href="javascript:void(0)" onclick="toggleDD(event)">Projects ▾</a>
+      <div class="nav-dropdown-menu" id="projMenu">
+        <a href="my-first-website.html">🌟 My First Website</a>
+        <a href="hyphenbot.html">🤖 HyphenBot</a>
+        <a href="My-K-Pop-AI-Diary-Studio.html">💜 K-pop Mood Diary</a>
+        <a href="bias-picker.html">🎵 K-pop Bias Picker</a>
+        <a href="kpop-universe.html">🌟 K-pop Universe</a>
+        <a href="mini-js-game.html">🎮 Star Catcher</a>
+        <a href="ai-study-buddy.html">🧠 AI Study Buddy</a>
+        <a href="memory-match.html">🃏 Memory Match</a>
+        <a href="horoscope.html">🔮 Daily Horoscope</a>
+        <a href="focus-breathe.html">🌌 Focus & Breathe</a>
+        <a href="wallpaper-gen.html">🎨 Wallpaper Generator</a>
+      </div>
+    </div>
+    <a href="mailto:aaradhyaberi01@gmail.com">Contact</a>
+  </div>
+</nav>
+
+<!-- SELECT SCREEN -->
+<div class="screen active" id="selectScreen">
+  <div class="select-hero">
+    <h1>🌟 K-pop Universe</h1>
+    <p>Choose your group and enter their world — activities, trivia, drama & more!</p>
+  </div>
+  <div id="groupList"></div>
+</div>
+
+<!-- WELCOME SCREEN -->
+<div class="screen" id="welcomeScreen">
+  <button class="welcome-back-btn" onclick="goBack('select')">← All Groups</button>
+  <div class="welcome-hero" id="welcomeHero">
+    <div class="welcome-emoji" id="welcomeEmoji"></div>
+    <div class="welcome-group" id="welcomeGroup"></div>
+    <div class="welcome-fandom" id="welcomeFandom"></div>
+    <div class="welcome-tagline" id="welcomeTagline"></div>
+    <div class="welcome-facts" id="welcomeFacts"></div>
+    <button class="enter-btn" onclick="goToActivities()">✦ Enter Fan Zone ✦</button>
+  </div>
+</div>
+
+<!-- ACTIVITIES SCREEN -->
+<div class="screen" id="activitiesScreen">
+  <div class="act-header">
+    <span class="act-group-badge" id="actBadge"></span>
+    <span class="act-title">Fan Zone</span>
+    <button class="back-activities-btn" onclick="goBack('welcome')">← Back</button>
+  </div>
+
+  <div class="act-tabs">
+    <button class="act-tab active" onclick="switchAct('idol',this)">🎤 Stage Name</button>
+    <button class="act-tab" onclick="switchAct('trivia',this)">🏆 Trivia</button>
+    <button class="act-tab" onclick="switchAct('era',this)">🌟 Which Era?</button>
+    <button class="act-tab" onclick="switchAct('drama',this)">🎭 K-Drama</button>
+  </div>
+
+  <!-- IDOL NAME -->
+  <div class="act-section active" id="idol">
+    <div class="idol-gen-wrap">
+      <div class="sec-title">🎤 Your K-pop Stage Name</div>
+      <p style="color:var(--sub);font-size:.88rem;margin-bottom:18px;">Enter your real name and discover your idol identity in <span id="idolGroupName" style="color:var(--wc)"></span>!</p>
+      <input class="idol-input" id="idolInput" placeholder="Enter your name..." maxlength="20">
+      <br>
+      <button class="gen-btn" onclick="generateIdolName()">✨ Generate Stage Name</button>
+      <div class="idol-result" id="idolResult">
+        <div class="idol-stage" id="idolStage"></div>
+        <div class="idol-sub" id="idolSub"></div>
+        <div class="idol-role" id="idolRole"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRIVIA -->
+  <div class="act-section" id="trivia">
+    <div class="trivia-wrap">
+      <div class="trivia-score" id="triviaScore">Score: 0 / 0</div>
+      <div class="trivia-q" id="triviaQ"></div>
+      <div class="trivia-opts" id="triviaOpts"></div>
+      <button class="trivia-next" id="triviaNext" onclick="nextTrivia()">Next →</button>
+    </div>
+  </div>
+
+  <!-- ERA -->
+  <div class="act-section" id="era">
+    <div class="g-card-sec" id="eraQuizWrap">
+      <div class="sec-title">🌟 Which Era Are You?</div>
+      <div class="era-q" id="eraQ"></div>
+      <div class="era-opts" id="eraOpts"></div>
+    </div>
+    <div class="era-result" id="eraResult">
+      <div style="font-size:2.5rem;margin-bottom:12px;" id="eraEmoji"></div>
+      <div class="era-name" id="eraName"></div>
+      <div class="era-desc" id="eraDesc"></div>
+      <button class="gen-btn" style="margin-top:18px;" onclick="resetEra()">🔄 Try Again</button>
+    </div>
+  </div>
+
+  <!-- DRAMA -->
+  <div class="act-section" id="drama">
+    <div class="drama-form">
+      <div class="sec-title">🎭 Create Your K-Drama</div>
+      <div class="drama-inputs">
+        <div>
+          <div class="drama-label">Your Name (Lead Role)</div>
+          <input class="drama-input" id="dramaName" placeholder="Your name...">
+        </div>
+        <div>
+          <div class="drama-label">Number of Episodes</div>
+          <select class="drama-input" id="dramaEps">
+            <option value="16">16 episodes</option>
+            <option value="20" selected>20 episodes</option>
+            <option value="24">24 episodes</option>
+            <option value="32">32 episodes</option>
+            <option value="40">40 episodes</option>
+            <option value="50">50 episodes</option>
+          </select>
+        </div>
+        <div>
+          <div class="drama-label">Genre</div>
+          <select class="drama-input" id="dramaGenre">
+            <option>Romance</option>
+            <option>Thriller</option>
+            <option>Fantasy</option>
+            <option>School Life</option>
+            <option>Mystery</option>
+            <option>Supernatural</option>
+          </select>
+        </div>
+        <div>
+          <div class="drama-label">Setting</div>
+          <select class="drama-input" id="drамаSetting">
+            <option>Modern Seoul</option>
+            <option>Joseon Era</option>
+            <option>Fantasy Kingdom</option>
+            <option>High School</option>
+            <option>Entertainment Industry</option>
+            <option>Space / Future</option>
+          </select>
+        </div>
+      </div>
+      <button class="gen-btn" onclick="generateDrama()" style="width:100%">🎬 Generate My K-Drama</button>
+    </div>
+    <div class="drama-output" id="dramaOutput"></div>
+  </div>
+</div>
+
+<footer>Built with 💜 &amp; lots of caffeine-free passion · RV Codes © 2025</footer>
+
+<script>
+/* NAV */
+function toggleDD(e){e.preventDefault();document.getElementById('projMenu').classList.toggle('show');}
+document.addEventListener('click',function(e){var d=document.getElementById('projDropdown');if(d&&!d.contains(e.target))document.getElementById('projMenu').classList.remove('show');});
+
+/* STARS */
+var sc=document.getElementById('stars'),sctx=sc.getContext('2d'),st=[];
+function iS(){sc.width=innerWidth;sc.height=innerHeight;st=Array.from({length:180},function(){return{x:Math.random()*sc.width,y:Math.random()*sc.height,r:Math.random()*1.2+.2,a:Math.random(),sp:Math.random()*.003+.001};});}
+function dS(){sctx.clearRect(0,0,sc.width,sc.height);st.forEach(function(s){s.a+=s.sp;if(s.a>1||s.a<0)s.sp*=-1;sctx.beginPath();sctx.arc(s.x,s.y,s.r,0,Math.PI*2);sctx.fillStyle='rgba(255,255,255,'+s.a+')';sctx.fill();});requestAnimationFrame(dS);}
+iS();dS();window.addEventListener('resize',iS);
+
+/* ══ GROUPS DATA ══ */
+var GROUPS=[
+  /* 4TH GEN BG */
+  {gen:'✦ 4th Gen Boy Groups',name:'ENHYPEN',emoji:'🖤',color:'#8b2fc9',fandom:'ENGENE',tagline:'Where darkness meets light — ENHYPEN\'s universe is unlike any other.',debut:2020,members:7,facts:[{v:'7',l:'Members'},{v:'2020',l:'Debut'},{v:'ENGENE',l:'Fandom'}],
+    eras:[{name:'BORDER: DAY ONE',emoji:'🌅',desc:'The debut era — crossing the border between human and vampire. Dark, fresh, iconic.'},{name:'DIMENSION: DILEMMA',emoji:'🌀',desc:'The maze era — cinematic, complex and visually stunning. Their artistic peak.'},{name:'MANIFESTO: DAY 1',emoji:'📜',desc:'Asserting their identity. Bold, mature and unapologetically themselves.'},{name:'DARK BLOOD',emoji:'🩸',desc:'The vampire awakening era. Dark academia meets K-pop perfection.'}],
+    trivia:[{q:'What is ENHYPEN\'s fandom name?',o:['MELODY','ENGENE','CARATBONG','ARMY'],a:1},{q:'Which survival show did ENHYPEN debut from?',o:['Produce X','I-Land','Boys Planet','The Debut'],a:1},{q:'Who is the leader of ENHYPEN?',o:['Heeseung','Jay','Jungwon','Sunghoon'],a:2},{q:'Which member is Japanese?',o:['Jake','Sunoo','Ni-ki','Jay'],a:2},{q:'What year did ENHYPEN debut?',o:['2019','2020','2021','2022'],a:1}],
+    eraQ:'What draws you most to ENHYPEN?',eraOpts:['The dark, mysterious storyline','The emotional depth of their music','The raw performances','The visual artistry'],
+    stages:['Heeseung','Jungwon','Jay','Jake','Sunghoon','Sunoo','Ni-ki'],
+  },
+  {gen:'✦ 4th Gen Boy Groups',name:'Stray Kids',emoji:'⚡',color:'#ff4500',fandom:'STAY',tagline:'Self-produced, self-made, self-defined. SKZ breaks every rule.',debut:2018,members:8,facts:[{v:'8',l:'Members'},{v:'2018',l:'Debut'},{v:'STAY',l:'Fandom'}],
+    eras:[{name:'Miroh',emoji:'🚪',desc:'Bursting through every door. The era that showed the world SKZ meant business.'},{name:'God\'s Menu',emoji:'🍽️',desc:'Chaotic, explosive, addictive. The blueprint for their signature sound.'},{name:'ODDINARY',emoji:'🌀',desc:'Embracing what makes them different. Powerful, weird, wonderful.'},{name:'5-STAR',emoji:'⭐',desc:'Stadium-level ambition realised. The biggest SKZ era yet.'}],
+    trivia:[{q:'Who self-produces most of SKZ\'s music (producing unit)?',o:['3RACHA','BLOCK','UNIT A','SKZ-RECORD'],a:0},{q:'What is Stray Kids\' fandom called?',o:['STAY','STRAY','KLIX','CUBE'],a:0},{q:'Which member is Australian?',o:['Bang Chan','Felix','Changbin','Han'],a:1},{q:'What survival show did SKZ come from?',o:['Produce 101','I-Land','Stray Kids (JYP)','The Fan'],a:2},{q:'How many members does SKZ have?',o:['7','8','9','10'],a:1}],
+    eraQ:'Which SKZ energy speaks to you?',eraOpts:['Rebellious and loud','Deeply emotional and lyrical','Intense and powerful','Playful and chaotic'],
+    stages:['Bang Chan','Lee Know','Changbin','Hyunjin','Han','Felix','Seungmin','I.N'],
+  },
+  {gen:'✦ 4th Gen Boy Groups',name:'TXT',emoji:'🌙',color:'#7b68ee',fandom:'MOA',tagline:'Dreaming, questioning, growing — TXT tells the story of youth.',debut:2019,members:5,facts:[{v:'5',l:'Members'},{v:'2019',l:'Debut'},{v:'MOA',l:'Fandom'}],
+    eras:[{name:'The Dream Chapter',emoji:'🌙',desc:'The innocent dreaming era. Soft, wistful and overflowing with youth.'},{name:'The Chaos Chapter',emoji:'🌊',desc:'When the dream breaks. Darker, more complex and emotionally layered.'},{name:'minisode',emoji:'🍀',desc:'Quiet introspection. The in-between moments that matter most.'},{name:'The Name Chapter',emoji:'📖',desc:'Finding identity after chaos. Mature, resolved and deeply moving.'}],
+    trivia:[{q:'What does TXT stand for?',o:['Tomorrow X Together','Today X Tomorrow','This X That','The X Team'],a:0},{q:'What is TXT\'s fandom name?',o:['ARMY','MOA','ONCE','STAY'],a:1},{q:'Which company is TXT under?',o:['JYP','SM','YG','HYBE/Big Hit'],a:3},{q:'Who is the leader of TXT?',o:['Yeonjun','Soobin','Beomgyu','Taehyun'],a:1},{q:'How many members are in TXT?',o:['4','5','6','7'],a:1}],
+    eraQ:'Which TXT story resonates with you?',eraOpts:['Innocent dreams of youth','Breaking free from the rules','Finding yourself after chaos','The quiet moments between big feelings'],
+    stages:['Yeonjun','Soobin','Beomgyu','Taehyun','Huening Kai'],
+  },
+  {gen:'✦ 4th Gen Boy Groups',name:'ATEEZ',emoji:'🏴‍☠️',color:'#ff6b35',fandom:'ATINY',tagline:'Eight members, one team, a pirate ship sailing to the top.',debut:2018,members:8,facts:[{v:'8',l:'Members'},{v:'2018',l:'Debut'},{v:'ATINY',l:'Fandom'}],
+    eras:[{name:'TREASURE',emoji:'💎',desc:'The debut era — searching for treasure. Explosive performance energy from day one.'},{name:'FEVER',emoji:'🔥',desc:'Peak ATEEZ chaos. Their most iconic, high-energy era.'},{name:'ZERO: FEVER',emoji:'0️⃣',desc:'The emotional heart of their story. Deeply personal and globally recognised.'},{name:'THE WORLD',emoji:'🌍',desc:'Taking over the world — quite literally. Stadium-filling power.'}],
+    trivia:[{q:'What is ATEEZ\'s fandom name?',o:['ATINY','ATZINY','TINY','ATIZ'],a:0},{q:'Which company is ATEEZ under?',o:['Big Hit','SM','KQ Entertainment','JYP'],a:2},{q:'How many members does ATEEZ have?',o:['7','8','9','10'],a:1},{q:'What is the name of their storyline universe?',o:['ATEEZ World','Treasure Island','HALAATINY','None'],a:1},{q:'Who is the leader of ATEEZ?',o:['Wooyoung','Seonghwa','Hongjoong','Yeosang'],a:2}],
+    eraQ:'Which ATEEZ concept speaks to your soul?',eraOpts:['Pirate adventure energy','Fierce performance power','Emotional storytelling depth','Pure chaotic fun'],
+    stages:['Hongjoong','Seonghwa','Yunho','Yeosang','San','Mingi','Wooyoung','Jongho'],
+  },
+  /* 4TH GEN GG */
+  {gen:'✦ 4th Gen Girl Groups',name:'IVE',emoji:'👑',color:'#c084fc',fandom:'DIVE',tagline:'Confident, elegant and absolutely iconic — IVE owns every room.',debut:2021,members:6,facts:[{v:'6',l:'Members'},{v:'2021',l:'Debut'},{v:'DIVE',l:'Fandom'}],
+    eras:[{name:'ELEVEN',emoji:'1️⃣',desc:'The era that launched a thousand stans. Confident, addictive and perfectly crafted.'},{name:'LOVE DIVE',emoji:'🤿',desc:'Falling in love with yourself. The self-love anthem of 4th gen.'},{name:'After LIKE',emoji:'💫',desc:'Pure chart domination. Irresistible from first note to last.'},{name:'I\'VE IVE',emoji:'👑',desc:'Consolidating their reign. Everything IVE does, they do perfectly.'}],
+    trivia:[{q:'What is IVE\'s fandom name?',o:['DIVE','LIVE','FIVE','IVY'],a:0},{q:'Which company is IVE under?',o:['SM','JYP','Starship','YG'],a:2},{q:'How many members does IVE have?',o:['5','6','7','8'],a:1},{q:'Which ex-IZ*ONE member is in IVE?',o:['Chaewon','Yujin','Sakura','Hyewon'],a:1},{q:'What was IVE\'s debut song?',o:['Love Dive','After Like','Eleven','I AM'],a:2}],
+    eraQ:'Which IVE quality do you connect with most?',eraOpts:['Unshakeable confidence','Elegant visual perfection','Self-love and independence','Pure chart-topping brilliance'],
+    stages:['Gaeul','Yujin','Rei','Wonyoung','Liz','Leeseo'],
+  },
+  {gen:'✦ 4th Gen Girl Groups',name:'aespa',emoji:'🤖',color:'#00d4ff',fandom:'MY',tagline:'Two worlds, four members, one universe — aespa lives in another dimension.',debut:2020,members:4,facts:[{v:'4',l:'Members'},{v:'2020',l:'Debut'},{v:'MY',l:'Fandom'}],
+    eras:[{name:'Black Mamba',emoji:'🐍',desc:'The debut era with a concept nobody had seen before. Iconic and instantly legendary.'},{name:'Next Level',emoji:'⬆️',desc:'Taking everything to a level that didn\'t exist before. Chaotic, powerful, unforgettable.'},{name:'Girls',emoji:'⚡',desc:'Reclaiming their world. Fierce, female and absolutely unstoppable.'},{name:'Drama',emoji:'🎭',desc:'The most polished era yet. Cinematic, elegant and technically flawless.'}],
+    trivia:[{q:'What is aespa\'s concept centered around?',o:['Time travel','AI avatars (æ-personas)','Space exploration','Fantasy kingdoms'],a:1},{q:'What is aespa\'s fandom name?',o:['MY','MYS','ÆSMY','AESPA'],a:0},{q:'Which company is aespa under?',o:['JYP','YG','SM','HYBE'],a:2},{q:'How many members does aespa have?',o:['3','4','5','6'],a:1},{q:'Who are the AI counterparts of aespa called?',o:['Avatars','Synths','æ (ae)-members','Clones'],a:2}],
+    eraQ:'Which aespa world do you belong in?',eraOpts:['The futuristic SM Culture Universe','The powerful real world of performance','The mystical world where AI meets human','The polished world of pure elegance'],
+    stages:['Karina','Giselle','Winter','Ningning'],
+  },
+  {gen:'✦ 4th Gen Girl Groups',name:'NewJeans',emoji:'🐰',color:'#ff9ec4',fandom:'Bunnies',tagline:'Retro, fresh and completely irresistible — NewJeans rewrote the K-pop playbook.',debut:2022,members:5,facts:[{v:'5',l:'Members'},{v:'2022',l:'Debut'},{v:'Bunnies',l:'Fandom'}],
+    eras:[{name:'Attention',emoji:'👀',desc:'The debut that broke the internet. Simple, fresh, utterly addictive.'},{name:'Hype Boy',emoji:'💙',desc:'The viral moment that made the whole world pay attention.'},{name:'OMG',emoji:'😮',desc:'Doubling down on their retro-fresh concept. Even more irresistible.'},{name:'Super Shy',emoji:'🌸',desc:'The era that confirmed NewJeans as a generational act.'}],
+    trivia:[{q:'What is NewJeans\' fandom name?',o:['Bunnies','NJs','Jeans','Newbies'],a:0},{q:'Which company is NewJeans under?',o:['SM','HYBE/ADOR','JYP','YG'],a:1},{q:'How many members does NewJeans have?',o:['4','5','6','7'],a:1},{q:'Who is the CEO of ADOR (NewJeans\' label)?',o:['Bang Si-hyuk','Min Hee-jin','Park Jin-young','Lee Soo-man'],a:1},{q:'What was NewJeans\' debut song?',o:['Hype Boy','OMG','Cookie','Attention'],a:3}],
+    eraQ:'Which NewJeans vibe is you?',eraOpts:['Cool and unbothered (Attention)','Fun and energetic (Hype Boy)','Soft and dreamy (OMG)','Sweet and shy (Super Shy)'],
+    stages:['Minji','Hanni','Danielle','Haerin','Hyein'],
+  },
+  {gen:'✦ 4th Gen Girl Groups',name:'Katseye',emoji:'🐱',color:'#ff69b4',fandom:'KATalog',tagline:'Six girls, one dream, the world is their stage — Katseye is just getting started.',debut:2024,members:6,facts:[{v:'6',l:'Members'},{v:'2024',l:'Debut'},{v:'KATalog',l:'Fandom'}],
+    eras:[{name:'Touch',emoji:'✨',desc:'The explosive debut era. Fresh, fierce and impossible to ignore.'},{name:'SIS (Sold In Seoul)',emoji:'🌸',desc:'Finding their identity in the city that made them. Bold and beautiful.'},{name:'Debut Era',emoji:'🐱',desc:'Still writing their story — and it\'s already incredible.'}],
+    trivia:[{q:'Which show did Katseye debut from?',o:['Produce 101','Pop Star Academy','Dream Academy','I-Land'],a:2},{q:'Which company backed Katseye\'s show?',o:['SM x Netflix','HYBE x Geffen Records','YG x Disney','JYP x Amazon'],a:1},{q:'How many members does Katseye have?',o:['5','6','7','8'],a:1},{q:'What is Katseye\'s debut song?',o:['Touch','Pop the Bubble','SIS','Debut'],a:0},{q:'What is Katseye\'s fandom name?',o:['KATalog','Kats','Eyes','KATArmy'],a:0}],
+    eraQ:'Which Katseye energy is you?',eraOpts:['Bold debut energy — making my mark','Finding my identity in a new world','Pure girl power and confidence','Still writing my story'],
+    stages:['Manon','Daniela','Sophia','Lara','Yoonchae','Megan'],
+  },
+  /* 3RD GEN */
+  {gen:'✦ 3rd Gen Groups',name:'BTS',emoji:'💜',color:'#7c3aed',fandom:'ARMY',tagline:'Seven boys who changed music forever — BTS belongs to the world.',debut:2013,members:7,facts:[{v:'7',l:'Members'},{v:'2013',l:'Debut'},{v:'ARMY',l:'Fandom'}],
+    eras:[{name:'HYYH (화양연화)',emoji:'🌸',desc:'The most beautiful moment in life. The era that turned BTS into a global phenomenon.'},{name:'Wings',emoji:'🦋',desc:'Dark, artistic and groundbreaking. The album that proved BTS were true artists.'},{name:'Love Yourself',emoji:'💜',desc:'The era that conquered the world. UN speeches, Billboard records, history made.'},{name:'Map of the Soul',emoji:'🗺️',desc:'Jungian psychology meets K-pop perfection. Deeply personal and universally resonant.'}],
+    trivia:[{q:'What does BTS stand for?',o:['Boys The Strong','Bangtan Sonyeondan','Beyond The Scene','Both B and C'],a:3},{q:'Who is the leader of BTS?',o:['Jin','Suga','RM','J-Hope'],a:2},{q:'What is BTS\'s fandom name?',o:['BTS Army','ARMY','Bulletproof','Purple'],a:1},{q:'Which member went solo with "Indigo"?',o:['Suga','V','RM','Jimin'],a:2},{q:'What year did BTS debut?',o:['2012','2013','2014','2015'],a:1}],
+    eraQ:'Which BTS era resonates with your soul?',eraOpts:['The beautiful innocence of HYYH','The dark artistic depth of Wings','The world-conquering Love Yourself era','The philosophical Map of the Soul'],
+    stages:['RM','Jin','Suga','J-Hope','Jimin','V','Jungkook'],
+  },
+  {gen:'✦ 3rd Gen Groups',name:'BLACKPINK',emoji:'🖤🩷',color:'#ff1493',fandom:'BLINK',tagline:'Blackpink in your area — the most powerful girl group on the planet.',debut:2016,members:4,facts:[{v:'4',l:'Members'},{v:'2016',l:'Debut'},{v:'BLINK',l:'Fandom'}],
+    eras:[{name:'SQUARE UP',emoji:'⬆️',desc:'DDU-DU DDU-DU changed everything. BLACKPINK announced their global takeover.'},{name:'Kill This Love',emoji:'💔',desc:'Fierce, emotional and unstoppable. The song that broke YouTube records.'},{name:'THE ALBUM',emoji:'💿',desc:'Their first full album — and it was a complete moment in pop history.'},{name:'BORN PINK',emoji:'🩷',desc:'World tour era. Stadium-filling, record-breaking, legendary.'}],
+    trivia:[{q:'What is BLACKPINK\'s fandom name?',o:['BLINK','PINK','BLACKY','BLINKY'],a:0},{q:'Which company is BLACKPINK under?',o:['SM','JYP','YG','HYBE'],a:2},{q:'How many members does BLACKPINK have?',o:['3','4','5','6'],a:1},{q:'Who went solo with "SOLO"?',o:['Jisoo','Jennie','Rosé','Lisa'],a:1},{q:'What was BLACKPINK\'s debut song?',o:['Playing With Fire','Boombayah','Whistle','DDU-DU'],a:1}],
+    eraQ:'Which BLACKPINK member energy do you have?',eraOpts:['Sweet but deadly (Jisoo)','Boss energy, always iconic (Jennie)','Soulful and emotional (Rosé)','Pure performance powerhouse (Lisa)'],
+    stages:['Jisoo','Jennie','Rosé','Lisa'],
+  },
+  {gen:'✦ 3rd Gen Groups',name:'TWICE',emoji:'🌸',color:'#ff69b4',fandom:'ONCE',tagline:'The nation\'s girl group — TWICE is sunshine in human form.',debut:2015,members:9,facts:[{v:'9',l:'Members'},{v:'2015',l:'Debut'},{v:'ONCE',l:'Fandom'}],
+    eras:[{name:'TT Era',emoji:'👻',desc:'The iconic hand gesture, the iconic song. This era made TWICE a household name in Asia.'},{name:'YES or YES',emoji:'✅',desc:'Brighter, bolder and completely irresistible. Peak TWICE happiness.'},{name:'CRY FOR ME',emoji:'💧',desc:'The dark pivot that proved TWICE could do anything.'},{name:'FORMULA OF LOVE',emoji:'🔬',desc:'Quirky, experimental and absolutely charming. Their most creative era.'}],
+    trivia:[{q:'What is TWICE\'s fandom name?',o:['TWICE ONCE','ONCE','TWICE','TWICELAND'],a:1},{q:'How many members does TWICE have?',o:['7','8','9','10'],a:2},{q:'Which company is TWICE under?',o:['SM','YG','JYP','HYBE'],a:2},{q:'Which survival show did TWICE come from?',o:['Sixteen','Produce 101','SIXTEEN TWICE','I-Land'],a:0},{q:'What was TWICE\'s debut song?',o:['TT','Like OOH-AHH','Cheer Up','FANCY'],a:1}],
+    eraQ:'Which TWICE concept is most you?',eraOpts:['Cute and bubbly (Like OOH-AHH)','Iconic and playful (TT)','Sweet and irresistible (Cheer Up)','Mature and artsy (Formula of Love)'],
+    stages:['Nayeon','Jeongyeon','Momo','Sana','Jihyo','Mina','Dahyun','Chaeyoung','Tzuyu'],
+  },
+  {gen:'✦ 3rd Gen Groups',name:'EXO',emoji:'🌌',color:'#4169e1',fandom:'EXO-L',tagline:'We are one — EXO built the blueprint that 4th gen follows.',debut:2012,members:9,facts:[{v:'9',l:'Members'},{v:'2012',l:'Debut'},{v:'EXO-L',l:'Fandom'}],
+    eras:[{name:'MAMA',emoji:'🌙',desc:'The mythological debut era. Superpowers and storylines — EXO arrived differently.'},{name:'EXODUS',emoji:'🚀',desc:'Peak EXO. Vocally flawless, visually perfect, globally dominating.'},{name:'The War',emoji:'⚔️',desc:'Ko Ko Bop era — funky, unexpected and undeniably iconic.'},{name:'OBSESSION',emoji:'🖤',desc:'Dark alter ego concept. EXO-X vs EXO — their most dramatic era.'}],
+    trivia:[{q:'What is EXO\'s fandom name?',o:['EXO-L','EXOL','EXO-LOVE','L-EXO'],a:0},{q:'What superpower concept did EXO debut with?',o:['Time travel','Elemental powers','Telepathy','Super strength'],a:1},{q:'How many members did EXO have at debut?',o:['9','10','12','6'],a:2},{q:'Which sub-unit is EXO-CBX?',o:['Chanyeol Baekhyun Xiumin','Chen Baekhyun Xiumin','Chanyeol Baek Xu','Chen Baekhyun Xu'],a:1},{q:'What was EXO\'s first major hit?',o:['Ko Ko Bop','Growl','Wolf','MAMA'],a:1}],
+    eraQ:'Which EXO concept is most you?',eraOpts:['Mythological and mysterious (MAMA)','Sleek and dominant (EXODUS)','Funky and unexpected (Ko Ko Bop)','Dark alter ego (OBSESSION)'],
+    stages:['Suho','Baekhyun','Chanyeol','D.O.','Kai','Sehun','Xiumin','Chen','Lay'],
+  },
+  {gen:'✦ 3rd Gen Groups',name:'Red Velvet',emoji:'🌹',color:'#dc143c',fandom:'ReVeluv',tagline:'Red and Velvet — two sides of one iconic group.',debut:2014,members:5,facts:[{v:'5',l:'Members'},{v:'2014',l:'Debut'},{v:'ReVeluv',l:'Fandom'}],
+    eras:[{name:'Red Flavor',emoji:'🍉',desc:'Summer personified. Their most iconic, carefree and joyful era.'},{name:'Peek-A-Boo',emoji:'👁️',desc:'The quirky dark side emerges. Mysterious, playful and completely unique.'},{name:'Psycho',emoji:'🔮',desc:'Velvet perfection. Their most artistic, sophisticated and critically acclaimed era.'},{name:'Feel My Rhythm',emoji:'🎵',desc:'Classical music meets K-pop. Elegant, refined and breathtakingly beautiful.'}],
+    trivia:[{q:'What is Red Velvet\'s fandom name?',o:['ReVeluv','Velvet','RV-Fan','Révolution'],a:0},{q:'How many members does Red Velvet have?',o:['4','5','6','7'],a:1},{q:'Which company is Red Velvet under?',o:['JYP','YG','SM','HYBE'],a:2},{q:'What are the two "sides" of Red Velvet?',o:['Happy and Sad','Red (bright) and Velvet (dark)','Fun and Serious','Day and Night'],a:1},{q:'Which member went solo with "INVU"?',o:['Irene','Wendy','Seulgi','Taeyeon'],a:3}],
+    eraQ:'Which Red Velvet side are you?',eraOpts:['Bright and joyful Red side','Dark and mysterious Velvet side','A perfect blend of both','Whoever they are in Psycho'],
+    stages:['Irene','Seulgi','Wendy','Joy','Yeri'],
+  },
+  {gen:'✦ 3rd Gen Groups',name:'SHINee',emoji:'🌟',color:'#00ced1',fandom:'SHAWOL',tagline:'The original trendsetters — SHINee\'s legacy is eternal.',debut:2008,members:5,facts:[{v:'5',l:'Members'},{v:'2008',l:'Debut'},{v:'SHAWOL',l:'Fandom'}],
+    eras:[{name:'Ring Ding Dong',emoji:'💫',desc:'The era that defined a generation. Still iconic over a decade later.'},{name:'Sherlock',emoji:'🔍',desc:'Innovative, experimental and absolutely ahead of its time.'},{name:'1 of 1',emoji:'🏆',desc:'A love letter to retro music. SHINee proving they could do anything.'},{name:'Don\'t Call Me',emoji:'🚫',desc:'Dark, powerful and emotional. A triumphant return that broke every record.'}],
+    trivia:[{q:'What is SHINee\'s fandom name?',o:['SHAWOL','SHINING','SHINE','SHINEE-L'],a:0},{q:'How many members does SHINee have?',o:['4','5','6','7'],a:1},{q:'What was SHINee\'s iconic 2009 hit?',o:['Lucifer','Ring Ding Dong','Replay','Sherlock'],a:1},{q:'Which company is SHINee under?',o:['JYP','YG','SM','HYBE'],a:2},{q:'Who is the leader of SHINee?',o:['Key','Taemin','Onew','Minho'],a:2}],
+    eraQ:'Which SHINee sound speaks to you?',eraOpts:['Iconic retro funk (Ring Ding Dong)','Experimental art pop (Sherlock)','Pure vintage soul (1 of 1)','Dark powerful comeback (Don\'t Call Me)'],
+    stages:['Onew','Key','Minho','Taemin'],
+  },
+];
+
+/* ══ STATE ══ */
+var selGroup=null;
+
+/* CSS VAR HELPER */
+function setVars(color,bg){
+  document.documentElement.style.setProperty('--wc',color);
+  document.documentElement.style.setProperty('--wbg',bg||'linear-gradient(160deg,#08010f,#1a0030)');
+}
+
+/* ══ BUILD GROUP LIST ══ */
+function buildGroupList(){
+  var container=document.getElementById('groupList');container.innerHTML='';
+  var gens={};
+  GROUPS.forEach(function(g){if(!gens[g.gen])gens[g.gen]=[];gens[g.gen].push(g);});
+  Object.keys(gens).forEach(function(gen){
+    var label=document.createElement('div');label.className='gen-label';label.textContent=gen;container.appendChild(label);
+    var grid=document.createElement('div');grid.className='group-grid';
+    gens[gen].forEach(function(g){
+      var card=document.createElement('div');card.className='group-card';
+      card.style.setProperty('--gc',g.color);
+      card.innerHTML='<span class="group-emoji">'+g.emoji+'</span><div class="group-name">'+g.name+'</div><div class="group-fandom">'+g.fandom+'</div>';
+      card.onclick=function(){selectGroup(g);};
+      grid.appendChild(card);
+    });
+    container.appendChild(grid);
+  });
+}
+buildGroupList();
+
+function selectGroup(g){
+  selGroup=g;
+  setVars(g.color);
+  /* welcome */
+  document.getElementById('welcomeEmoji').textContent=g.emoji;
+  document.getElementById('welcomeGroup').textContent=g.name;
+  document.getElementById('welcomeFandom').textContent='Fandom: '+g.fandom;
+  document.getElementById('welcomeTagline').textContent=g.tagline;
+  /* facts */
+  var ff=document.getElementById('welcomeFacts');ff.innerHTML='';
+  g.facts.forEach(function(f){ff.innerHTML+='<div class="wfact"><div class="wfact-val">'+f.v+'</div><div class="wfact-label">'+f.l+'</div></div>';});
+  /* bg */
+  document.getElementById('welcomeHero').style.background='radial-gradient(ellipse at 50% 40%, '+g.color+'33 0%, #08010f 70%)';
+  showScreen('welcomeScreen');
+  /* init activities */
+  document.getElementById('idolGroupName').textContent=g.name;
+  document.getElementById('actBadge').textContent=g.emoji+' '+g.name;
+  document.getElementById('actBadge').style.background=g.color+'22';
+  document.getElementById('actBadge').style.border='1px solid '+g.color+'55';
+  document.getElementById('actBadge').style.color=g.color;
+  initTrivia();initEra();
+  document.getElementById('idolResult').classList.remove('show');
+  document.getElementById('dramaOutput').classList.remove('show');
+  document.getElementById('dramaOutput').innerHTML='';
+}
+
+function goToActivities(){showScreen('activitiesScreen');window.scrollTo({top:0,behavior:'smooth'});}
+function goBack(to){showScreen(to==='select'?'selectScreen':'welcomeScreen');window.scrollTo({top:0,behavior:'smooth'});}
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
+  document.getElementById(id).classList.add('active');
+}
+
+function switchAct(id,btn){
+  document.querySelectorAll('.act-section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.act-tab').forEach(function(b){b.classList.remove('active');});
+  document.getElementById(id).classList.add('active');btn.classList.add('active');
+}
+
+/* ══ IDOL NAME GENERATOR ══ */
+var adjectives=['Ice','Moon','Star','Neon','Solar','Dark','Silk','Storm','Dream','Shadow','Ember','Crystal'];
+var nouns=['Jin','Ra','Yun','Soo','Ki','Woo','Ha','Na','Mi','Jun','Ri','Il'];
+var roles=['Main Vocalist','Lead Dancer','Rapper','Visual','Leader','Maknae','Main Dancer','Lead Vocalist'];
+var specialties=['known for insane high notes','the group\'s ace — excels at everything','famous for powerful stage presence','the group\'s mood maker and comedian','legendary for emotional performances'];
+
+function generateIdolName(){
+  var name=document.getElementById('idolInput').value.trim();
+  if(!name){alert('Enter your name first! 🎤');return;}
+  var seed=name.split('').reduce(function(a,c){return a+c.charCodeAt(0);},0);
+  var stageName=adjectives[seed%adjectives.length]+' '+nouns[(seed*3)%nouns.length];
+  var role=roles[(seed*7)%roles.length];
+  var specialty=specialties[(seed*11)%specialties.length];
+  document.getElementById('idolStage').textContent=stageName;
+  document.getElementById('idolSub').textContent='In '+selGroup.name+', you\'d be '+specialty+'. Your real name "'+name+'" inspired your unique stage identity.';
+  document.getElementById('idolRole').textContent='✦ '+role+' ✦';
+  document.getElementById('idolResult').classList.add('show');
+}
+
+/* ══ TRIVIA ══ */
+var triviaIdx=0;var triviaScore=0;
+function initTrivia(){triviaIdx=0;triviaScore=0;renderTrivia();}
+function renderTrivia(){
+  var qs=selGroup.trivia;
+  if(triviaIdx>=qs.length){
+    document.getElementById('triviaQ').textContent='Quiz complete! You scored '+triviaScore+' / '+qs.length+' 🎉';
+    document.getElementById('triviaOpts').innerHTML='';
+    document.getElementById('triviaScore').textContent='Final score: '+triviaScore+' / '+qs.length;
+    document.getElementById('triviaNext').textContent='🔄 Restart';document.getElementById('triviaNext').classList.add('show');
+    return;
+  }
+  var q=qs[triviaIdx];
+  document.getElementById('triviaScore').textContent='Score: '+triviaScore+' / '+triviaIdx;
+  document.getElementById('triviaQ').textContent=q.q;
+  var opts=document.getElementById('triviaOpts');opts.innerHTML='';
+  q.o.forEach(function(o,i){
+    var btn=document.createElement('button');btn.className='trivia-opt';btn.textContent=o;
+    btn.onclick=function(){
+      document.querySelectorAll('.trivia-opt').forEach(function(b){b.classList.add('disabled');});
+      if(i===q.a){btn.classList.add('correct');triviaScore++;}
+      else{btn.classList.add('wrong');document.querySelectorAll('.trivia-opt')[q.a].classList.add('correct');}
+      document.getElementById('triviaNext').classList.add('show');
+    };
+    opts.appendChild(btn);
+  });
+  document.getElementById('triviaNext').classList.remove('show');
+  document.getElementById('triviaNext').textContent='Next →';
+}
+function nextTrivia(){triviaIdx++;if(triviaIdx>selGroup.trivia.length){triviaIdx=0;triviaScore=0;}renderTrivia();}
+
+/* ══ ERA QUIZ ══ */
+var eraScores=[];
+function initEra(){
+  eraScores=Array(selGroup.eras.length).fill(0);
+  document.getElementById('eraResult').classList.remove('show');
+  document.getElementById('eraQuizWrap').style.display='block';
+  document.getElementById('eraQ').textContent=selGroup.eraQ;
+  var opts=document.getElementById('eraOpts');opts.innerHTML='';
+  selGroup.eraOpts.forEach(function(o,i){
+    var btn=document.createElement('button');btn.className='era-opt';btn.textContent=o;
+    btn.onclick=function(){
+      eraScores[i]+=3;
+      var best=eraScores.indexOf(Math.max.apply(null,eraScores));
+      var era=selGroup.eras[Math.min(best,selGroup.eras.length-1)];
+      document.getElementById('eraEmoji').textContent=era.emoji;
+      document.getElementById('eraName').textContent=era.name;
+      document.getElementById('eraDesc').textContent=era.desc;
+      document.getElementById('eraQuizWrap').style.display='none';
+      document.getElementById('eraResult').classList.add('show');
+    };
+    opts.appendChild(btn);
+  });
+}
+function resetEra(){initEra();}
+
+/* ══ KDRAMA GENERATOR ══ */
+var dramaAdjectives=['Moonlit','Crimson','Silent','Golden','Shattered','Eternal','Hidden','Forgotten','Burning','Midnight'];
+var dramaNouns=['Promise','Heart','Secret','Destiny','Shadow','Dream','Storm','Love','Tear','Star'];
+var dramaConflicts=['a forbidden love across rival families','a secret identity that changes everything','a time-travel romance with impossible stakes','a love triangle involving best friends','a Cinderella story in the entertainment industry','a enemies-to-lovers slow burn with incredible tension'];
+var dramaTwists=['the lead discovers their true identity in episode midpoint','a shocking betrayal from a trusted friend','a memory loss arc that tests every relationship','an unexpected return from someone thought to be gone','a secret from the past that threatens everything built'];
+
+function generateDrama(){
+  var name=document.getElementById('dramaName').value.trim()||'You';
+  var eps=parseInt(document.getElementById('dramaEps').value);
+  var genre=document.getElementById('dramaGenre').value;
+  var setting=document.getElementById('drамаSetting').value||document.getElementById('dramaGenre').options[0].value;
+
+  /* get setting value properly */
+  var settingEl=document.getElementById('activitiesScreen').querySelector('select:last-of-type')||document.querySelectorAll('.drama-input')[3];
+  var settingVal=settingEl?settingEl.value:'Modern Seoul';
+
+  var seed=name.length+(eps*genre.length);
+  var title=dramaAdjectives[seed%dramaAdjectives.length]+' '+dramaNouns[(seed*3)%dramaNouns.length];
+  var conflict=dramaConflicts[seed%dramaConflicts.length];
+  var twist=dramaTwists[(seed*5)%dramaTwists.length];
+  var members=selGroup.stages;
+  var lead=members[seed%members.length];
+  var second=members[(seed+2)%members.length];
+  var rival=members[(seed+4)%members.length];
+  var bestFriend=members[(seed+1)%members.length];
+
+  /* episode titles */
+  var epTitles=[
+    'The Beginning of Everything','First Encounter','When Worlds Collide','The Misunderstanding',
+    'Unlikely Alliance','Growing Closer','The First Confession','Almost','The Secret Revealed',
+    'Everything Falls Apart','The Distance','Coming Back','The Truth Hurts','Forgiveness',
+    'Second Chance','The Complication Returns','Deeper Feelings','The Grand Gesture',
+    'Crisis Point','The Choice','Reunion','Breaking Point','New Understanding',
+    'The Sacrifice','Rising Together','The Final Obstacle','Almost Lost','The Declaration',
+    'Everything Changes','Together At Last','A New Beginning','Epilogue: Six Months Later',
+    'Where Are They Now','The Wedding','Surprise Return','New Chapter',
+    'The Revelation','Full Circle','Last Goodbye','Happy Ending','Final Frame',
+    'Sequel Hook','After Credits','The Real Ending','Bonus Episode','Special Episode',
+    'Director\'s Cut','The Untold Story','Hidden Scene','The Beginning of Part 2',
+  ];
+
+  var html='<div class="drama-title">'+title+'</div>';
+  html+='<div class="drama-meta">'+eps+' Episodes · '+genre+' · '+settingVal+'</div>';
+  html+='<div class="drama-synopsis">'+name+' navigates '+conflict+' in '+settingVal+'. As '+genre.toLowerCase()+' unfolds across '+eps+' gripping episodes, '+twist+'. Starring alongside the charming '+lead+', the mysterious '+rival+' and the unforgettable cast of '+selGroup.name+', this is a story you won\'t forget.</div>';
+  html+='<div class="drama-cast"><div class="cast-title">✦ MAIN CAST</div><div class="cast-grid">';
+  html+='<div class="cast-item"><div class="cast-member">'+name+'</div><div class="cast-role">Lead Role — The Heart of the Story</div></div>';
+  html+='<div class="cast-item"><div class="cast-member">'+lead+'</div><div class="cast-role">Love Interest — Mysterious & Warm</div></div>';
+  html+='<div class="cast-item"><div class="cast-member">'+second+'</div><div class="cast-role">Second Lead — Secretly in Love</div></div>';
+  html+='<div class="cast-item"><div class="cast-member">'+bestFriend+'</div><div class="cast-role">Best Friend — Comic Relief & Heart</div></div>';
+  html+='<div class="cast-item"><div class="cast-member">'+rival+'</div><div class="cast-role">Antagonist — Not Entirely Villainous</div></div>';
+  html+='</div></div>';
+  html+='<div class="episodes-title">✦ EPISODE GUIDE</div><div class="ep-list">';
+
+  for(var i=0;i<eps;i++){
+    var epTitle=epTitles[i]||'Episode '+(i+1)+': The Story Continues';
+    var quarter=Math.floor(i/(eps/4));
+    var arc=['Introduction arc — establishing the world and characters.','Rising tension — feelings grow, complications emerge.','Crisis point — everything falls apart before it gets better.','Resolution — the emotional climax and satisfying conclusion.'][quarter]||'The story deepens.';
+    html+='<div class="ep-item"><div class="ep-num">EP '+(i+1).toString().padStart(2,'0')+'</div><div class="ep-title">'+epTitle+'</div><div class="ep-desc">'+arc+'</div></div>';
+  }
+  html+='</div>';
+
+  var out=document.getElementById('dramaOutput');
+  out.innerHTML=html;out.classList.add('show');
+  out.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+/* FIX SETTING SELECT ID */
+document.addEventListener('DOMContentLoaded',function(){
+  var selects=document.querySelectorAll('.drama-input');
+  if(selects[3])selects[3].id='dramaSetting';
+});
+</script>
+</body>
+</html>
