@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Focus & Breathe 🌌 | RV Codes</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&family=Orbitron:wght@700&display=swap');
+
+  :root{
+    --bg:#050d1a;--teal:#00d4aa;--purple:#9b5de5;--pink:#ff6b9d;--blue:#4cc9f0;
+    --card:rgba(255,255,255,.05);--border:rgba(0,212,170,.2);--text:#e8f4f0;--sub:rgba(232,244,240,.55);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+
+  /* AURORA BG */
+  #auroraCanvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.5;}
+
+  nav{display:flex;justify-content:space-between;align-items:center;padding:16px 24px;background:rgba(5,13,26,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);position:relative;z-index:50;}
+  .nav-logo{font-family:'Orbitron',monospace;font-weight:700;color:#fff;text-decoration:none;font-size:.9rem;text-shadow:0 0 16px var(--teal);}
+  .nav-links{display:flex;gap:20px;align-items:center;}
+  .nav-links a{color:var(--sub);text-decoration:none;font-size:.9rem;font-weight:600;}
+  .nav-links a:hover{color:var(--teal);}
+  .nav-dropdown{position:relative;display:inline-block;}
+  .nav-dropdown-menu{display:none;position:absolute;top:100%;right:0;margin-top:10px;background:#0a1628;border:1px solid var(--border);border-radius:14px;padding:8px;min-width:220px;box-shadow:0 10px 30px rgba(0,0,0,.6);z-index:200;}
+  .nav-dropdown:hover .nav-dropdown-menu,.nav-dropdown-menu.show{display:block;}
+  .nav-dropdown-menu a{display:block;padding:9px 12px;border-radius:10px;color:var(--text)!important;font-size:.85rem!important;}
+  .nav-dropdown-menu a:hover{background:rgba(0,212,170,.08);}
+
+  .wrapper{max-width:860px;margin:0 auto;padding:36px 20px 80px;position:relative;z-index:1;}
+
+  .hero{text-align:center;margin-bottom:40px;}
+  .hero h1{font-family:'Orbitron',monospace;font-size:clamp(1.5rem,4vw,2.2rem);font-weight:700;color:#fff;margin-bottom:8px;text-shadow:0 0 30px rgba(0,212,170,.4);}
+  .hero p{color:var(--sub);font-size:.95rem;}
+
+  /* TABS */
+  .tabs{display:flex;gap:0;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:4px;margin-bottom:32px;backdrop-filter:blur(10px);}
+  .tab-btn{flex:1;padding:12px;border:none;background:none;color:var(--sub);font-family:'Nunito',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;border-radius:10px;transition:.25s;}
+  .tab-btn.active{background:linear-gradient(135deg,var(--teal),var(--blue));color:#fff;box-shadow:0 4px 16px rgba(0,212,170,.3);}
+
+  .section{display:none;animation:fadeUp .4s ease;}
+  .section.active{display:block;}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+  /* ── BREATHING ── */
+  .breath-center{display:flex;flex-direction:column;align-items:center;gap:28px;padding:20px 0;}
+
+  /* TECHNIQUE PILLS */
+  .technique-row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;}
+  .tech-pill{padding:10px 20px;border-radius:20px;border:1px solid var(--border);background:var(--card);color:var(--sub);font-family:'Nunito',sans-serif;font-size:.85rem;font-weight:700;cursor:pointer;transition:.25s;backdrop-filter:blur(8px);}
+  .tech-pill:hover{border-color:var(--teal);color:var(--teal);}
+  .tech-pill.active{background:rgba(0,212,170,.15);border-color:var(--teal);color:#fff;}
+
+  /* BREATHING CIRCLE */
+  .breath-wrap{position:relative;width:260px;height:260px;display:flex;align-items:center;justify-content:center;}
+  .breath-ring{position:absolute;inset:0;border-radius:50%;background:conic-gradient(var(--teal),var(--blue),var(--purple),var(--teal));animation:spin 8s linear infinite;opacity:.3;}
+  .breath-ring-mask{position:absolute;inset:6px;border-radius:50%;background:var(--bg);}
+  .breath-circle{position:absolute;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(0,212,170,.25),rgba(76,201,240,.1));border:2px solid rgba(0,212,170,.4);display:flex;align-items:center;justify-content:center;flex-direction:column;transition:transform 0s;box-shadow:0 0 30px rgba(0,212,170,.15);}
+  .breath-circle.expand{animation:none;}
+  @keyframes spin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+  .breath-label{font-family:'Orbitron',monospace;font-size:.8rem;letter-spacing:2px;color:var(--teal);margin-bottom:4px;}
+  .breath-count{font-family:'Orbitron',monospace;font-size:2rem;font-weight:700;color:#fff;}
+  .breath-phase{font-size:.75rem;color:var(--sub);margin-top:4px;letter-spacing:1px;text-transform:uppercase;}
+
+  /* PROGRESS RING */
+  .progress-svg{position:absolute;top:0;left:0;width:260px;height:260px;transform:rotate(-90deg);}
+  .progress-ring{fill:none;stroke:var(--teal);stroke-width:4;stroke-linecap:round;stroke-dasharray:754;stroke-dashoffset:754;transition:stroke-dashoffset .5s linear;}
+
+  .breath-controls{display:flex;gap:12px;}
+  .breath-btn{padding:12px 28px;border-radius:30px;border:none;font-family:'Nunito',sans-serif;font-weight:800;font-size:.9rem;cursor:pointer;transition:.25s;}
+  .breath-btn.start{background:linear-gradient(135deg,var(--teal),var(--blue));color:#fff;box-shadow:0 4px 16px rgba(0,212,170,.3);}
+  .breath-btn.start:hover{transform:scale(1.05);}
+  .breath-btn.stop{background:rgba(255,255,255,.06);color:var(--sub);border:1px solid var(--border);}
+  .breath-btn.stop:hover{border-color:var(--pink);color:var(--pink);}
+
+  .session-count{font-size:.85rem;color:var(--sub);text-align:center;}
+  .session-dots{display:flex;gap:6px;justify-content:center;margin-top:6px;}
+  .sdot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.1);transition:.3s;}
+  .sdot.done{background:var(--teal);box-shadow:0 0 8px var(--teal);}
+
+  .technique-info{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 22px;text-align:center;backdrop-filter:blur(10px);max-width:400px;}
+  .technique-info h3{font-size:.9rem;font-weight:800;color:var(--teal);margin-bottom:6px;}
+  .technique-info p{font-size:.82rem;color:var(--sub);line-height:1.6;}
+
+  /* ── FOCUS TIMER ── */
+  .timer-layout{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  @media(max-width:560px){.timer-layout{grid-template-columns:1fr;}}
+
+  .timer-face-wrap{display:flex;flex-direction:column;align-items:center;gap:20px;}
+
+  .timer-svg-wrap{position:relative;width:220px;height:220px;}
+  .timer-svg{width:220px;height:220px;transform:rotate(-90deg);}
+  .timer-bg-ring{fill:none;stroke:rgba(255,255,255,.06);stroke-width:8;}
+  .timer-prog-ring{fill:none;stroke:url(#timerGrad);stroke-width:8;stroke-linecap:round;stroke-dasharray:628;stroke-dashoffset:0;transition:stroke-dashoffset .5s linear;}
+  .timer-face{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+  .timer-display{font-family:'Orbitron',monospace;font-size:2.6rem;font-weight:700;color:#fff;}
+  .timer-mode-label{font-size:.7rem;letter-spacing:3px;color:var(--sub);text-transform:uppercase;margin-top:4px;}
+
+  .timer-controls{display:flex;gap:10px;}
+  .t-btn{padding:11px 22px;border-radius:24px;border:none;font-family:'Nunito',sans-serif;font-weight:800;font-size:.85rem;cursor:pointer;transition:.25s;}
+  .t-btn.play{background:linear-gradient(135deg,var(--purple),var(--pink));color:#fff;box-shadow:0 4px 16px rgba(155,93,229,.3);}
+  .t-btn.play:hover{transform:scale(1.05);}
+  .t-btn.reset{background:rgba(255,255,255,.06);color:var(--sub);border:1px solid var(--border);}
+  .t-btn.reset:hover{border-color:var(--teal);color:var(--teal);}
+
+  /* MODE SELECTOR */
+  .mode-panel{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;backdrop-filter:blur(10px);}
+  .mode-panel h3{font-family:'Orbitron',monospace;font-size:.8rem;letter-spacing:2px;color:var(--teal);margin-bottom:16px;}
+  .mode-btns{display:flex;flex-direction:column;gap:10px;}
+  .mode-btn{padding:14px 16px;border-radius:12px;border:1px solid var(--border);background:rgba(255,255,255,.03);cursor:pointer;transition:.25s;text-align:left;display:flex;align-items:center;gap:12px;}
+  .mode-btn:hover{border-color:var(--purple);background:rgba(155,93,229,.08);}
+  .mode-btn.active{border-color:var(--purple);background:rgba(155,93,229,.15);}
+  .mode-icon{font-size:1.4rem;flex-shrink:0;}
+  .mode-name{font-weight:800;font-size:.9rem;color:#fff;margin-bottom:2px;}
+  .mode-desc{font-size:.72rem;color:var(--sub);}
+
+  /* SESSION LOG */
+  .session-log{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-top:20px;backdrop-filter:blur(10px);}
+  .session-log h3{font-family:'Orbitron',monospace;font-size:.8rem;letter-spacing:2px;color:var(--purple);margin-bottom:14px;}
+  .log-list{display:flex;flex-direction:column;gap:8px;max-height:200px;overflow-y:auto;}
+  .log-item{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:10px;background:rgba(255,255,255,.03);font-size:.82rem;color:var(--sub);}
+  .log-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+  .log-empty{color:rgba(255,255,255,.2);font-size:.82rem;text-align:center;padding:10px;}
+
+  /* STATS ROW */
+  .stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px;}
+  .stat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;text-align:center;backdrop-filter:blur(10px);}
+  .stat-val{font-family:'Orbitron',monospace;font-size:1.4rem;font-weight:700;color:var(--teal);}
+  .stat-label{font-size:.72rem;color:var(--sub);margin-top:4px;letter-spacing:1px;}
+
+  /* NOTIFICATION */
+  .notif{position:fixed;top:80px;right:24px;background:linear-gradient(135deg,var(--teal),var(--blue));color:#fff;padding:14px 22px;border-radius:14px;font-weight:700;font-size:.88rem;z-index:999;box-shadow:0 8px 24px rgba(0,212,170,.3);animation:slideIn .4s ease;display:none;}
+  .notif.show{display:block;}
+  @keyframes slideIn{from{opacity:0;transform:translateX(20px);}to{opacity:1;transform:translateX(0);}}
+
+  footer{text-align:center;padding:30px 0;color:rgba(232,244,240,.2);font-size:.82rem;position:relative;z-index:1;}
+</style>
+</head>
+<body>
+<canvas id="auroraCanvas"></canvas>
+
+<nav>
+  <a href="index.html" class="nav-logo">RV⚡CODES</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="about-me.html">About</a>
+    <div class="nav-dropdown" id="projDropdown">
+      <a href="javascript:void(0)" onclick="toggleDD(event)">Projects ▾</a>
+      <div class="nav-dropdown-menu" id="projMenu">
+        <a href="my-first-website.html">🌟 My First Website</a>
+        <a href="hyphenbot.html">🤖 HyphenBot</a>
+        <a href="mini-js-game.html">🎮 Star Catcher</a>
+        <a href="ai-study-buddy.html">🧠 AI Study Buddy</a>
+        <a href="My-K-Pop-AI-Diary-Studio.html">💜 K-pop Mood Diary</a>
+        <a href="quiz-app.html">❓ Quiz App</a>
+        <a href="marks-analyzer.html">📊 Marks Analyzer</a>
+        <a href="smart-study-os.html">🚀 Smart Study OS</a>
+        <a href="wallpaper-gen.html">🎨 Wallpaper Generator</a>
+        <a href="bias-picker.html">🎵 K-pop Bias Picker</a>
+        <a href="horoscope.html">🔮 Daily Horoscope</a>
+        <a href="focus-breathe.html">🌌 Focus & Breathe</a>
+      </div>
+    </div>
+    <a href="mailto:aaradhyaberi01@gmail.com">Contact</a>
+  </div>
+</nav>
+
+<div class="wrapper">
+  <div class="hero">
+    <h1>🌌 Focus & Breathe</h1>
+    <p>Breathe with the aurora, focus with intention — your calm productive space.</p>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('breathe',this)">🌬️ Breathing</button>
+    <button class="tab-btn" onclick="switchTab('focus',this)">⏱️ Focus Timer</button>
+  </div>
+
+  <!-- BREATHING -->
+  <div class="section active" id="breathe">
+    <div class="breath-center">
+
+      <div class="technique-row" id="techRow"></div>
+
+      <div class="breath-wrap">
+        <div class="breath-ring"></div>
+        <div class="breath-ring-mask"></div>
+        <svg class="progress-svg" viewBox="0 0 260 260">
+          <circle class="progress-ring" id="progressRing" cx="130" cy="130" r="120"/>
+        </svg>
+        <div class="breath-circle" id="breathCircle">
+          <div class="breath-label">BREATHE</div>
+          <div class="breath-count" id="breathCount">—</div>
+          <div class="breath-phase" id="breathPhase">ready</div>
+        </div>
+      </div>
+
+      <div class="breath-controls">
+        <button class="breath-btn start" id="breathStartBtn" onclick="toggleBreath()">▶ Start</button>
+        <button class="breath-btn stop" onclick="resetBreath()">↺ Reset</button>
+      </div>
+
+      <div>
+        <div class="session-count">Cycles completed: <span id="cycleCount">0</span></div>
+        <div class="session-dots" id="sessionDots">
+          <div class="sdot"></div><div class="sdot"></div><div class="sdot"></div>
+          <div class="sdot"></div><div class="sdot"></div>
+        </div>
+      </div>
+
+      <div class="technique-info" id="techInfo"></div>
+    </div>
+  </div>
+
+  <!-- FOCUS TIMER -->
+  <div class="section" id="focus">
+    <div class="timer-layout">
+      <div class="timer-face-wrap">
+        <div class="timer-svg-wrap">
+          <svg class="timer-svg" viewBox="0 0 220 220">
+            <defs>
+              <linearGradient id="timerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" style="stop-color:#9b5de5"/>
+                <stop offset="100%" style="stop-color:#ff6b9d"/>
+              </linearGradient>
+            </defs>
+            <circle class="timer-bg-ring" cx="110" cy="110" r="100"/>
+            <circle class="timer-prog-ring" id="timerRing" cx="110" cy="110" r="100"/>
+          </svg>
+          <div class="timer-face">
+            <div class="timer-display" id="timerDisplay">25:00</div>
+            <div class="timer-mode-label" id="timerModeLabel">FOCUS</div>
+          </div>
+        </div>
+        <div class="timer-controls">
+          <button class="t-btn play" id="timerPlayBtn" onclick="toggleTimer()">▶ Start</button>
+          <button class="t-btn reset" onclick="resetTimer()">↺ Reset</button>
+        </div>
+      </div>
+
+      <div class="mode-panel">
+        <h3>✦ SESSION MODE</h3>
+        <div class="mode-btns" id="modeBtns"></div>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-val" id="statSessions">0</div><div class="stat-label">Sessions</div></div>
+      <div class="stat-card"><div class="stat-val" id="statMinutes">0</div><div class="stat-label">Minutes</div></div>
+      <div class="stat-card"><div class="stat-val" id="statStreak">0</div><div class="stat-label">Day Streak 🔥</div></div>
+    </div>
+
+    <div class="session-log">
+      <h3>✦ SESSION LOG</h3>
+      <div class="log-list" id="logList"><div class="log-empty">No sessions yet — start your first focus session! 🌌</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="notif" id="notif"></div>
+<footer>Built with 💜 &amp; lots of caffeine-free passion · RV Codes © 2025</footer>
+
+<script>
+/* NAV */
+function toggleDD(e){e.preventDefault();document.getElementById('projMenu').classList.toggle('show');}
+document.addEventListener('click',function(e){var d=document.getElementById('projDropdown');if(d&&!d.contains(e.target))document.getElementById('projMenu').classList.remove('show');});
+
+/* TABS */
+function switchTab(id,btn){
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+/* ══ AURORA ══ */
+var ac=document.getElementById('auroraCanvas');
+var actx=ac.getContext('2d');
+var waves=[];
+function initAurora(){
+  ac.width=innerWidth;ac.height=innerHeight;
+  waves=Array.from({length:6},function(_,i){
+    return{y:ac.height*.2+i*ac.height*.1,amp:40+i*15,freq:.003+i*.001,phase:Math.random()*Math.PI*2,speed:.005+i*.002,
+      color:['rgba(0,212,170,','rgba(76,201,240,','rgba(155,93,229,','rgba(0,212,170,','rgba(100,220,200,','rgba(76,150,240,'][i]};
+  });
+}
+function drawAurora(){
+  actx.clearRect(0,0,ac.width,ac.height);
+  waves.forEach(function(w,i){
+    w.phase+=w.speed;
+    actx.beginPath();
+    actx.moveTo(0,w.y);
+    for(var x=0;x<=ac.width;x+=4){
+      var y=w.y+Math.sin(x*w.freq+w.phase)*w.amp+Math.sin(x*w.freq*.5+w.phase*1.3)*w.amp*.5;
+      actx.lineTo(x,y);
+    }
+    actx.lineTo(ac.width,0);actx.lineTo(0,0);actx.closePath();
+    var g=actx.createLinearGradient(0,w.y-w.amp,0,w.y+w.amp);
+    g.addColorStop(0,w.color+'0)');g.addColorStop(.5,w.color+'.12)');g.addColorStop(1,w.color+'0)');
+    actx.fillStyle=g;actx.fill();
+  });
+  requestAnimationFrame(drawAurora);
+}
+initAurora();drawAurora();
+window.addEventListener('resize',initAurora);
+
+/* ══ BREATHING ══ */
+var TECHNIQUES={
+  '4-7-8':{label:'4-7-8 Calm',phases:[{name:'Inhale',dur:4},{name:'Hold',dur:7},{name:'Exhale',dur:8}],info:'The ultimate relaxation technique. Inhale for 4, hold for 7, exhale for 8. Perfect before sleep or when anxious.',color:'#00d4aa'},
+  'Box':{label:'Box Breathing',phases:[{name:'Inhale',dur:4},{name:'Hold',dur:4},{name:'Exhale',dur:4},{name:'Hold',dur:4}],info:'Used by Navy SEALs for focus and calm. Four equal counts creates a perfect square of breath. Great before studying.',color:'#4cc9f0'},
+  '5-5':{label:'5-5 Balance',phases:[{name:'Inhale',dur:5},{name:'Exhale',dur:5}],info:'Simple and powerful. Equal inhale and exhale for 5 seconds each. Perfect for quick stress relief anywhere.',color:'#9b5de5'},
+  'Deep':{label:'Deep Reset',phases:[{name:'Inhale',dur:6},{name:'Hold',dur:2},{name:'Exhale',dur:8}],info:'A deep reset breath. Long exhale activates your parasympathetic nervous system — instant calm.',color:'#ff6b9d'},
+};
+
+var selTech='Box';var breathRunning=false;var breathInterval=null;var cycles=0;
+var phaseIdx=0;var secLeft=0;var totalPhaseTime=0;
+
+/* build tech pills */
+var tr=document.getElementById('techRow');
+Object.keys(TECHNIQUES).forEach(function(k){
+  var p=document.createElement('button');p.className='tech-pill'+(k===selTech?' active':'');p.textContent=TECHNIQUES[k].label;
+  p.onclick=function(){if(breathRunning)return;document.querySelectorAll('.tech-pill').forEach(function(x){x.classList.remove('active');});p.classList.add('active');selTech=k;resetBreath();updateTechInfo();};
+  tr.appendChild(p);
+});
+
+function updateTechInfo(){
+  var t=TECHNIQUES[selTech];
+  document.getElementById('techInfo').innerHTML='<h3>'+t.label+'</h3><p>'+t.info+'</p>';
+}
+updateTechInfo();
+
+function toggleBreath(){
+  if(breathRunning){pauseBreath();}else{startBreath();}
+}
+
+function startBreath(){
+  breathRunning=true;document.getElementById('breathStartBtn').textContent='⏸ Pause';
+  if(secLeft===0){phaseIdx=0;secLeft=TECHNIQUES[selTech].phases[0].dur;}
+  runBreathTick();
+  breathInterval=setInterval(runBreathTick,1000);
+}
+
+function pauseBreath(){
+  breathRunning=false;clearInterval(breathInterval);
+  document.getElementById('breathStartBtn').textContent='▶ Resume';
+}
+
+function resetBreath(){
+  breathRunning=false;clearInterval(breathInterval);
+  phaseIdx=0;secLeft=0;cycles=0;
+  document.getElementById('breathStartBtn').textContent='▶ Start';
+  document.getElementById('breathCount').textContent='—';
+  document.getElementById('breathPhase').textContent='ready';
+  document.getElementById('breathCircle').style.transform='scale(1)';
+  document.getElementById('cycleCount').textContent='0';
+  document.getElementById('progressRing').style.strokeDashoffset='754';
+  document.querySelectorAll('.sdot').forEach(function(d){d.classList.remove('done');});
+}
+
+function runBreathTick(){
+  var tech=TECHNIQUES[selTech];
+  var phase=tech.phases[phaseIdx];
+  document.getElementById('breathCount').textContent=secLeft;
+  document.getElementById('breathPhase').textContent=phase.name.toUpperCase();
+
+  /* circle scale */
+  var scale=phase.name==='Inhale'?1+((phase.dur-secLeft)/phase.dur)*.35:phase.name==='Exhale'?1.35-((phase.dur-secLeft)/phase.dur)*.35:1.2;
+  document.getElementById('breathCircle').style.transform='scale('+scale+')';
+  document.getElementById('breathCircle').style.transition='transform 1s ease';
+
+  /* progress ring */
+  var elapsed=phase.dur-secLeft;var pct=elapsed/phase.dur;
+  document.getElementById('progressRing').style.strokeDashoffset=754-(754*pct);
+
+  secLeft--;
+  if(secLeft<0){
+    phaseIdx++;
+    if(phaseIdx>=tech.phases.length){
+      phaseIdx=0;cycles++;
+      document.getElementById('cycleCount').textContent=cycles;
+      var dots=document.querySelectorAll('.sdot');
+      if(cycles<=dots.length)dots[cycles-1].classList.add('done');
+    }
+    secLeft=tech.phases[phaseIdx].dur;
+  }
+}
+
+/* ══ FOCUS TIMER ══ */
+var MODES=[
+  {icon:'🎯',name:'Focus',desc:'25 min deep work',focus:25,breakTime:5,color:'#9b5de5'},
+  {icon:'⚡',name:'Power',desc:'50 min intense session',focus:50,breakTime:10,color:'#ff6b9d'},
+  {icon:'🌱',name:'Gentle',desc:'15 min soft focus',focus:15,breakTime:5,color:'#00d4aa'},
+  {icon:'🌙',name:'Night',desc:'20 min evening study',focus:20,breakTime:5,color:'#4cc9f0'},
+];
+
+var selMode=0;var timerRunning=false;var timerInterval=null;
+var timerLeft=MODES[0].focus*60;var isBreak=false;
+var totalSessions=0;var totalMinutes=0;var logEntries=[];
+var circumference=628;
+
+/* build mode btns */
+var mb=document.getElementById('modeBtns');
+MODES.forEach(function(m,i){
+  var btn=document.createElement('div');btn.className='mode-btn'+(i===0?' active':'');
+  btn.innerHTML='<div class="mode-icon">'+m.icon+'</div><div><div class="mode-name">'+m.name+' — '+m.focus+'min</div><div class="mode-desc">'+m.desc+'</div></div>';
+  btn.onclick=function(){
+    if(timerRunning)return;
+    document.querySelectorAll('.mode-btn').forEach(function(b){b.classList.remove('active');});
+    btn.classList.add('active');selMode=i;isBreak=false;
+    timerLeft=MODES[i].focus*60;updateTimerDisplay();
+    document.getElementById('timerModeLabel').textContent='FOCUS';
+  };
+  mb.appendChild(btn);
+});
+
+function toggleTimer(){
+  if(timerRunning){pauseTimer();}else{startFocus();}
+}
+
+function startFocus(){
+  timerRunning=true;
+  document.getElementById('timerPlayBtn').textContent='⏸ Pause';
+  timerInterval=setInterval(function(){
+    timerLeft--;updateTimerDisplay();updateTimerRing();
+    if(timerLeft<=0){
+      clearInterval(timerInterval);timerRunning=false;
+      document.getElementById('timerPlayBtn').textContent='▶ Start';
+      if(!isBreak){
+        totalSessions++;totalMinutes+=MODES[selMode].focus;
+        document.getElementById('statSessions').textContent=totalSessions;
+        document.getElementById('statMinutes').textContent=totalMinutes;
+        addLog(MODES[selMode].name,MODES[selMode].focus,MODES[selMode].color);
+        showNotif('🎉 Focus session done! Take a '+MODES[selMode].breakTime+'min break!');
+        isBreak=true;timerLeft=MODES[selMode].breakTime*60;
+        document.getElementById('timerModeLabel').textContent='BREAK';
+        updateTimerDisplay();
+      } else {
+        isBreak=false;timerLeft=MODES[selMode].focus*60;
+        document.getElementById('timerModeLabel').textContent='FOCUS';
+        updateTimerDisplay();
+        showNotif('🌌 Break over! Ready to focus again?');
+      }
+    }
+  },1000);
+}
+
+function pauseTimer(){
+  timerRunning=false;clearInterval(timerInterval);
+  document.getElementById('timerPlayBtn').textContent='▶ Resume';
+}
+
+function resetTimer(){
+  timerRunning=false;clearInterval(timerInterval);
+  isBreak=false;timerLeft=MODES[selMode].focus*60;
+  document.getElementById('timerPlayBtn').textContent='▶ Start';
+  document.getElementById('timerModeLabel').textContent='FOCUS';
+  updateTimerDisplay();
+  document.getElementById('timerRing').style.strokeDashoffset='0';
+}
+
+function updateTimerDisplay(){
+  var m=Math.floor(timerLeft/60);var s=timerLeft%60;
+  document.getElementById('timerDisplay').textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+}
+
+function updateTimerRing(){
+  var total=(isBreak?MODES[selMode].breakTime:MODES[selMode].focus)*60;
+  var elapsed=total-timerLeft;var pct=elapsed/total;
+  document.getElementById('timerRing').style.strokeDashoffset=circumference-(circumference*pct);
+}
+
+function addLog(mode,mins,color){
+  var now=new Date();var time=now.getHours()+':'+String(now.getMinutes()).padStart(2,'0');
+  var item=document.createElement('div');item.className='log-item';
+  item.innerHTML='<div class="log-dot" style="background:'+color+';box-shadow:0 0 6px '+color+'"></div><span>'+mode+' session — '+mins+' min</span><span style="margin-left:auto;opacity:.5">'+time+'</span>';
+  var ll=document.getElementById('logList');
+  var empty=ll.querySelector('.log-empty');if(empty)empty.remove();
+  ll.insertBefore(item,ll.firstChild);
+}
+
+function showNotif(msg){
+  var n=document.getElementById('notif');n.textContent=msg;n.classList.add('show');
+  setTimeout(function(){n.classList.remove('show');},4000);
+}
+
+updateTimerDisplay();
+</script>
+</body>
+</html>
