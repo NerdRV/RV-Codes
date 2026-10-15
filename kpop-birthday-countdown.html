@@ -1,0 +1,1466 @@
+<title>K-pop Birthday Countdown</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Orbitron:wght@700;900&display=swap">
+
+<style>
+/* ── DESIGN TOKENS ─────────────────────────────────────────
+   Layout: sticky group-tab rail + scrollable idol card grid
+   Color: per-group theming via CSS custom properties
+   Type: Nunito body + Orbitron countdown digits
+──────────────────────────────────────────────────────────── */
+:root {
+  --bg: #0d0d12;
+  --bg2: #13131a;
+  --surface: #1a1a24;
+  --surface2: #22223a;
+  --fg: #f0eeff;
+  --fg-muted: #9994bb;
+  --border: rgba(255,255,255,.08);
+
+  /* group accent tokens — overridden per group */
+  --accent: #ff3a5c;
+  --accent2: #ff8fa0;
+  --glow: rgba(255,58,92,.4);
+  --group-bg: #1a0a10;
+  --group-grad: linear-gradient(135deg, #2a0a10 0%, #1a0812 100%);
+  --tab-glow: rgba(255,58,92,.6);
+
+  color-scheme: dark;
+}
+
+/* intentionally single-theme (dark neon) — matches the K-pop night aesthetic */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: 'Nunito', sans-serif;
+  min-height: 100dvh;
+  overflow-x: clip;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0;
+}
+
+/* ── HEADER ─── */
+.page-header {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 100;
+  background: rgba(13,13,18,.92);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 0 0;
+  overflow: visible;
+}
+/* allow tab rail to scroll beyond header edges */
+.tab-rail-wrapper {
+  overflow: hidden;
+  margin: 0 -4px;
+  padding: 0 4px;
+}
+
+.header-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 4px 12px;
+}
+
+.header-emoji { font-size: 1.6rem; }
+
+.header-title {
+  font-family: 'Orbitron', monospace;
+  font-size: clamp(1rem, 4vw, 1.35rem);
+  font-weight: 900;
+  background: linear-gradient(90deg, #f472b6, #c084fc, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 1px;
+  flex: 1;
+}
+
+.search-input {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  color: var(--fg);
+  font-family: 'Nunito', sans-serif;
+  font-size: .85rem;
+  padding: 6px 14px;
+  width: clamp(100px, 22vw, 160px);
+  outline: none;
+  transition: border-color .2s, box-shadow .2s;
+}
+.search-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--glow);
+}
+
+/* ── GROUP TAB RAIL ─── */
+.tab-rail-wrapper {
+  position: relative;
+}
+.tab-rail {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  overflow-y: visible;
+  padding: 0 4px 10px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,.15) transparent;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity;
+}
+.tab-rail::-webkit-scrollbar { height: 3px; }
+.tab-rail::-webkit-scrollbar-thumb { background: rgba(255,255,255,.2); border-radius: 3px; }
+.tab-rail::-webkit-scrollbar-track { background: transparent; }
+
+.group-tab { scroll-snap-align: start; }
+
+.group-tab {
+  flex-shrink: 0;
+  padding: 6px 16px;
+  border-radius: 20px;
+  border: 1.5px solid var(--border);
+  background: transparent;
+  color: var(--fg-muted);
+  font-family: 'Nunito', sans-serif;
+  font-size: .8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .2s;
+  white-space: nowrap;
+  letter-spacing: .5px;
+}
+
+.group-tab:hover {
+  border-color: var(--tab-color, #f472b6);
+  color: var(--tab-color, #f472b6);
+  background: rgba(255,255,255,.04);
+}
+
+.group-tab.active {
+  background: var(--tab-color, #f472b6);
+  border-color: var(--tab-color, #f472b6);
+  color: #fff;
+  box-shadow: 0 0 16px var(--tab-glow, rgba(244,114,182,.5));
+  font-weight: 900;
+}
+
+/* ── MAIN CONTENT ─── */
+.main {
+  padding-block: 24px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* ── GROUP HEADER BANNER ─── */
+.group-banner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 24px;
+  border-radius: 16px;
+  background: var(--group-grad);
+  border: 1px solid rgba(255,255,255,.06);
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.group-banner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 80% 50%, var(--glow) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.group-name {
+  font-family: 'Orbitron', monospace;
+  font-size: clamp(1.4rem, 5vw, 2.2rem);
+  font-weight: 900;
+  color: var(--accent2);
+  text-shadow: 0 0 30px var(--glow);
+  letter-spacing: 2px;
+  text-wrap: balance;
+}
+
+.group-tagline {
+  font-size: .85rem;
+  color: var(--fg-muted);
+  margin-top: 2px;
+  font-style: italic;
+}
+
+.group-icon {
+  font-size: clamp(2rem, 6vw, 3rem);
+  flex-shrink: 0;
+}
+
+/* ── UPCOMING BANNER ─── */
+.upcoming-banner {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  margin-bottom: 24px;
+  scrollbar-width: none;
+}
+.upcoming-banner::-webkit-scrollbar { display: none; }
+
+.upcoming-pill {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+  color: #fff;
+  border-radius: 24px;
+  padding: 8px 16px;
+  font-size: .8rem;
+  font-weight: 800;
+  box-shadow: 0 0 18px var(--glow);
+  animation: pillPulse 2s ease-in-out infinite;
+}
+
+.upcoming-pill.today {
+  animation: todayPulse 1s ease-in-out infinite;
+  background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+  box-shadow: 0 0 24px rgba(245,158,11,.6);
+}
+
+@keyframes pillPulse {
+  0%,100% { box-shadow: 0 0 18px var(--glow); }
+  50% { box-shadow: 0 0 32px var(--glow); }
+}
+@keyframes todayPulse {
+  0%,100% { transform: scale(1); box-shadow: 0 0 24px rgba(245,158,11,.6); }
+  50% { transform: scale(1.03); box-shadow: 0 0 40px rgba(245,158,11,.9); }
+}
+
+/* ── IDOL GRID ─── */
+.idol-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+/* ── IDOL CARD ─── */
+.idol-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px 16px 16px;
+  text-align: center;
+  transition: transform .2s, box-shadow .2s, border-color .2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.idol-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 16px 16px 0 0;
+}
+
+.idol-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent);
+  box-shadow: 0 8px 32px var(--glow);
+}
+
+.idol-card.birthday-today {
+  border-color: #f59e0b;
+  box-shadow: 0 0 32px rgba(245,158,11,.5);
+  animation: todayCardGlow 2s ease-in-out infinite;
+}
+
+.idol-card.birthday-soon {
+  border-color: var(--accent);
+  box-shadow: 0 0 20px var(--glow);
+}
+
+@keyframes todayCardGlow {
+  0%,100% { box-shadow: 0 0 28px rgba(245,158,11,.5); }
+  50% { box-shadow: 0 0 48px rgba(245,158,11,.8); }
+}
+
+.idol-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--group-grad);
+  border: 2.5px solid var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  margin: 0 auto 12px;
+  box-shadow: 0 0 16px var(--glow);
+}
+
+.idol-card.birthday-today .idol-avatar {
+  border-color: #f59e0b;
+  box-shadow: 0 0 20px rgba(245,158,11,.7);
+  animation: avatarSpin 3s linear infinite;
+}
+
+@keyframes avatarSpin {
+  from { box-shadow: 0 0 20px rgba(245,158,11,.7), 0 0 0 2px #f59e0b; }
+  50% { box-shadow: 0 0 40px rgba(245,158,11,1), 0 0 0 4px #fbbf24; }
+  to { box-shadow: 0 0 20px rgba(245,158,11,.7), 0 0 0 2px #f59e0b; }
+}
+
+.idol-name {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--fg);
+  margin-bottom: 2px;
+}
+
+.idol-position {
+  font-size: .72rem;
+  color: var(--fg-muted);
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.birthday-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .5px;
+  margin-bottom: 12px;
+}
+
+.badge-today {
+  background: rgba(245,158,11,.2);
+  color: #f59e0b;
+  border: 1px solid rgba(245,158,11,.4);
+}
+
+.badge-soon {
+  background: rgba(var(--accent-rgb, 255,58,92),.15);
+  color: var(--accent2);
+  border: 1px solid rgba(var(--accent-rgb, 255,58,92),.3);
+}
+
+.badge-normal {
+  background: rgba(255,255,255,.06);
+  color: var(--fg-muted);
+  border: 1px solid var(--border);
+}
+
+.countdown-display {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.countdown-unit {
+  text-align: center;
+}
+
+.countdown-num {
+  font-family: 'Orbitron', monospace;
+  font-size: clamp(.9rem, 2.5vw, 1.05rem);
+  font-weight: 700;
+  color: var(--accent2);
+  font-variant-numeric: tabular-nums;
+  display: block;
+  line-height: 1.1;
+}
+
+.idol-card.birthday-today .countdown-num {
+  color: #fbbf24;
+}
+
+.countdown-label {
+  font-size: .58rem;
+  color: var(--fg-muted);
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+
+.bday-date {
+  font-size: .75rem;
+  color: var(--fg-muted);
+  margin-top: 8px;
+}
+
+/* section separator */
+.section-label {
+  font-size: .72rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--fg-muted);
+  margin: 0 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* empty state */
+.empty-state {
+  text-align: center;
+  padding: 48px 24px;
+  color: var(--fg-muted);
+  font-size: .9rem;
+}
+
+/* ── FOOTER ─── */
+.page-footer {
+  text-align: center;
+  padding: 32px 0 24px;
+  font-size: .75rem;
+  color: var(--fg-muted);
+  border-top: 1px solid var(--border);
+  margin-top: 40px;
+}
+
+.page-footer a {
+  color: var(--accent2);
+  text-decoration: none;
+}
+</style>
+
+<!-- ── HTML ─────────────────────────────────────────────── -->
+
+<header class="page-header">
+  <div class="header-top">
+    <span class="header-emoji">🎂</span>
+    <span class="header-title">IDOL BIRTHDAY COUNTDOWN</span>
+    <input class="search-input" id="searchInput" type="search" placeholder="Search idol…" aria-label="Search idol">
+  </div>
+  <div class="tab-rail-wrapper">
+    <div class="tab-rail" id="tabRail" role="tablist"></div>
+  </div>
+</header>
+
+<main class="main" id="mainContent"></main>
+
+<footer class="page-footer">
+  <p>Made with 💜 by Aaradhya · All dates in KST · Data updated for 2025–2026</p>
+</footer>
+
+<script>
+// ── GROUP DATA ────────────────────────────────────────────
+const GROUPS = [
+  {
+    id: 'all',
+    name: 'ALL GROUPS',
+    icon: '🌟',
+    tagline: 'Every idol, every group',
+    theme: {
+      accent: '#c084fc', accent2: '#f0abfc',
+      glow: 'rgba(192,132,252,.4)',
+      groupBg: '#100d1a',
+      groupGrad: 'linear-gradient(135deg, #1a1033 0%, #100d1a 100%)',
+      tabGlow: 'rgba(192,132,252,.6)',
+      tabColor: '#c084fc',
+    },
+    members: [],   // will be auto-populated
+  },
+  {
+    id: 'enhypen',
+    name: 'ENHYPEN',
+    icon: '🩸',
+    tagline: 'Dark Blood vampire concept · BELIFT LAB',
+    theme: {
+      accent: '#dc2626', accent2: '#f87171',
+      glow: 'rgba(220,38,38,.45)',
+      groupBg: '#160606',
+      groupGrad: 'linear-gradient(135deg, #240808 0%, #160606 100%)',
+      tabGlow: 'rgba(220,38,38,.7)',
+      tabColor: '#ef4444',
+    },
+    members: [
+      { name: 'Jungwon',  emoji: '🦋', pos: 'Leader / Vocalist', bday: [2004,2,9] },
+      { name: 'Heeseung', emoji: '🎸', pos: 'Vocalist / Dancer',  bday: [2001,10,15] },
+      { name: 'Jay',      emoji: '🦅', pos: 'Vocalist / Rapper',  bday: [2002,4,20] },
+      { name: 'Jake',     emoji: '🐶', pos: 'Vocalist / Dancer',  bday: [2002,11,15] },
+      { name: 'Sunghoon', emoji: '❄️', pos: 'Vocalist',           bday: [2002,12,8] },
+      { name: 'Sunoo',    emoji: '☀️', pos: 'Vocalist',           bday: [2003,6,24] },
+      { name: 'Ni-ki',    emoji: '🌙', pos: 'Main Dancer / Maknae', bday: [2005,12,9] },
+    ],
+  },
+  {
+    id: 'skz',
+    name: 'Stray Kids',
+    icon: '⚡',
+    tagline: 'Thunderous self-produced chaos · JYP Entertainment',
+    theme: {
+      accent: '#facc15', accent2: '#fde68a',
+      glow: 'rgba(250,204,21,.4)',
+      groupBg: '#0d0d00',
+      groupGrad: 'linear-gradient(135deg, #1a1800 0%, #0d0d00 100%)',
+      tabGlow: 'rgba(250,204,21,.7)',
+      tabColor: '#eab308',
+    },
+    members: [
+      { name: 'Bang Chan',  emoji: '🌙', pos: 'Leader / Producer',    bday: [2000,10,3] },
+      { name: 'Lee Know',   emoji: '🐱', pos: 'Main Dancer',          bday: [2000,10,25] },
+      { name: 'Changbin',   emoji: '💪', pos: 'Main Rapper',          bday: [2000,8,11] },
+      { name: 'Hyunjin',    emoji: '🎨', pos: 'Vocalist / Dancer',    bday: [2000,3,20] },
+      { name: 'Han',        emoji: '🌧️', pos: 'Rapper / Vocalist',    bday: [2000,9,14] },
+      { name: 'Felix',      emoji: '🦊', pos: 'Dancer / Rapper',      bday: [2000,9,15] },
+      { name: 'Seungmin',   emoji: '⚾', pos: 'Vocalist',             bday: [2000,9,22] },
+      { name: 'I.N',        emoji: '🧡', pos: 'Vocalist / Maknae',    bday: [2001,2,8] },
+    ],
+  },
+  {
+    id: 'twice',
+    name: 'TWICE',
+    icon: '🌸',
+    tagline: 'Feel Special girl crush · JYP Entertainment',
+    theme: {
+      accent: '#f472b6', accent2: '#fbcfe8',
+      glow: 'rgba(244,114,182,.4)',
+      groupBg: '#160d12',
+      groupGrad: 'linear-gradient(135deg, #241524 0%, #160d12 100%)',
+      tabGlow: 'rgba(244,114,182,.7)',
+      tabColor: '#ec4899',
+    },
+    members: [
+      { name: 'Nayeon',   emoji: '🐰', pos: 'Lead Vocalist',     bday: [1995,9,22] },
+      { name: 'Jeongyeon',emoji: '🌻', pos: 'Lead Vocalist',     bday: [1996,11,1] },
+      { name: 'Momo',     emoji: '🍑', pos: 'Main Dancer',       bday: [1996,11,9] },
+      { name: 'Sana',     emoji: '🌟', pos: 'Vocalist',          bday: [1996,12,29] },
+      { name: 'Jihyo',    emoji: '👑', pos: 'Leader / Main Vocalist', bday: [1997,2,1] },
+      { name: 'Mina',     emoji: '🦢', pos: 'Vocalist / Dancer', bday: [1997,3,24] },
+      { name: 'Dahyun',   emoji: '🐧', pos: 'Rapper / Vocalist', bday: [1998,5,28] },
+      { name: 'Chaeyoung',emoji: '🍓', pos: 'Rapper / Vocalist', bday: [1999,4,23] },
+      { name: 'Tzuyu',    emoji: '🏹', pos: 'Vocalist / Maknae', bday: [1999,6,14] },
+    ],
+  },
+  {
+    id: 'bts',
+    name: 'BTS',
+    icon: '💜',
+    tagline: 'Purple You cosmic journey · HYBE',
+    theme: {
+      accent: '#8b5cf6', accent2: '#c4b5fd',
+      glow: 'rgba(139,92,246,.45)',
+      groupBg: '#0a0614',
+      groupGrad: 'linear-gradient(135deg, #140a2a 0%, #0a0614 100%)',
+      tabGlow: 'rgba(139,92,246,.7)',
+      tabColor: '#a78bfa',
+    },
+    members: [
+      { name: 'RM',      emoji: '🌍', pos: 'Leader / Rapper',       bday: [1994,9,12] },
+      { name: 'Jin',     emoji: '👑', pos: 'Vocalist / Visual',      bday: [1992,12,4] },
+      { name: 'Suga',    emoji: '🎹', pos: 'Rapper / Producer',      bday: [1993,3,9] },
+      { name: 'J-Hope',  emoji: '☀️', pos: 'Dancer / Rapper',        bday: [1994,2,18] },
+      { name: 'Jimin',   emoji: '🌙', pos: 'Main Dancer / Vocalist', bday: [1995,10,13] },
+      { name: 'V',       emoji: '🐯', pos: 'Vocalist / Visual',      bday: [1995,12,30] },
+      { name: 'Jungkook',emoji: '🐰', pos: 'Main Vocalist / Maknae', bday: [1997,9,1] },
+    ],
+  },
+  {
+    id: 'txt',
+    name: 'TXT',
+    icon: '🌙',
+    tagline: 'The Name Chapter dreamy chaos · HYBE',
+    theme: {
+      accent: '#6366f1', accent2: '#a5b4fc',
+      glow: 'rgba(99,102,241,.45)',
+      groupBg: '#080a18',
+      groupGrad: 'linear-gradient(135deg, #0e1030 0%, #080a18 100%)',
+      tabGlow: 'rgba(99,102,241,.7)',
+      tabColor: '#818cf8',
+    },
+    members: [
+      { name: 'Yeonjun',  emoji: '🔥', pos: 'Oldest / Main Dancer', bday: [1999,9,13] },
+      { name: 'Soobin',   emoji: '🦋', pos: 'Leader / Vocalist',     bday: [2000,12,5] },
+      { name: 'Beomgyu',  emoji: '🎸', pos: 'Guitarist / Vocalist',  bday: [2001,3,13] },
+      { name: 'Taehyun',  emoji: '💙', pos: 'Main Vocalist',         bday: [2002,2,5] },
+      { name: 'Huening Kai', emoji: '🌙', pos: 'Vocalist / Maknae', bday: [2002,8,14] },
+    ],
+  },
+  {
+    id: 'illit',
+    name: 'ILLIT',
+    icon: '🌷',
+    tagline: 'Magnetic cottagecore soft girl · HYBE',
+    theme: {
+      accent: '#fb7185', accent2: '#fda4af',
+      glow: 'rgba(251,113,133,.4)',
+      groupBg: '#160a0a',
+      groupGrad: 'linear-gradient(135deg, #241010 0%, #160a0a 100%)',
+      tabGlow: 'rgba(251,113,133,.6)',
+      tabColor: '#fb7185',
+    },
+    members: [
+      { name: 'Yunah',  emoji: '🌹', pos: 'Leader / Vocalist', bday: [2003,12,25] },
+      { name: 'Minju',  emoji: '🌸', pos: 'Vocalist',          bday: [2005,2,7] },
+      { name: 'Moka',   emoji: '☕', pos: 'Main Dancer',       bday: [2005,5,27] },
+      { name: 'Wonhee', emoji: '🦋', pos: 'Vocalist',          bday: [2006,3,30] },
+      { name: 'Iroha',  emoji: '🌺', pos: 'Vocalist / Maknae', bday: [2006,12,21] },
+    ],
+  },
+  {
+    id: 'andteam',
+    name: '&TEAM',
+    icon: '🌊',
+    tagline: 'GO interstellar energy · HYBE Japan',
+    theme: {
+      accent: '#06b6d4', accent2: '#67e8f9',
+      glow: 'rgba(6,182,212,.4)',
+      groupBg: '#000e12',
+      groupGrad: 'linear-gradient(135deg, #001c24 0%, #000e12 100%)',
+      tabGlow: 'rgba(6,182,212,.6)',
+      tabColor: '#22d3ee',
+    },
+    members: [
+      { name: 'K',       emoji: '⚡', pos: 'Leader / Rapper',     bday: [2001,10,2] },
+      { name: 'Fuma',    emoji: '🌊', pos: 'Main Rapper',         bday: [2002,7,13] },
+      { name: 'Nicholas',emoji: '🌟', pos: 'Vocalist',            bday: [2002,12,25] },
+      { name: 'EJ',      emoji: '🎯', pos: 'Main Dancer',         bday: [2003,6,8] },
+      { name: 'Yuma',    emoji: '🦅', pos: 'Vocalist',            bday: [2003,8,20] },
+      { name: 'Jo',      emoji: '🔮', pos: 'Vocalist',            bday: [2004,3,5] },
+      { name: 'Harua',   emoji: '💫', pos: 'Vocalist',            bday: [2005,10,28] },
+      { name: 'Taki',    emoji: '🌙', pos: 'Vocalist',            bday: [2005,11,13] },
+      { name: 'Maki',    emoji: '🍀', pos: 'Maknae / Vocalist',   bday: [2006,9,12] },
+    ],
+  },
+  {
+    id: 'tws',
+    name: 'TWS',
+    icon: '🎡',
+    tagline: 'Plot Twist bubbly boyhood · PLEDIS',
+    theme: {
+      accent: '#34d399', accent2: '#a7f3d0',
+      glow: 'rgba(52,211,153,.4)',
+      groupBg: '#001208',
+      groupGrad: 'linear-gradient(135deg, #002212 0%, #001208 100%)',
+      tabGlow: 'rgba(52,211,153,.6)',
+      tabColor: '#10b981',
+    },
+    members: [
+      { name: 'Shinyu',  emoji: '🎸', pos: 'Leader / Vocalist', bday: [2001,12,7] },
+      { name: 'Dohoon',  emoji: '🎡', pos: 'Vocalist',          bday: [2003,1,14] },
+      { name: 'Youngjae',emoji: '☘️', pos: 'Vocalist',          bday: [2004,3,22] },
+      { name: 'Hanjin',  emoji: '🌊', pos: 'Rapper / Dancer',   bday: [2004,7,17] },
+      { name: 'Kyungmin',emoji: '🎯', pos: 'Main Dancer',       bday: [2005,5,23] },
+      { name: 'Jihoon',  emoji: '⭐', pos: 'Maknae / Vocalist', bday: [2006,11,4] },
+    ],
+  },
+  {
+    id: 'cravity',
+    name: 'CRAVITY',
+    icon: '🌀',
+    tagline: 'VEGA dark universe concept · Starship',
+    theme: {
+      accent: '#f97316', accent2: '#fdba74',
+      glow: 'rgba(249,115,22,.4)',
+      groupBg: '#130600',
+      groupGrad: 'linear-gradient(135deg, #200a00 0%, #130600 100%)',
+      tabGlow: 'rgba(249,115,22,.6)',
+      tabColor: '#fb923c',
+    },
+    members: [
+      { name: 'Serim',            emoji: '👑', pos: 'Leader / Rapper',         bday: [2000,3,5] },
+      { name: 'Allen',            emoji: '🌙', pos: 'Vocalist / Rapper',         bday: [2000,11,28] },
+      { name: 'Jungmo',           emoji: '🎸', pos: 'Vocalist',                  bday: [2001,9,26] },
+      { name: 'Woobin',           emoji: '⚡', pos: 'Main Dancer',               bday: [2001,8,26] },
+      { name: 'Wonjin',           emoji: '🔥', pos: 'Vocalist',                  bday: [2001,12,12] },
+      { name: 'Minhee',           emoji: '🌟', pos: 'Main Vocalist',             bday: [2001,9,14] },
+      { name: 'Taeyoung',         emoji: '🌀', pos: 'Rapper',                    bday: [2002,5,12] },
+      { name: 'Yonghee',          emoji: '🎵', pos: 'Vocalist / Maknae',         bday: [2003,1,15] },
+    ],
+  },
+  {
+    id: 'kep1er',
+    name: 'Kep1er',
+    icon: '🚀',
+    tagline: 'WA DA DA cosmic girl crush · Wake One',
+    theme: {
+      accent: '#e879f9', accent2: '#f0abfc',
+      glow: 'rgba(232,121,249,.4)',
+      groupBg: '#130018',
+      groupGrad: 'linear-gradient(135deg, #200028 0%, #130018 100%)',
+      tabGlow: 'rgba(232,121,249,.6)',
+      tabColor: '#d946ef',
+    },
+    members: [
+      { name: 'Yujin',    emoji: '⭐', pos: 'Leader / Vocalist', bday: [2003,9,8] },
+      { name: 'Xiaoting', emoji: '🌸', pos: 'Vocalist',          bday: [2002,12,31] },
+      { name: 'Mashiro',  emoji: '🌙', pos: 'Vocalist',          bday: [2000,6,18] },
+      { name: 'Chaehyun', emoji: '🎶', pos: 'Main Vocalist',     bday: [2004,5,29] },
+      { name: 'Dayeon',   emoji: '💜', pos: 'Main Dancer',       bday: [2003,9,13] },
+      { name: 'Bahiyyih', emoji: '🦋', pos: 'Vocalist',          bday: [2004,1,25] },
+      { name: 'Yeseo',    emoji: '🔮', pos: 'Vocalist / Rapper', bday: [2004,7,26] },
+      { name: 'Hikaru',   emoji: '🌟', pos: 'Vocalist',          bday: [2002,4,24] },
+      { name: 'Huening Bahiyyih', emoji: '🌺', pos: 'Maknae',   bday: [2004,1,25] },
+    ],
+  },
+  {
+    id: 'ateez',
+    name: 'ATEEZ',
+    icon: '🏴‍☠️',
+    tagline: 'Pirate performance powerhouse · KQ',
+    theme: {
+      accent: '#f59e0b', accent2: '#fcd34d',
+      glow: 'rgba(245,158,11,.4)',
+      groupBg: '#100800',
+      groupGrad: 'linear-gradient(135deg, #201000 0%, #100800 100%)',
+      tabGlow: 'rgba(245,158,11,.6)',
+      tabColor: '#d97706',
+    },
+    members: [
+      { name: 'Hongjoong',emoji: '🎵', pos: 'Leader / Rapper / Producer', bday: [1998,11,7] },
+      { name: 'Seonghwa', emoji: '🌹', pos: 'Vocalist / Visual',          bday: [1998,4,3] },
+      { name: 'Yunho',    emoji: '🌊', pos: 'Vocalist / Dancer',           bday: [1999,3,23] },
+      { name: 'Yeosang',  emoji: '🐱', pos: 'Vocalist',                    bday: [1999,6,15] },
+      { name: 'San',      emoji: '🔥', pos: 'Vocalist / Dancer',           bday: [1999,7,10] },
+      { name: 'Mingi',    emoji: '⚡', pos: 'Main Rapper',                 bday: [1999,8,9] },
+      { name: 'Wooyoung', emoji: '🌙', pos: 'Vocalist / Dancer',           bday: [1999,11,26] },
+      { name: 'Jongho',   emoji: '💪', pos: 'Main Vocalist / Maknae',      bday: [2000,10,12] },
+    ],
+  },
+  {
+    id: 'nct127',
+    name: 'NCT 127',
+    icon: '🌐',
+    tagline: 'Kick It empowered city boys · SM Entertainment',
+    theme: {
+      accent: '#22c55e', accent2: '#86efac',
+      glow: 'rgba(34,197,94,.4)',
+      groupBg: '#001208',
+      groupGrad: 'linear-gradient(135deg, #001c0e 0%, #001208 100%)',
+      tabGlow: 'rgba(34,197,94,.6)',
+      tabColor: '#16a34a',
+    },
+    members: [
+      { name: 'Taeil',   emoji: '🎵', pos: 'Main Vocalist', bday: [1994,6,14] },
+      { name: 'Johnny',  emoji: '😎', pos: 'Vocalist',      bday: [1995,2,9] },
+      { name: 'Taeyong', emoji: '👑', pos: 'Leader / Rapper / Dancer', bday: [1995,7,1] },
+      { name: 'Yuta',    emoji: '🔥', pos: 'Rapper / Vocalist', bday: [1995,10,26] },
+      { name: 'Doyoung', emoji: '🐰', pos: 'Main Vocalist', bday: [1996,2,1] },
+      { name: 'Jaehyun', emoji: '💙', pos: 'Vocalist',      bday: [1997,2,14] },
+      { name: 'Winwin',  emoji: '🎋', pos: 'Vocalist',      bday: [1997,10,28] },
+      { name: 'Jungwoo', emoji: '🌟', pos: 'Vocalist',      bday: [1998,2,19] },
+      { name: 'Mark',    emoji: '⚡', pos: 'Rapper',        bday: [1999,8,2] },
+      { name: 'Haechan', emoji: '☀️', pos: 'Vocalist / Maknae', bday: [2000,6,6] },
+    ],
+  },
+  {
+    id: 'aespa',
+    name: 'aespa',
+    icon: '🤖',
+    tagline: 'Savage metaverse girl group · SM Entertainment',
+    theme: {
+      accent: '#38bdf8', accent2: '#7dd3fc',
+      glow: 'rgba(56,189,248,.4)',
+      groupBg: '#000d14',
+      groupGrad: 'linear-gradient(135deg, #001820 0%, #000d14 100%)',
+      tabGlow: 'rgba(56,189,248,.6)',
+      tabColor: '#0ea5e9',
+    },
+    members: [
+      { name: 'Karina',  emoji: '🤖', pos: 'Leader / Main Dancer', bday: [2000,4,11] },
+      { name: 'Giselle', emoji: '💫', pos: 'Rapper / Vocalist',     bday: [2000,10,30] },
+      { name: 'Winter',  emoji: '❄️', pos: 'Main Dancer / Vocalist',bday: [2001,1,1] },
+      { name: 'Ningning',emoji: '🌟', pos: 'Main Vocalist / Maknae',bday: [2002,10,23] },
+    ],
+  },
+  {
+    id: 'gidle',
+    name: '(G)I-DLE',
+    icon: '👑',
+    tagline: 'Queencard self-produced girl power · Cube',
+    theme: {
+      accent: '#dc2626', accent2: '#fca5a5',
+      glow: 'rgba(220,38,38,.4)',
+      groupBg: '#140000',
+      groupGrad: 'linear-gradient(135deg, #220000 0%, #140000 100%)',
+      tabGlow: 'rgba(220,38,38,.6)',
+      tabColor: '#ef4444',
+    },
+    members: [
+      { name: 'Soyeon',   emoji: '👑', pos: 'Leader / Rapper / Producer', bday: [1998,8,26] },
+      { name: 'Miyeon',   emoji: '🌸', pos: 'Main Vocalist',              bday: [1997,1,31] },
+      { name: 'Minnie',   emoji: '🌼', pos: 'Vocalist',                   bday: [1997,10,23] },
+      { name: 'Yuqi',     emoji: '🦊', pos: 'Vocalist / Rapper',          bday: [1999,9,23] },
+      { name: 'Shuhua',   emoji: '🌙', pos: 'Vocalist / Maknae',          bday: [2000,1,6] },
+    ],
+  },
+  {
+    id: 'nmixx',
+    name: 'NMIXX',
+    icon: '🎵',
+    tagline: 'O.O genre-bending girl group · JYP',
+    theme: {
+      accent: '#f59e0b', accent2: '#fde68a',
+      glow: 'rgba(245,158,11,.4)',
+      groupBg: '#110900',
+      groupGrad: 'linear-gradient(135deg, #1e1000 0%, #110900 100%)',
+      tabGlow: 'rgba(245,158,11,.6)',
+      tabColor: '#f59e0b',
+    },
+    members: [
+      { name: 'Lily',    emoji: '🌸', pos: 'Main Vocalist',      bday: [2001,8,27] },
+      { name: 'Haewon',  emoji: '🌊', pos: 'Vocalist',           bday: [2002,5,19] },
+      { name: 'Sullyoon',emoji: '🌟', pos: 'Vocalist / Visual',  bday: [2004,1,6] },
+      { name: 'Jinni',   emoji: '✨', pos: 'Vocalist',           bday: [2004,9,14] },
+      { name: 'Bae',     emoji: '🎶', pos: 'Main Dancer',        bday: [2002,12,4] },
+      { name: 'Kyujin',  emoji: '🔥', pos: 'Main Dancer / Rapper / Maknae', bday: [2005,7,26] },
+    ],
+  },
+  {
+    id: 'lesserafim',
+    name: 'LE SSERAFIM',
+    icon: '🪶',
+    tagline: 'FEARLESS unbothered energy · HYBE',
+    theme: {
+      accent: '#d4a017', accent2: '#fde68a',
+      glow: 'rgba(212,160,23,.4)',
+      groupBg: '#110d00',
+      groupGrad: 'linear-gradient(135deg, #1e1800 0%, #110d00 100%)',
+      tabGlow: 'rgba(212,160,23,.6)',
+      tabColor: '#d97706',
+    },
+    members: [
+      { name: 'Sakura',   emoji: '🌸', pos: 'Vocalist',           bday: [1998,3,19] },
+      { name: 'Chaewon',  emoji: '👑', pos: 'Leader / Vocalist',  bday: [2000,8,19] },
+      { name: 'Yunjin',   emoji: '🎸', pos: 'Vocalist',           bday: [2001,10,8] },
+      { name: 'Kazuha',   emoji: '🩰', pos: 'Vocalist / Dancer',  bday: [2003,8,9] },
+      { name: 'Eunchae',  emoji: '🌻', pos: 'Main Dancer / Maknae', bday: [2006,11,10] },
+    ],
+  },
+  {
+    id: 'newjeans',
+    name: 'NewJeans',
+    icon: '🐰',
+    tagline: 'Hype Boy Y2K nostalgia girl group · ADOR',
+    theme: {
+      accent: '#60a5fa', accent2: '#bfdbfe',
+      glow: 'rgba(96,165,250,.4)',
+      groupBg: '#00070f',
+      groupGrad: 'linear-gradient(135deg, #000d1e 0%, #00070f 100%)',
+      tabGlow: 'rgba(96,165,250,.6)',
+      tabColor: '#3b82f6',
+    },
+    members: [
+      { name: 'Minji',   emoji: '🐇', pos: 'Leader / Vocalist', bday: [2004,5,7] },
+      { name: 'Hanni',   emoji: '🐱', pos: 'Vocalist',          bday: [2004,10,6] },
+      { name: 'Danielle',emoji: '🌷', pos: 'Vocalist',          bday: [2005,4,11] },
+      { name: 'Haerin',  emoji: '🐈', pos: 'Vocalist',          bday: [2006,5,15] },
+      { name: 'Hyein',   emoji: '🦋', pos: 'Vocalist / Maknae', bday: [2008,4,21] },
+    ],
+  },
+  {
+    id: 'exo',
+    name: 'EXO',
+    icon: '🌑',
+    tagline: 'Power legendary superpower boys · SM',
+    theme: {
+      accent: '#e11d48', accent2: '#fda4af',
+      glow: 'rgba(225,29,72,.4)',
+      groupBg: '#130008',
+      groupGrad: 'linear-gradient(135deg, #200010 0%, #130008 100%)',
+      tabGlow: 'rgba(225,29,72,.6)',
+      tabColor: '#be123c',
+    },
+    members: [
+      { name: 'Suho',   emoji: '💎', pos: 'Leader / Vocalist',  bday: [1991,5,22] },
+      { name: 'Baekhyun',emoji:'✨', pos: 'Main Vocalist',      bday: [1992,5,6] },
+      { name: 'Chanyeol',emoji:'🎸', pos: 'Rapper / Vocalist',  bday: [1992,11,27] },
+      { name: 'D.O.',   emoji: '🎬', pos: 'Main Vocalist',      bday: [1993,1,12] },
+      { name: 'Kai',    emoji: '🔥', pos: 'Main Dancer',        bday: [1994,1,14] },
+      { name: 'Sehun',  emoji: '🌊', pos: 'Rapper / Maknae',   bday: [1994,4,12] },
+      { name: 'Xiumin', emoji: '❄️', pos: 'Vocalist',           bday: [1990,3,26] },
+      { name: 'Lay',    emoji: '🌿', pos: 'Vocalist / Dancer',  bday: [1991,10,7] },
+      { name: 'Chen',   emoji: '⚡', pos: 'Main Vocalist',      bday: [1992,9,21] },
+    ],
+  },
+  {
+    id: 'shinee',
+    name: 'SHINee',
+    icon: '💎',
+    tagline: 'Replay legendary 3rd gen icons · SM',
+    theme: {
+      accent: '#06b6d4', accent2: '#a5f3fc',
+      glow: 'rgba(6,182,212,.4)',
+      groupBg: '#000d12',
+      groupGrad: 'linear-gradient(135deg, #001820 0%, #000d12 100%)',
+      tabGlow: 'rgba(6,182,212,.6)',
+      tabColor: '#0891b2',
+    },
+    members: [
+      { name: 'Onew',   emoji: '🌟', pos: 'Leader / Vocalist', bday: [1989,12,14] },
+      { name: 'Key',    emoji: '💎', pos: 'Vocalist / Rapper', bday: [1991,9,23] },
+      { name: 'Minho',  emoji: '🔥', pos: 'Rapper / Vocalist', bday: [1991,12,9] },
+      { name: 'Taemin', emoji: '🌙', pos: 'Main Dancer / Vocalist / Maknae', bday: [1993,7,18] },
+    ],
+  },
+  {
+    id: 'got7',
+    name: 'GOT7',
+    icon: '🦅',
+    tagline: 'Hard Carry performance legends · JYPE',
+    theme: {
+      accent: '#16a34a', accent2: '#86efac',
+      glow: 'rgba(22,163,74,.4)',
+      groupBg: '#001208',
+      groupGrad: 'linear-gradient(135deg, #001e0e 0%, #001208 100%)',
+      tabGlow: 'rgba(22,163,74,.6)',
+      tabColor: '#15803d',
+    },
+    members: [
+      { name: 'Jay B',   emoji: '🦅', pos: 'Leader / Vocalist', bday: [1994,1,6] },
+      { name: 'Mark',    emoji: '🌟', pos: 'Vocalist',           bday: [1993,9,4] },
+      { name: 'Jackson', emoji: '🔥', pos: 'Rapper',             bday: [1994,3,28] },
+      { name: 'Jinyoung',emoji: '📖', pos: 'Vocalist',           bday: [1994,9,22] },
+      { name: 'Youngjae',emoji: '🎵', pos: 'Main Vocalist',      bday: [1996,9,17] },
+      { name: 'BamBam',  emoji: '💫', pos: 'Rapper / Dancer',    bday: [1997,5,2] },
+      { name: 'Yugyeom', emoji: '🌙', pos: 'Main Dancer / Maknae', bday: [1997,9,17] },
+    ],
+  },
+  {
+    id: 'monsta_x',
+    name: 'MONSTA X',
+    icon: '🐺',
+    tagline: 'Rush chaotic beast energy · Starship',
+    theme: {
+      accent: '#7c3aed', accent2: '#c4b5fd',
+      glow: 'rgba(124,58,237,.45)',
+      groupBg: '#06000f',
+      groupGrad: 'linear-gradient(135deg, #0e0020 0%, #06000f 100%)',
+      tabGlow: 'rgba(124,58,237,.7)',
+      tabColor: '#6d28d9',
+    },
+    members: [
+      { name: 'Shownu',  emoji: '🐻', pos: 'Leader / Dancer', bday: [1992,6,18] },
+      { name: 'Minhyuk', emoji: '☀️', pos: 'Vocalist',        bday: [1993,11,3] },
+      { name: 'Kihyun',  emoji: '🎵', pos: 'Main Vocalist',   bday: [1993,11,22] },
+      { name: 'Hyungwon',emoji: '🌊', pos: 'Vocalist / Dancer', bday: [1994,1,15] },
+      { name: 'Jooheon', emoji: '🐝', pos: 'Main Rapper',     bday: [1994,10,6] },
+      { name: 'I.M',     emoji: '⚡', pos: 'Rapper / Maknae', bday: [1996,1,26] },
+    ],
+  },
+  {
+    id: 'seventeen',
+    name: 'SEVENTEEN',
+    icon: '💎',
+    tagline: 'Left & Right self-producing legends · Pledis',
+    theme: {
+      accent: '#0ea5e9', accent2: '#7dd3fc',
+      glow: 'rgba(14,165,233,.4)',
+      groupBg: '#000a12',
+      groupGrad: 'linear-gradient(135deg, #001020 0%, #000a12 100%)',
+      tabGlow: 'rgba(14,165,233,.6)',
+      tabColor: '#0284c7',
+    },
+    members: [
+      { name: 'S.Coups',  emoji: '👑', pos: 'Leader / Rapper',  bday: [1995,8,8] },
+      { name: 'Jeonghan', emoji: '👼', pos: 'Vocalist',          bday: [1995,10,4] },
+      { name: 'Joshua',   emoji: '🎸', pos: 'Vocalist',          bday: [1995,12,30] },
+      { name: 'Jun',      emoji: '🐱', pos: 'Performer',         bday: [1996,6,10] },
+      { name: 'Hoshi',    emoji: '⭐', pos: 'Main Dancer / Performer', bday: [1996,6,15] },
+      { name: 'Wonwoo',   emoji: '📚', pos: 'Rapper',            bday: [1996,7,17] },
+      { name: 'Woozi',    emoji: '🎵', pos: 'Leader Vocal / Producer', bday: [1996,11,22] },
+      { name: 'DK',       emoji: '☀️', pos: 'Main Vocalist',     bday: [1997,2,18] },
+      { name: 'Mingyu',   emoji: '🌊', pos: 'Rapper / Vocalist', bday: [1997,4,6] },
+      { name: 'The8',     emoji: '🎭', pos: 'Performer',         bday: [1997,11,7] },
+      { name: 'Seungkwan',emoji: '🎤', pos: 'Main Vocalist',     bday: [1998,1,16] },
+      { name: 'Vernon',   emoji: '🌙', pos: 'Rapper',            bday: [1998,2,18] },
+      { name: 'Dino',     emoji: '🦖', pos: 'Performer / Maknae', bday: [1999,2,11] },
+    ],
+  },
+  {
+    id: 'day6',
+    name: 'DAY6',
+    icon: '🎸',
+    tagline: 'Zombie self-composed band kings · JYP',
+    theme: {
+      accent: '#f97316', accent2: '#fed7aa',
+      glow: 'rgba(249,115,22,.4)',
+      groupBg: '#110600',
+      groupGrad: 'linear-gradient(135deg, #1e0c00 0%, #110600 100%)',
+      tabGlow: 'rgba(249,115,22,.6)',
+      tabColor: '#ea580c',
+    },
+    members: [
+      { name: 'Sungjin', emoji: '🎸', pos: 'Leader / Main Vocalist', bday: [1993,1,16] },
+      { name: 'Young K', emoji: '🎵', pos: 'Bassist / Vocalist',     bday: [1993,12,19] },
+      { name: 'Wonpil',  emoji: '🎹', pos: 'Keyboardist / Vocalist', bday: [1994,4,28] },
+      { name: 'Dowoon',  emoji: '🥁', pos: 'Drummer / Maknae',      bday: [1995,8,25] },
+    ],
+  },
+  {
+    id: 'nct_dream',
+    name: 'NCT DREAM',
+    icon: '🌈',
+    tagline: 'Candy youthful dreamers · SM Entertainment',
+    theme: {
+      accent: '#f472b6', accent2: '#fbcfe8',
+      glow: 'rgba(244,114,182,.4)',
+      groupBg: '#140010',
+      groupGrad: 'linear-gradient(135deg, #200018 0%, #140010 100%)',
+      tabGlow: 'rgba(244,114,182,.6)',
+      tabColor: '#ec4899',
+    },
+    members: [
+      { name: 'Mark',     emoji: '⚡', pos: 'Leader / Rapper',  bday: [1999,8,2] },
+      { name: 'Renjun',   emoji: '🎨', pos: 'Vocalist',         bday: [2000,3,23] },
+      { name: 'Jeno',     emoji: '🔥', pos: 'Dancer / Vocalist',bday: [2000,4,23] },
+      { name: 'Haechan',  emoji: '☀️', pos: 'Main Vocalist',    bday: [2000,6,6] },
+      { name: 'Jaemin',   emoji: '🌟', pos: 'Vocalist / Dancer',bday: [2000,8,13] },
+      { name: 'Chenle',   emoji: '🎵', pos: 'Vocalist',         bday: [2001,11,22] },
+      { name: 'Jisung',   emoji: '🌙', pos: 'Dancer / Maknae',  bday: [2002,2,5] },
+    ],
+  },
+  {
+    id: 'txt_yeonjun',
+    name: 'P1Harmony',
+    icon: '🎯',
+    tagline: 'SCARED/SCARED dark teen concept · FNC',
+    theme: {
+      accent: '#a855f7', accent2: '#e9d5ff',
+      glow: 'rgba(168,85,247,.4)',
+      groupBg: '#0a0014',
+      groupGrad: 'linear-gradient(135deg, #120024 0%, #0a0014 100%)',
+      tabGlow: 'rgba(168,85,247,.6)',
+      tabColor: '#9333ea',
+    },
+    members: [
+      { name: 'Keeho',   emoji: '🎨', pos: 'Vocalist',          bday: [2001,9,26] },
+      { name: 'Theo',    emoji: '🌙', pos: 'Vocalist / Dancer', bday: [2001,9,7] },
+      { name: 'Jiung',   emoji: '🎵', pos: 'Producer / Vocalist',bday: [2001,9,17] },
+      { name: 'Intak',   emoji: '🔥', pos: 'Main Rapper',       bday: [2002,9,29] },
+      { name: 'Soul',    emoji: '💫', pos: 'Vocalist',          bday: [2003,5,11] },
+      { name: 'Jongseob',emoji: '⚡', pos: 'Rapper',            bday: [2004,3,25] },
+    ],
+  },
+  {
+    id: 'ikon',
+    name: 'iKON',
+    icon: '🖤',
+    tagline: 'Love Scenario emotional hits · YG',
+    theme: {
+      accent: '#6b7280', accent2: '#d1d5db',
+      glow: 'rgba(107,114,128,.4)',
+      groupBg: '#080808',
+      groupGrad: 'linear-gradient(135deg, #111 0%, #080808 100%)',
+      tabGlow: 'rgba(107,114,128,.6)',
+      tabColor: '#9ca3af',
+    },
+    members: [
+      { name: 'B.I',     emoji: '🖤', pos: 'Leader / Rapper', bday: [1996,10,22] },
+      { name: 'Bobby',   emoji: '🔥', pos: 'Main Rapper',     bday: [1995,12,21] },
+      { name: 'Jay',     emoji: '🎵', pos: 'Vocalist',        bday: [1994,9,18] },
+      { name: 'Song',    emoji: '🌟', pos: 'Vocalist',        bday: [1995,10,11] },
+      { name: 'DK',      emoji: '☀️', pos: 'Main Vocalist',   bday: [1996,1,3] },
+      { name: 'Chan',    emoji: '🎸', pos: 'Vocalist / Maknae', bday: [1998,1,26] },
+    ],
+  },
+  {
+    id: 'astro',
+    name: 'ASTRO',
+    icon: '🚀',
+    tagline: 'Breathless galaxy boy vibes · Fantagio',
+    theme: {
+      accent: '#f59e0b', accent2: '#fde68a',
+      glow: 'rgba(245,158,11,.4)',
+      groupBg: '#110900',
+      groupGrad: 'linear-gradient(135deg, #1e1000 0%, #110900 100%)',
+      tabGlow: 'rgba(245,158,11,.6)',
+      tabColor: '#d97706',
+    },
+    members: [
+      { name: 'MJ',      emoji: '☀️', pos: 'Main Vocalist',  bday: [1994,4,5] },
+      { name: 'Jinjin',  emoji: '👑', pos: 'Leader / Rapper',bday: [1996,9,15] },
+      { name: 'Cha Eunwoo', emoji: '✨', pos: 'Vocalist / Visual', bday: [1997,3,30] },
+      { name: 'Moonbin', emoji: '🌙', pos: 'Main Dancer',    bday: [1998,1,26] },
+      { name: 'Rocky',   emoji: '🔥', pos: 'Main Dancer',    bday: [1999,2,25] },
+      { name: 'Sanha',   emoji: '🌟', pos: 'Vocalist / Maknae', bday: [2000,3,21] },
+    ],
+  },
+  {
+    id: 'blackpink',
+    name: 'BLACKPINK',
+    icon: '🖤',
+    tagline: 'How You Like That iconic girl crush · YG',
+    theme: {
+      accent: '#ec4899', accent2: '#fbcfe8',
+      glow: 'rgba(236,72,153,.4)',
+      groupBg: '#140010',
+      groupGrad: 'linear-gradient(135deg, #200018 0%, #140010 100%)',
+      tabGlow: 'rgba(236,72,153,.6)',
+      tabColor: '#db2777',
+    },
+    members: [
+      { name: 'Jisoo',   emoji: '🍎', pos: 'Vocalist / Visual', bday: [1995,1,3] },
+      { name: 'Jennie',  emoji: '💎', pos: 'Rapper / Vocalist', bday: [1996,1,16] },
+      { name: 'Rosé',    emoji: '🌹', pos: 'Main Vocalist',     bday: [1997,2,11] },
+      { name: 'Lisa',    emoji: '👑', pos: 'Main Dancer / Rapper / Maknae', bday: [1997,3,27] },
+    ],
+  },
+  {
+    id: 'redvelvet',
+    name: 'Red Velvet',
+    icon: '🍎',
+    tagline: 'Psycho duality concept queens · SM',
+    theme: {
+      accent: '#dc2626', accent2: '#fca5a5',
+      glow: 'rgba(220,38,38,.4)',
+      groupBg: '#140000',
+      groupGrad: 'linear-gradient(135deg, #200004 0%, #140000 100%)',
+      tabGlow: 'rgba(220,38,38,.6)',
+      tabColor: '#b91c1c',
+    },
+    members: [
+      { name: 'Irene',   emoji: '👑', pos: 'Leader / Vocalist', bday: [1991,3,29] },
+      { name: 'Seulgi',  emoji: '🐻', pos: 'Main Dancer / Vocalist', bday: [1994,2,10] },
+      { name: 'Wendy',   emoji: '❄️', pos: 'Main Vocalist',     bday: [1994,2,21] },
+      { name: 'Joy',     emoji: '🌷', pos: 'Vocalist',          bday: [1996,9,3] },
+      { name: 'Yeri',    emoji: '🍎', pos: 'Vocalist / Maknae', bday: [1999,3,5] },
+    ],
+  },
+  {
+    id: 'highlight',
+    name: 'HIGHLIGHT',
+    icon: '🌅',
+    tagline: 'Can You Feel It veteran idol kings · Around Us',
+    theme: {
+      accent: '#f97316', accent2: '#fdba74',
+      glow: 'rgba(249,115,22,.4)',
+      groupBg: '#110600',
+      groupGrad: 'linear-gradient(135deg, #1e0c00 0%, #110600 100%)',
+      tabGlow: 'rgba(249,115,22,.6)',
+      tabColor: '#ea580c',
+    },
+    members: [
+      { name: 'Yoon Doojoon', emoji: '🌅', pos: 'Leader / Vocalist', bday: [1989,7,4] },
+      { name: 'Yong Junhyung',emoji: '🎵', pos: 'Rapper / Producer', bday: [1989,9,19] },
+      { name: 'Yang Yoseob',  emoji: '✨', pos: 'Main Vocalist',     bday: [1990,1,5] },
+      { name: 'Lee Kikwang',  emoji: '🔥', pos: 'Vocalist / Dancer', bday: [1990,3,30] },
+      { name: 'Son Dongwoon', emoji: '🌙', pos: 'Vocalist / Maknae', bday: [1991,6,6] },
+    ],
+  },
+  {
+    id: 'bnd',
+    name: 'BOYNEXTDOOR',
+    icon: '🚪',
+    tagline: 'One and Only boy-next-door energy · KOZ / HYBE',
+    theme: {
+      accent: '#f97316', accent2: '#fed7aa',
+      glow: 'rgba(249,115,22,.45)',
+      groupBg: '#110600',
+      groupGrad: 'linear-gradient(135deg, #1e0e00 0%, #110600 100%)',
+      tabGlow: 'rgba(249,115,22,.7)',
+      tabColor: '#ea580c',
+    },
+    members: [
+      { name: 'Sungho',  emoji: '🚪', pos: 'Leader / Vocalist',      bday: [2002,3,14] },
+      { name: 'Riwoo',   emoji: '🌟', pos: 'Main Vocalist',           bday: [2003,1,25] },
+      { name: 'Taesan',  emoji: '🔥', pos: 'Vocalist / Rapper',       bday: [2003,3,23] },
+      { name: 'Leehan',  emoji: '🌙', pos: 'Vocalist',                bday: [2004,9,16] },
+      { name: 'Jaehyun', emoji: '🎸', pos: 'Rapper / Vocalist',       bday: [2004,1,20] },
+      { name: 'Woonhak', emoji: '🧡', pos: 'Main Dancer / Maknae',    bday: [2005,11,9] },
+    ],
+  },
+  {
+    id: 'cortis',
+    name: 'CORTIS',
+    icon: '🌌',
+    tagline: 'Rising 4th gen boygroup · Cortis Entertainment',
+    theme: {
+      accent: '#a78bfa', accent2: '#ddd6fe',
+      glow: 'rgba(167,139,250,.45)',
+      groupBg: '#0a0614',
+      groupGrad: 'linear-gradient(135deg, #150a2a 0%, #0a0614 100%)',
+      tabGlow: 'rgba(167,139,250,.7)',
+      tabColor: '#8b5cf6',
+    },
+    members: [
+      { name: 'Keonho', emoji: '🌌', pos: 'Vocalist', bday: [2002,4,19], altNames: ['ahn keonho','hyeongjun keonho','keonho cortis'] },
+    ],
+  },
+  {
+    id: 'itzy',
+    name: 'ITZY',
+    icon: '💥',
+    tagline: 'DALLA DALLA fierce confidence · JYP Entertainment',
+    theme: {
+      accent: '#fb923c', accent2: '#fdba74',
+      glow: 'rgba(251,146,60,.4)',
+      groupBg: '#130600',
+      groupGrad: 'linear-gradient(135deg, #241000 0%, #130600 100%)',
+      tabGlow: 'rgba(251,146,60,.6)',
+      tabColor: '#f97316',
+    },
+    members: [
+      { name: 'Yeji',    emoji: '🐱', pos: 'Leader / Main Dancer', bday: [2000,5,26] },
+      { name: 'Lia',     emoji: '🌸', pos: 'Vocalist',             bday: [2000,7,21] },
+      { name: 'Ryujin',  emoji: '🔥', pos: 'Rapper / Dancer',      bday: [2001,4,17] },
+      { name: 'Chaeryeong',emoji:'💃',pos: 'Main Dancer / Vocalist',bday: [2001,6,5] },
+      { name: 'Yuna',    emoji: '✨', pos: 'Vocalist / Maknae',     bday: [2003,12,9] },
+    ],
+  },
+];
+
+// ── UTILITIES ─────────────────────────────────────────────
+function today() {
+  const now = new Date();
+  return { y: now.getFullYear(), m: now.getMonth()+1, d: now.getDate() };
+}
+
+function nextBirthday(bday) {
+  const t = today();
+  const [, bm, bd] = bday;
+  const now = new Date();
+  let next = new Date(t.y, bm-1, bd);
+  if (next < now) next = new Date(t.y+1, bm-1, bd);
+  return next;
+}
+
+function daysUntil(bday) {
+  const next = nextBirthday(bday);
+  const now = new Date();
+  const diff = next - now;
+  return Math.ceil(diff / 86400000);
+}
+
+function isToday(bday) {
+  const t = today();
+  return bday[1] === t.m && bday[2] === t.d;
+}
+
+function isSoon(bday, days=14) {
+  if (isToday(bday)) return false;
+  return daysUntil(bday) <= days;
+}
+
+function formatBday([, m, d]) {
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return `${months[m-1]} ${d}`;
+}
+
+function getCountdown(bday) {
+  const next = nextBirthday(bday);
+  const now = new Date();
+  let diff = next - now;
+  if (diff < 0) diff = 0;
+  const days = Math.floor(diff / 86400000);
+  const hours = Math.floor((diff % 86400000) / 3600000);
+  const mins = Math.floor((diff % 3600000) / 60000);
+  const secs = Math.floor((diff % 60000) / 1000);
+  return { days, hours, mins, secs };
+}
+
+function pad(n) { return String(n).padStart(2,'0'); }
+
+// ── BUILD ALL-GROUP members list ─────────────────────────
+function buildAllMembers() {
+  const all = [];
+  GROUPS.filter(g => g.id !== 'all').forEach(g => {
+    g.members.forEach(m => all.push({ ...m, groupName: g.name, groupId: g.id }));
+  });
+  GROUPS[0].members = all;
+}
+
+// ── RENDER ────────────────────────────────────────────────
+let activeGroup = 'all';
+let timerIds = [];
+
+function applyGroupTheme(g) {
+  const r = document.documentElement.style;
+  r.setProperty('--accent', g.theme.accent);
+  r.setProperty('--accent2', g.theme.accent2);
+  r.setProperty('--glow', g.theme.glow);
+  r.setProperty('--group-bg', g.theme.groupBg);
+  r.setProperty('--group-grad', g.theme.groupGrad);
+  r.setProperty('--tab-glow', g.theme.tabGlow);
+}
+
+function renderTabs() {
+  const rail = document.getElementById('tabRail');
+  rail.innerHTML = '';
+  GROUPS.forEach(g => {
+    const btn = document.createElement('button');
+    btn.className = 'group-tab' + (g.id === activeGroup ? ' active' : '');
+    btn.style.setProperty('--tab-color', g.theme.tabColor);
+    btn.textContent = g.name;
+    btn.setAttribute('role','tab');
+    btn.setAttribute('aria-selected', g.id === activeGroup);
+    btn.addEventListener('click', () => { activeGroup = g.id; renderAll(); });
+    rail.appendChild(btn);
+  });
+}
+
+function renderGroup(group, searchQ = '') {
+  const main = document.getElementById('mainContent');
+  main.innerHTML = '';
+
+  applyGroupTheme(group);
+
+  // Banner
+  const banner = document.createElement('div');
+  banner.className = 'group-banner';
+  banner.innerHTML = `
+    <span class="group-icon" aria-hidden="true">${group.icon}</span>
+    <div>
+      <div class="group-name">${group.name}</div>
+      <div class="group-tagline">${group.tagline}</div>
+    </div>`;
+  main.appendChild(banner);
+
+  // Filter members
+  let members = group.members;
+  if (searchQ) {
+    const q = searchQ.toLowerCase();
+    members = members.filter(m => {
+      const names = m.name.toLowerCase();
+      const group = (m.groupName || '').toLowerCase();
+      const pos = (m.pos || '').toLowerCase();
+      // also support common alternate names / stage names
+      const altNames = (m.altNames || []).map(n => n.toLowerCase());
+      return names.includes(q) || group.includes(q) || pos.includes(q)
+        || altNames.some(a => a.includes(q));
+    });
+  }
+
+  if (!members.length) {
+    main.insertAdjacentHTML('beforeend', '<div class="empty-state">No idols found 🔍</div>');
+    return;
+  }
+
+  // Sort: today > soon > days remaining
+  const sorted = [...members].sort((a,b) => {
+    const aT = isToday(a.bday), bT = isToday(b.bday);
+    if (aT && !bT) return -1; if (!aT && bT) return 1;
+    return daysUntil(a.bday) - daysUntil(b.bday);
+  });
+
+  // Upcoming pills
+  const upcomingMembers = sorted.filter(m => isToday(m.bday) || isSoon(m.bday));
+  if (upcomingMembers.length) {
+    const pillRow = document.createElement('div');
+    pillRow.className = 'upcoming-banner';
+    upcomingMembers.forEach(m => {
+      const pill = document.createElement('div');
+      pill.className = isToday(m.bday) ? 'upcoming-pill today' : 'upcoming-pill';
+      const label = isToday(m.bday) ? '🎂 TODAY!' : `🎉 ${daysUntil(m.bday)}d`;
+      const groupTag = m.groupName ? ` (${m.groupName})` : '';
+      pill.innerHTML = `${label} ${m.name}${groupTag}`;
+      pillRow.appendChild(pill);
+    });
+    main.appendChild(pillRow);
+  }
+
+  const p = document.createElement('p');
+  p.className = 'section-label';
+  p.textContent = `${members.length} idols`;
+  main.appendChild(p);
+
+  const grid = document.createElement('div');
+  grid.className = 'idol-grid';
+
+  sorted.forEach(m => {
+    const card = document.createElement('div');
+    card.className = 'idol-card' +
+      (isToday(m.bday) ? ' birthday-today' : isSoon(m.bday) ? ' birthday-soon' : '');
+
+    // For "all" group, find the group theme for the avatar border
+    const memberGroup = m.groupId
+      ? GROUPS.find(g => g.id === m.groupId)
+      : group;
+    const accent = memberGroup ? memberGroup.theme.accent : group.theme.accent;
+
+    const groupTag = m.groupName
+      ? `<div style="font-size:.68rem;color:${memberGroup?.theme?.accent2||'#ccc'};margin-bottom:2px;font-weight:700;">${m.groupName}</div>`
+      : '';
+
+    let badgeClass = 'badge-normal';
+    let badgeText = formatBday(m.bday);
+    if (isToday(m.bday)) { badgeClass = 'badge-today'; badgeText = '🎂 BIRTHDAY TODAY!'; }
+    else if (isSoon(m.bday)) { badgeClass = 'badge-soon'; badgeText = `🎉 in ${daysUntil(m.bday)} days`; }
+
+    const countdownId = `cd-${m.name.replace(/\s/g,'')}-${m.bday.join('')}`;
+
+    card.innerHTML = `
+      <div class="idol-avatar" style="border-color:${accent};box-shadow:0 0 16px ${memberGroup?.theme?.glow||'rgba(255,255,255,.2)'}">
+        ${m.emoji}
+      </div>
+      ${groupTag}
+      <div class="idol-name">${m.name}</div>
+      <div class="idol-position">${m.pos}</div>
+      <div class="birthday-badge ${badgeClass}">${badgeText}</div>
+      ${isToday(m.bday)
+        ? `<div style="font-size:1.4rem;animation:todayPulse 1s ease-in-out infinite">🎊🥳🎊</div>`
+        : `<div class="countdown-display" id="${countdownId}">
+            <div class="countdown-unit"><span class="countdown-num">--</span><span class="countdown-label">days</span></div>
+            <div class="countdown-unit"><span class="countdown-num">--</span><span class="countdown-label">hrs</span></div>
+            <div class="countdown-unit"><span class="countdown-num">--</span><span class="countdown-label">min</span></div>
+            <div class="countdown-unit"><span class="countdown-num">--</span><span class="countdown-label">sec</span></div>
+           </div>`}
+      <div class="bday-date">🎂 ${m.bday[0]}  ·  ${formatBday(m.bday)}</div>`;
+
+    grid.appendChild(card);
+  });
+
+  main.appendChild(grid);
+
+  // Kick off countdowns
+  timerIds.forEach(clearInterval);
+  timerIds = [];
+
+  function tick() {
+    sorted.forEach(m => {
+      if (isToday(m.bday)) return;
+      const id = `cd-${m.name.replace(/\s/g,'')}-${m.bday.join('')}`;
+      const el = document.getElementById(id);
+      if (!el) return;
+      const { days, hours, mins, secs } = getCountdown(m.bday);
+      const nums = el.querySelectorAll('.countdown-num');
+      nums[0].textContent = pad(days);
+      nums[1].textContent = pad(hours);
+      nums[2].textContent = pad(mins);
+      nums[3].textContent = pad(secs);
+    });
+  }
+
+  tick();
+  timerIds.push(setInterval(tick, 1000));
+}
+
+function renderAll() {
+  const searchQ = document.getElementById('searchInput').value.trim();
+  const group = GROUPS.find(g => g.id === activeGroup) || GROUPS[0];
+  renderTabs();
+  renderGroup(group, searchQ);
+}
+
+// ── SEARCH ────────────────────────────────────────────────
+document.getElementById('searchInput').addEventListener('input', () => {
+  const q = document.getElementById('searchInput').value.trim();
+  if (q) { activeGroup = 'all'; }
+  renderAll();
+});
+
+// ── INIT ─────────────────────────────────────────────────
+buildAllMembers();
+renderAll();
+</script>
